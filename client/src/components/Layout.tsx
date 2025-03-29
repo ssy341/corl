@@ -22,33 +22,65 @@ export function Header() {
         <div className="flex items-center">
           <Link href="/">
             <div className="text-2xl font-bold text-primary cursor-pointer">
-              Coal Services
+              {i18n.language === 'cn' ? '煤炭服务' : 'Coal Services'}
             </div>
           </Link>
         </div>
         
-        <nav className="hidden md:flex space-x-6">
+        <nav className="hidden lg:flex space-x-4">
           <Link href="/">
-            <div className="text-gray-700 hover:text-primary transition-colors cursor-pointer">
-              {t('nav.home')}
+            <div className="text-gray-700 hover:text-primary transition-colors cursor-pointer px-2">
+              {i18n.language === 'cn' ? '主页' : 'Home'}
             </div>
           </Link>
-          <Link href="/services">
-            <div className="text-gray-700 hover:text-primary transition-colors cursor-pointer">
-              {t('nav.services')}
+          <Link href="/services/storage-monitoring">
+            <div className="text-gray-700 hover:text-primary transition-colors cursor-pointer px-2">
+              {i18n.language === 'cn' ? '煤仓监管服务' : 'Storage Monitoring'}
             </div>
           </Link>
-          <Link href="/about">
-            <div className="text-gray-700 hover:text-primary transition-colors cursor-pointer">
-              {t('nav.about')}
+          <Link href="/services/weight-estimation">
+            <div className="text-gray-700 hover:text-primary transition-colors cursor-pointer px-2">
+              {i18n.language === 'cn' ? '煤重估量服务' : 'Weight Estimation'}
             </div>
           </Link>
-          <Link href="/contact">
-            <div className="text-gray-700 hover:text-primary transition-colors cursor-pointer">
-              {t('nav.contact')}
+          <Link href="/services/price-estimation">
+            <div className="text-gray-700 hover:text-primary transition-colors cursor-pointer px-2">
+              {i18n.language === 'cn' ? '煤价估算服务' : 'Price Estimation'}
+            </div>
+          </Link>
+          <Link href="/services/product-collateral">
+            <div className="text-gray-700 hover:text-primary transition-colors cursor-pointer px-2">
+              {i18n.language === 'cn' ? '煤品货押服务' : 'Product Collateral'}
+            </div>
+          </Link>
+          <Link href="/services/transport">
+            <div className="text-gray-700 hover:text-primary transition-colors cursor-pointer px-2">
+              {i18n.language === 'cn' ? '煤炭运输服务' : 'Transport'}
+            </div>
+          </Link>
+          <Link href="/services/quality-testing">
+            <div className="text-gray-700 hover:text-primary transition-colors cursor-pointer px-2">
+              {i18n.language === 'cn' ? '煤质检测服务' : 'Quality Testing'}
+            </div>
+          </Link>
+          <Link href="/consultation">
+            <div className="text-gray-700 hover:text-primary transition-colors cursor-pointer px-2">
+              {i18n.language === 'cn' ? '煤事咨询服务' : 'Consultation'}
             </div>
           </Link>
         </nav>
+        
+        {/* Mobile menu button - we'll implement the mobile menu later */}
+        <div className="lg:hidden">
+          <Button variant="ghost" size="sm" className="px-2">
+            <span className="sr-only">Open menu</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </Button>
+        </div>
         
         <div className="flex items-center">
           <Button 
@@ -56,7 +88,7 @@ export function Header() {
             onClick={toggleLanguage}
             className="text-gray-700 hover:text-primary"
           >
-            {t('language.switch')}
+            {i18n.language === 'cn' ? 'EN' : '中文'}
           </Button>
         </div>
       </div>
@@ -65,7 +97,7 @@ export function Header() {
 }
 
 export function Footer() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const currentYear = new Date().getFullYear();
   
   return (
@@ -73,40 +105,82 @@ export function Footer() {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-lg font-bold mb-4">{t('footer.company')}</h3>
+            <h3 className="text-lg font-bold mb-4">
+              {i18n.language === 'cn' ? '煤炭服务' : 'Coal Services'}
+            </h3>
             <p className="text-gray-600 max-w-xs">
-              Providing integrated coal industry solutions with advanced technology and expert consultation.
+              {i18n.language === 'cn' 
+                ? '提供先进技术和专业咨询的综合煤炭行业解决方案。' 
+                : 'Providing integrated coal industry solutions with advanced technology and expert consultation.'}
             </p>
           </div>
           
           <div>
-            <h3 className="text-lg font-bold mb-4">{t('footer.services')}</h3>
+            <h3 className="text-lg font-bold mb-4">
+              {i18n.language === 'cn' ? '我们的服务' : 'Our Services'}
+            </h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/services/coal-storage-monitoring">
+                <Link href="/services/storage-monitoring">
                   <div className="text-gray-600 hover:text-primary transition-colors cursor-pointer">
-                    Coal Storage Monitoring
+                    {i18n.language === 'cn' ? '煤仓监管服务' : 'Storage Monitoring'}
                   </div>
                 </Link>
               </li>
               <li>
                 <Link href="/services/weight-estimation">
                   <div className="text-gray-600 hover:text-primary transition-colors cursor-pointer">
-                    Weight Estimation
+                    {i18n.language === 'cn' ? '煤重估量服务' : 'Weight Estimation'}
                   </div>
                 </Link>
               </li>
               <li>
                 <Link href="/services/price-estimation">
                   <div className="text-gray-600 hover:text-primary transition-colors cursor-pointer">
-                    Price Estimation
+                    {i18n.language === 'cn' ? '煤价估算服务' : 'Price Estimation'}
+                  </div>
+                </Link>
+              </li>
+              <li>
+                <Link href="/services/product-collateral">
+                  <div className="text-gray-600 hover:text-primary transition-colors cursor-pointer">
+                    {i18n.language === 'cn' ? '煤品货押服务' : 'Product Collateral'}
+                  </div>
+                </Link>
+              </li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 className="text-lg font-bold mb-4">
+              {i18n.language === 'cn' ? '更多服务' : 'More Services'}
+            </h3>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/services/transport">
+                  <div className="text-gray-600 hover:text-primary transition-colors cursor-pointer">
+                    {i18n.language === 'cn' ? '煤炭运输服务' : 'Transport'}
+                  </div>
+                </Link>
+              </li>
+              <li>
+                <Link href="/services/quality-testing">
+                  <div className="text-gray-600 hover:text-primary transition-colors cursor-pointer">
+                    {i18n.language === 'cn' ? '煤质检测服务' : 'Quality Testing'}
                   </div>
                 </Link>
               </li>
               <li>
                 <Link href="/consultation">
                   <div className="text-gray-600 hover:text-primary transition-colors cursor-pointer">
-                    Consultation Services
+                    {i18n.language === 'cn' ? '煤事咨询服务' : 'Consultation'}
+                  </div>
+                </Link>
+              </li>
+              <li>
+                <Link href="/">
+                  <div className="text-gray-600 hover:text-primary transition-colors cursor-pointer">
+                    {i18n.language === 'cn' ? '全部服务' : 'All Services'}
                   </div>
                 </Link>
               </li>
@@ -114,36 +188,32 @@ export function Footer() {
           </div>
           
           <div>
-            <h3 className="text-lg font-bold mb-4">{t('footer.resources')}</h3>
+            <h3 className="text-lg font-bold mb-4">
+              {i18n.language === 'cn' ? '公司信息' : 'Company'}
+            </h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/about">
                   <div className="text-gray-600 hover:text-primary transition-colors cursor-pointer">
-                    {t('nav.about')}
+                    {i18n.language === 'cn' ? '关于我们' : 'About Us'}
                   </div>
                 </Link>
               </li>
               <li>
                 <Link href="/contact">
                   <div className="text-gray-600 hover:text-primary transition-colors cursor-pointer">
-                    {t('nav.contact')}
+                    {i18n.language === 'cn' ? '联系我们' : 'Contact Us'}
                   </div>
                 </Link>
               </li>
-            </ul>
-          </div>
-          
-          <div>
-            <h3 className="text-lg font-bold mb-4">{t('footer.legal')}</h3>
-            <ul className="space-y-2">
               <li>
                 <div className="text-gray-600 hover:text-primary transition-colors cursor-pointer">
-                  {t('footer.privacy')}
+                  {i18n.language === 'cn' ? '隐私政策' : 'Privacy Policy'}
                 </div>
               </li>
               <li>
                 <div className="text-gray-600 hover:text-primary transition-colors cursor-pointer">
-                  {t('footer.terms')}
+                  {i18n.language === 'cn' ? '服务条款' : 'Terms of Service'}
                 </div>
               </li>
             </ul>
@@ -152,7 +222,8 @@ export function Footer() {
         
         <div className="border-t border-gray-200 mt-8 pt-8 text-center">
           <p className="text-gray-600">
-            &copy; {currentYear} {t('footer.company')}. {t('footer.rights')}
+            &copy; {currentYear} {i18n.language === 'cn' ? '煤炭服务有限公司' : 'Coal Services Co., Ltd.'}. 
+            {i18n.language === 'cn' ? ' 版权所有' : ' All rights reserved.'}
           </p>
         </div>
       </div>

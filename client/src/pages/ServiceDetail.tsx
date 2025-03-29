@@ -7,10 +7,10 @@ import CoalStorageMonitoring from './ServicePages/CoalStorageMonitoring';
 import WeightEstimation from './ServicePages/WeightEstimation';
 import NotFound from './not-found';
 
-// Service slug to component mapping
+// Service slug to component mapping - we only include components that have been implemented
 const serviceComponents: Record<string, React.FC> = {
-  'storage-monitoring': CoalStorageMonitoring,
-  'weight-estimation': WeightEstimation,
+  'storage-monitoring': CoalStorageMonitoring,    // 煤仓监管服务
+  'weight-estimation': WeightEstimation,          // 煤重估量服务
 };
 
 // Default component for services that don't have a dedicated page yet
@@ -110,9 +110,9 @@ export default function ServiceDetail() {
     return <NotFound />;
   }
 
-  // If we have a dedicated page component for this service, use it
+  // If we have a dedicated page component for this service and it's not null, use it
   const ServiceComponent = serviceComponents[slug];
-  if (ServiceComponent) {
+  if (ServiceComponent && typeof ServiceComponent === 'function') {
     return <ServiceComponent />;
   }
 
