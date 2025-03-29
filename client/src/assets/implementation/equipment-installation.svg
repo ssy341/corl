@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="720" height="120" viewBox="0 0 720 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="720" height="120" rx="10" fill="#FFF3E0" stroke="#FF9800" stroke-width="2"/>
+  
+  <!-- 设备安装图标 -->
+  <g transform="translate(40, 30)">
+    <rect x="0" y="0" width="60" height="60" rx="5" fill="#FFE0B2"/>
+    <rect x="15" y="10" width="30" height="40" rx="2" fill="#FF9800"/>
+    <rect x="20" y="15" width="20" height="10" fill="#FFE0B2"/>
+    <rect x="20" y="30" width="20" height="10" fill="#FFE0B2"/>
+    <circle cx="30" cy="45" r="3" fill="#FFE0B2"/>
+  </g>
+  
+  <!-- 摄像头安装元素 -->
+  <g transform="translate(130, 30)">
+    <rect x="0" y="0" width="60" height="60" rx="5" fill="#FFE0B2"/>
+    <path d="M20,20 L40,20 L40,40 L20,40 Z" fill="#FF9800"/>
+    <path d="M40,30 L50,25 L50,35 L40,30 Z" fill="#FF9800"/>
+    <rect x="25" y="25" width="10" height="10" rx="5" fill="#FFE0B2"/>
+    <path d="M20,50 L40,50" stroke="#FF9800" stroke-width="2"/>
+    <path d="M30,40 L30,50" stroke="#FF9800" stroke-width="2"/>
+    <circle cx="30" cy="10" r="5" fill="none" stroke="#FF9800" stroke-width="2" stroke-dasharray="2,1"/>
+  </g>
+  
+  <!-- 服务器安装元素 -->
+  <g transform="translate(220, 30)">
+    <rect x="0" y="0" width="60" height="60" rx="5" fill="#FFE0B2"/>
+    <rect x="15" y="10" width="30" height="40" rx="2" fill="#FF9800"/>
+    <rect x="20" y="15" width="20" height="5" fill="#FFE0B2"/>
+    <rect x="20" y="25" width="20" height="5" fill="#FFE0B2"/>
+    <rect x="20" y="35" width="20" height="5" fill="#FFE0B2"/>
+    <circle cx="15" cy="15" r="2" fill="#FFE0B2"/>
+    <circle cx="15" cy="25" r="2" fill="#FFE0B2"/>
+    <circle cx="15" cy="35" r="2" fill="#FFE0B2"/>
+  </g>
+  
+  <!-- 标题文本 -->
+  <text x="360" y="70" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#E65100">设备安装与集成</text>
+  
+  <!-- 连接线 -->
+  <path d="M300,60 L340,60" stroke="#FF9800" stroke-width="2" stroke-dasharray="5,3"/>
+  <path d="M380,60 L420,60" stroke="#FF9800" stroke-width="2" stroke-dasharray="5,3"/>
+  
+  <!-- 工具图标元素 -->
+  <g transform="translate(450, 30)">
+    <rect x="0" y="0" width="60" height="60" rx="5" fill="#FFE0B2"/>
+    <!-- 扳手图标 -->
+    <path d="M25,15 L35,25 L45,15 L40,10 L30,20 L20,10 Z" fill="#FF9800"/>
+    <!-- 螺丝刀图标 -->
+    <rect x="30" y="30" width="5" height="20" fill="#FF9800"/>
+    <path d="M27,30 L38,30 L38,35 L27,35 Z" fill="#FF9800"/>
+    <!-- 钳子图标 -->
+    <path d="M15,40 C15,45 20,45 20,40 L20,30 C20,25 15,25 15,30 Z" fill="#FF9800"/>
+    <path d="M20,35 L25,35" stroke="#FF9800" stroke-width="2"/>
+  </g>
+  
+  <!-- 装饰元素 -->
+  <circle cx="550" cy="40" r="10" fill="#FFE0B2" stroke="#FF9800" stroke-width="2"/>
+  <path d="M570,50 L590,70 L610,50 L590,30 Z" fill="#FFE0B2" stroke="#FF9800" stroke-width="2"/>
+  <rect x="620" y="30" width="20" height="20" rx="4" fill="#FFE0B2" stroke="#FF9800" stroke-width="2"/>
+  <circle cx="670" cy="50" r="15" fill="#FFE0B2" stroke="#FF9800" stroke-width="2"/>
+</svg>
