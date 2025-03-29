@@ -15,6 +15,9 @@ import {
 
 // Import SVG assets
 import CoalStorageSvg from '@/assets/images/coal-storage.svg';
+import FirePreventionSvg from '@/assets/images/fire-prevention.svg';
+import InventoryManagementSvg from '@/assets/images/inventory-management.svg';
+import SecurityMonitoringSvg from '@/assets/images/security-monitoring.svg';
 import SiteAssessmentSvg from '@/assets/implementation/site-assessment.svg';
 import SystemDesignSvg from '@/assets/implementation/system-design.svg';
 import EquipmentInstallationSvg from '@/assets/implementation/equipment-installation.svg';
@@ -487,9 +490,9 @@ export default function CoalStorageMonitoring() {
                   </div>
                   <div>
                     <img 
-                      src="https://images.unsplash.com/photo-1580893246395-52aead8960dc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" 
+                      src={SecurityMonitoringSvg} 
                       alt="Security Monitoring" 
-                      className="rounded-lg shadow-lg"
+                      className="rounded-lg shadow-lg bg-white p-2"
                     />
                   </div>
                 </div>
@@ -499,9 +502,9 @@ export default function CoalStorageMonitoring() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                   <div>
                     <img 
-                      src="https://images.unsplash.com/photo-1581093806275-6fd49533cebe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" 
+                      src={FirePreventionSvg} 
                       alt="Fire Prevention" 
-                      className="rounded-lg shadow-lg"
+                      className="rounded-lg shadow-lg bg-white p-2"
                     />
                   </div>
                   <div>
@@ -655,9 +658,9 @@ export default function CoalStorageMonitoring() {
                   </div>
                   <div>
                     <img 
-                      src="https://images.unsplash.com/photo-1581093803931-2ee0439a5127?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" 
+                      src={InventoryManagementSvg} 
                       alt="Inventory Management" 
-                      className="rounded-lg shadow-lg"
+                      className="rounded-lg shadow-lg bg-white p-2"
                     />
                   </div>
                 </div>
