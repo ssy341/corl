@@ -6,6 +6,18 @@ import { Button } from '@/components/ui/button';
 // Import hero background
 import heroBackground from '@/assets/images/hero-background.svg';
 
+// Import mock visualizations and charts
+import coalPriceChart from '@/assets/charts/coal-price-chart.svg';
+import coalProductionChart from '@/assets/charts/coal-production-chart.svg';
+import coalQualityRadar from '@/assets/charts/coal-quality-radar.svg';
+import dashboardMockup from '@/assets/mockups/dashboard-mockup.svg';
+import thermalImaging from '@/assets/mockups/thermal-imaging.svg';
+import weightEstimation from '@/assets/mockups/weight-estimation-3d.svg';
+import priceEstimation from '@/assets/mockups/price-estimation.svg';
+import qualityTesting from '@/assets/mockups/quality-testing.svg';
+import transportTracking from '@/assets/mockups/transport-tracking.svg';
+import collateralManagement from '@/assets/mockups/collateral-management.svg';
+
 // Define the CoalService type here (simplified)
 interface CoalService {
   id: number;
@@ -59,22 +71,22 @@ export default function Home() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="col-span-2">
                   <img 
-                    src="/src/assets/images/coal-storage.svg" 
+                    src={dashboardMockup} 
                     alt="Coal Storage Monitoring" 
                     className="w-full h-auto rounded-lg shadow-lg bg-slate-800/80 p-4 transition-all duration-500 hover:scale-105"
                   />
                 </div>
                 <div>
                   <img 
-                    src="/src/assets/images/weight-estimation.svg" 
+                    src={weightEstimation} 
                     alt="Weight Estimation" 
                     className="w-full h-auto rounded-lg shadow-lg bg-slate-800/80 p-4 transition-all duration-500 hover:scale-105"
                   />
                 </div>
                 <div>
                   <img 
-                    src="/src/assets/images/quality-testing.svg" 
-                    alt="Quality Testing" 
+                    src={thermalImaging} 
+                    alt="Thermal Imaging" 
                     className="w-full h-auto rounded-lg shadow-lg bg-slate-800/80 p-4 transition-all duration-500 hover:scale-105"
                   />
                 </div>
@@ -177,10 +189,128 @@ export default function Home() {
             </div>
             <div className="md:w-1/2">
               <img 
-                src="/src/assets/images/consultation.svg" 
+                src={qualityTesting} 
                 alt="AI Coal Industry Consultation"
-                className="w-full h-auto max-w-md mx-auto"
+                className="w-full h-auto max-w-md mx-auto rounded-lg shadow-lg"
               />
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* Data Visualization Section */}
+      <section className="py-20 bg-slate-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold mb-4">{i18n.language === 'cn' ? '数据可视化' : 'Data Visualization'}</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              {i18n.language === 'cn' 
+                ? '通过先进的数据可视化技术，实时监控和分析煤炭产业关键指标' 
+                : 'Monitor and analyze key coal industry metrics through advanced data visualization techniques'}
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-semibold mb-4">{i18n.language === 'cn' ? '煤炭价格趋势' : 'Coal Price Trends'}</h3>
+              <img 
+                src={coalPriceChart} 
+                alt="Coal Price Chart" 
+                className="w-full h-auto rounded-lg"
+              />
+            </div>
+            
+            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-semibold mb-4">{i18n.language === 'cn' ? '煤炭产量分析' : 'Coal Production Analysis'}</h3>
+              <img 
+                src={coalProductionChart} 
+                alt="Coal Production Chart" 
+                className="w-full h-auto rounded-lg"
+              />
+            </div>
+            
+            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-semibold mb-4">{i18n.language === 'cn' ? '煤炭质量参数' : 'Coal Quality Parameters'}</h3>
+              <img 
+                src={coalQualityRadar} 
+                alt="Coal Quality Radar" 
+                className="w-full h-auto rounded-lg"
+              />
+            </div>
+            
+            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-semibold mb-4">{i18n.language === 'cn' ? '运输跟踪系统' : 'Transport Tracking System'}</h3>
+              <img 
+                src={transportTracking} 
+                alt="Transport Tracking" 
+                className="w-full h-auto rounded-lg"
+              />
+            </div>
+          </div>
+          
+          <div className="mt-12 text-center">
+            <Link href="/services">
+              <Button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:opacity-90">
+                {i18n.language === 'cn' ? '探索更多服务功能' : 'Explore More Features'}
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+      
+      {/* Demo Features Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold mb-4">{i18n.language === 'cn' ? '高级功能展示' : 'Advanced Features'}</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              {i18n.language === 'cn' 
+                ? '体验我们平台提供的创新煤炭行业解决方案' 
+                : 'Experience innovative coal industry solutions offered on our platform'}
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="bg-white rounded-lg overflow-hidden shadow-md">
+              <img 
+                src={priceEstimation} 
+                alt="Price Estimation System" 
+                className="w-full h-auto"
+              />
+              <div className="p-6">
+                <h3 className="text-xl font-semibold mb-2">{i18n.language === 'cn' ? '价格估算系统' : 'Price Estimation System'}</h3>
+                <p className="text-gray-600 mb-4">
+                  {i18n.language === 'cn' 
+                    ? '基于多项参数的智能煤炭价格估算，结合市场趋势提供精准预测' 
+                    : 'Intelligent coal price estimation based on multiple parameters, providing accurate forecasts combined with market trends'}
+                </p>
+                <Link href="/services/price-estimation">
+                  <Button variant="link" className="p-0 text-primary hover:text-primary/80">
+                    {i18n.language === 'cn' ? '了解详情' : 'Learn More'} →
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-lg overflow-hidden shadow-md">
+              <img 
+                src={collateralManagement} 
+                alt="Coal Product Collateral Management" 
+                className="w-full h-auto"
+              />
+              <div className="p-6">
+                <h3 className="text-xl font-semibold mb-2">{i18n.language === 'cn' ? '产品抵押担保管理' : 'Product Collateral Management'}</h3>
+                <p className="text-gray-600 mb-4">
+                  {i18n.language === 'cn' 
+                    ? '全面的煤炭产品抵押担保管理系统，优化资产流动性和风险控制' 
+                    : 'Comprehensive coal product collateral management system, optimizing asset liquidity and risk control'}
+                </p>
+                <Link href="/services/product-collateral">
+                  <Button variant="link" className="p-0 text-primary hover:text-primary/80">
+                    {i18n.language === 'cn' ? '了解详情' : 'Learn More'} →
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
