@@ -1,10 +1,15 @@
 import { Switch, Route } from "wouter";
-import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import { useEffect } from "react";
+import Layout from "@/components/Layout";
+import ConsultationPage from "@/pages/Consultation";
+
+// We'll implement these pages later
+const ServicesPage = () => <div className="container mx-auto px-4 py-12">Services Page</div>;
+const ServiceDetail = () => <div className="container mx-auto px-4 py-12">Service Detail Page</div>;
+const AboutPage = () => <div className="container mx-auto px-4 py-12">About Page</div>;
+const ContactPage = () => <div className="container mx-auto px-4 py-12">Contact Page</div>;
 
 function Router() {
   // Smooth scroll implementation for anchor links
@@ -39,18 +44,24 @@ function Router() {
   }, []);
 
   return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route component={NotFound} />
-    </Switch>
+    <Layout>
+      <Switch>
+        <Route path="/" component={Home} />
+        <Route path="/services" component={ServicesPage} />
+        <Route path="/services/:slug" component={ServiceDetail} />
+        <Route path="/consultation" component={ConsultationPage} />
+        <Route path="/about" component={AboutPage} />
+        <Route path="/contact" component={ContactPage} />
+        <Route component={NotFound} />
+      </Switch>
+    </Layout>
   );
 }
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <Router />
-      <Toaster />
       <style dangerouslySetInnerHTML={{
         __html: `
         .bg-gradient {
@@ -77,7 +88,7 @@ function App() {
         }
         `
       }} />
-    </QueryClientProvider>
+    </>
   );
 }
 
