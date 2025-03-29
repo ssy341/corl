@@ -16,7 +16,7 @@ export default function WeightEstimation() {
 
   // Set document title
   useEffect(() => {
-    document.title = i18n.i18n.language === 'cn' ? '煤重估量服务 | 煤炭服务' : 'Coal Weight Estimation | Coal Services';
+    document.title = i18n.language === 'cn' ? '煤重估量服务 | 煤炭服务' : 'Coal Weight Estimation | Coal Services';
   }, [i18n.language]);
 
   return (
