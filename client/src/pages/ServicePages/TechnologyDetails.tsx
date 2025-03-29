@@ -9,6 +9,11 @@ import {
   CardTitle 
 } from '@/components/ui/card';
 
+// Import SVG assets
+import ModelingSvg from '@/assets/technology/3d-modeling.svg';
+import DroneSurveySvg from '@/assets/technology/drone-survey.svg';
+import DensityAnalysisSvg from '@/assets/technology/density-analysis.svg';
+
 export default function TechnologyDetails() {
   const { t, i18n } = useTranslation();
   const [location] = useLocation();
@@ -95,7 +100,7 @@ export default function TechnologyDetails() {
                 : 'Under extreme weather conditions, our drone system still completed the precise measurement of a 150-hectare coal yard and generated high-quality three-dimensional models.'
             }
           ],
-          image: 'https://images.unsplash.com/photo-1473968512647-3e447244af8f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+          image: DroneSurveySvg
         };
       
       case '3d-modeling':
@@ -153,7 +158,7 @@ export default function TechnologyDetails() {
                 : 'Achieved real-time volume monitoring of coal piles in a high-density operational environment, supporting automated decision-making in the inventory management system.'
             }
           ],
-          image: 'https://images.unsplash.com/photo-1610492219843-0f0cb2ab28df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80'
+          image: ModelingSvg
         };
         
       case 'density-analysis':
@@ -211,7 +216,7 @@ export default function TechnologyDetails() {
                 : 'Achieved precise zoned management of coal from different sources, with the density model automatically adapting to seasonal moisture content changes, maintaining weight estimation accuracy at ±1.2% throughout the year.'
             }
           ],
-          image: 'https://images.unsplash.com/photo-1509228627152-72ae86a3be56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80'
+          image: DensityAnalysisSvg
         };
         
       default:
