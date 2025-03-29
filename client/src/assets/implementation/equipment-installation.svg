@@ -1,63 +1,74 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="720" height="120" viewBox="0 0 720 120" xmlns="http://www.w3.org/2000/svg">
-  <!-- 背景 -->
-  <rect width="720" height="120" rx="10" fill="#FFF3E0" stroke="#FF9800" stroke-width="2"/>
+<svg width="500" height="120" viewBox="0 0 500 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with gradient -->
+  <rect width="500" height="120" rx="10" fill="url(#paint0_linear)" />
   
-  <!-- 设备安装图标 -->
-  <g transform="translate(40, 30)">
-    <rect x="0" y="0" width="60" height="60" rx="5" fill="#FFE0B2"/>
-    <rect x="15" y="10" width="30" height="40" rx="2" fill="#FF9800"/>
-    <rect x="20" y="15" width="20" height="10" fill="#FFE0B2"/>
-    <rect x="20" y="30" width="20" height="10" fill="#FFE0B2"/>
-    <circle cx="30" cy="45" r="3" fill="#FFE0B2"/>
-  </g>
+  <!-- Coal storage facility outline -->
+  <rect x="60" y="30" width="380" height="70" rx="5" stroke="white" stroke-width="2" stroke-opacity="0.5" fill="none" />
   
-  <!-- 摄像头安装元素 -->
-  <g transform="translate(130, 30)">
-    <rect x="0" y="0" width="60" height="60" rx="5" fill="#FFE0B2"/>
-    <path d="M20,20 L40,20 L40,40 L20,40 Z" fill="#FF9800"/>
-    <path d="M40,30 L50,25 L50,35 L40,30 Z" fill="#FF9800"/>
-    <rect x="25" y="25" width="10" height="10" rx="5" fill="#FFE0B2"/>
-    <path d="M20,50 L40,50" stroke="#FF9800" stroke-width="2"/>
-    <path d="M30,40 L30,50" stroke="#FF9800" stroke-width="2"/>
-    <circle cx="30" cy="10" r="5" fill="none" stroke="#FF9800" stroke-width="2" stroke-dasharray="2,1"/>
-  </g>
+  <!-- Roof structure -->
+  <path d="M60 30L80 15H420L440 30" stroke="white" stroke-width="2" stroke-opacity="0.5" fill="none" />
   
-  <!-- 服务器安装元素 -->
-  <g transform="translate(220, 30)">
-    <rect x="0" y="0" width="60" height="60" rx="5" fill="#FFE0B2"/>
-    <rect x="15" y="10" width="30" height="40" rx="2" fill="#FF9800"/>
-    <rect x="20" y="15" width="20" height="5" fill="#FFE0B2"/>
-    <rect x="20" y="25" width="20" height="5" fill="#FFE0B2"/>
-    <rect x="20" y="35" width="20" height="5" fill="#FFE0B2"/>
-    <circle cx="15" cy="15" r="2" fill="#FFE0B2"/>
-    <circle cx="15" cy="25" r="2" fill="#FFE0B2"/>
-    <circle cx="15" cy="35" r="2" fill="#FFE0B2"/>
-  </g>
+  <!-- Equipment installation elements -->
   
-  <!-- 标题文本 -->
-  <text x="360" y="70" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#E65100">设备安装与集成</text>
+  <!-- CCTV Camera 1 -->
+  <circle cx="100" cy="30" r="8" fill="#93C5FD" stroke="white" stroke-width="1" />
+  <path d="M100 30L110 40" stroke="white" stroke-width="1.5" />
+  <rect x="110" y="40" width="15" height="8" rx="1" fill="#60A5FA" stroke="white" stroke-width="1" />
   
-  <!-- 连接线 -->
-  <path d="M300,60 L340,60" stroke="#FF9800" stroke-width="2" stroke-dasharray="5,3"/>
-  <path d="M380,60 L420,60" stroke="#FF9800" stroke-width="2" stroke-dasharray="5,3"/>
+  <!-- CCTV Camera 2 -->
+  <circle cx="400" cy="30" r="8" fill="#93C5FD" stroke="white" stroke-width="1" />
+  <path d="M400 30L390 40" stroke="white" stroke-width="1.5" />
+  <rect x="375" y="40" width="15" height="8" rx="1" fill="#60A5FA" stroke="white" stroke-width="1" />
   
-  <!-- 工具图标元素 -->
-  <g transform="translate(450, 30)">
-    <rect x="0" y="0" width="60" height="60" rx="5" fill="#FFE0B2"/>
-    <!-- 扳手图标 -->
-    <path d="M25,15 L35,25 L45,15 L40,10 L30,20 L20,10 Z" fill="#FF9800"/>
-    <!-- 螺丝刀图标 -->
-    <rect x="30" y="30" width="5" height="20" fill="#FF9800"/>
-    <path d="M27,30 L38,30 L38,35 L27,35 Z" fill="#FF9800"/>
-    <!-- 钳子图标 -->
-    <path d="M15,40 C15,45 20,45 20,40 L20,30 C20,25 15,25 15,30 Z" fill="#FF9800"/>
-    <path d="M20,35 L25,35" stroke="#FF9800" stroke-width="2"/>
-  </g>
+  <!-- Thermal Camera -->
+  <rect x="240" y="25" width="20" height="15" rx="2" fill="#BFDBFE" stroke="white" stroke-width="1" />
+  <circle cx="250" cy="32" r="5" fill="#3B82F6" />
+  <path d="M240 40L235 50" stroke="white" stroke-width="1.5" />
+  <path d="M260 40L265 50" stroke="white" stroke-width="1.5" />
   
-  <!-- 装饰元素 -->
-  <circle cx="550" cy="40" r="10" fill="#FFE0B2" stroke="#FF9800" stroke-width="2"/>
-  <path d="M570,50 L590,70 L610,50 L590,30 Z" fill="#FFE0B2" stroke="#FF9800" stroke-width="2"/>
-  <rect x="620" y="30" width="20" height="20" rx="4" fill="#FFE0B2" stroke="#FF9800" stroke-width="2"/>
-  <circle cx="670" cy="50" r="15" fill="#FFE0B2" stroke="#FF9800" stroke-width="2"/>
+  <!-- Server rack installation -->
+  <rect x="160" y="55" width="40" height="45" rx="2" fill="#93C5FD" stroke="white" stroke-width="1.5" />
+  <line x1="165" y1="65" x2="195" y2="65" stroke="white" stroke-width="1" />
+  <line x1="165" y1="75" x2="195" y2="75" stroke="white" stroke-width="1" />
+  <line x1="165" y1="85" x2="195" y2="85" stroke="white" stroke-width="1" />
+  <line x1="165" y1="95" x2="195" y2="95" stroke="white" stroke-width="1" />
+  
+  <!-- Control panel installation -->
+  <rect x="300" y="55" width="50" height="30" rx="2" fill="#BFDBFE" stroke="white" stroke-width="1.5" />
+  <circle cx="315" cy="65" r="5" fill="#3B82F6" />
+  <circle cx="335" cy="65" r="5" fill="#3B82F6" />
+  <rect x="310" y="75" width="30" height="5" rx="1" fill="#60A5FA" />
+  
+  <!-- Worker 1 - installing equipment -->
+  <circle cx="140" cy="80" r="7" fill="#93C5FD" />
+  <line x1="140" y1="87" x2="140" y2="100" stroke="#93C5FD" stroke-width="2" />
+  <line x1="140" y1="90" x2="130" y2="95" stroke="#93C5FD" stroke-width="2" />
+  <line x1="140" y1="90" x2="150" y2="95" stroke="#93C5FD" stroke-width="2" />
+  <line x1="140" y1="100" x2="135" y2="110" stroke="#93C5FD" stroke-width="2" />
+  <line x1="140" y1="100" x2="145" y2="110" stroke="#93C5FD" stroke-width="2" />
+  
+  <!-- Worker 2 - installing control panel -->
+  <circle cx="280" cy="70" r="7" fill="#93C5FD" />
+  <line x1="280" y1="77" x2="280" y2="90" stroke="#93C5FD" stroke-width="2" />
+  <line x1="280" y1="80" x2="270" y2="85" stroke="#93C5FD" stroke-width="2" />
+  <line x1="280" y1="80" x2="290" y2="85" stroke="#93C5FD" stroke-width="2" />
+  <line x1="280" y1="90" x2="275" y2="100" stroke="#93C5FD" stroke-width="2" />
+  <line x1="280" y1="90" x2="285" y2="100" stroke="#93C5FD" stroke-width="2" />
+  
+  <!-- Connection lines -->
+  <path d="M100 38L160 70" stroke="#60A5FA" stroke-width="1" stroke-dasharray="3 2" />
+  <path d="M250 40L180 55" stroke="#60A5FA" stroke-width="1" stroke-dasharray="3 2" />
+  <path d="M400 38L325 55" stroke="#60A5FA" stroke-width="1" stroke-dasharray="3 2" />
+  <path d="M200 75L300 70" stroke="#60A5FA" stroke-width="1" stroke-dasharray="3 2" />
+  
+  <!-- Equipment Installation text -->
+  <text x="50%" y="18" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="white">Equipment Installation</text>
+  
+  <!-- Gradient definition -->
+  <defs>
+    <linearGradient id="paint0_linear" x1="0" y1="0" x2="500" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3B82F6" />
+      <stop offset="1" stop-color="#2563EB" />
+    </linearGradient>
+  </defs>
 </svg>
