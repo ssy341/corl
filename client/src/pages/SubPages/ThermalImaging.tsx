@@ -1,509 +1,364 @@
-import { useEffect } from 'react';
-import { Link } from 'wouter';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'wouter';
+import { ArrowLeft, Thermometer, Flame, Cpu, BellRing, BarChart3, Zap, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardFooter, 
-  CardHeader, 
-  CardTitle 
-} from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { 
-  Thermometer, 
-  AlertCircle, 
-  Flame, 
-  BarChart3, 
-  Cpu,
-  CloudLightning
-} from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import Mock3DVisualizer from '@/components/demo/Mock3DVisualizer';
 
 export default function ThermalImaging() {
   const { t, i18n } = useTranslation();
-
-  // Set document title
-  useEffect(() => {
-    document.title = i18n.language === 'cn' ? '热成像与温度感应系统 | 煤炭服务' : 'Thermal Imaging & Temperature Sensing System | Coal Services';
-  }, [i18n.language]);
-
-  // Sample thermal camera specifications
-  const thermalCameraSpecs = [
-    { 
-      name: i18n.language === 'cn' ? '热灵敏度' : 'Thermal Sensitivity', 
-      value: '<0.05°C' 
+  const lang = i18n.language;
+  
+  const features = [
+    {
+      id: 1,
+      icon: <Thermometer className="h-5 w-5"/>,
+      titleEn: 'Temperature Monitoring',
+      titleCn: '温度监测',
+      descriptionEn: 'Continuous monitoring of coal pile surface temperatures with precision of ±0.5°C for early detection of hotspots.',
+      descriptionCn: '持续监测煤堆表面温度，精度为±0.5°C，可及早发现热点。',
     },
-    { 
-      name: i18n.language === 'cn' ? '测量温度范围' : 'Temperature Measurement Range', 
-      value: '-20°C ~ +550°C' 
+    {
+      id: 2,
+      icon: <Flame className="h-5 w-5"/>,
+      titleEn: 'Spontaneous Combustion Prevention',
+      titleCn: '自燃预防',
+      descriptionEn: 'Early warning system detects temperature anomalies before they develop into dangerous combustion conditions.',
+      descriptionCn: '预警系统在温度异常发展为危险的燃烧条件之前检测到它们。',
     },
-    { 
-      name: i18n.language === 'cn' ? '温度精度' : 'Temperature Accuracy', 
-      value: '±2°C or ±2%' 
+    {
+      id: 3,
+      icon: <Cpu className="h-5 w-5"/>,
+      titleEn: 'AI-Powered Analysis',
+      titleCn: '人工智能分析',
+      descriptionEn: 'Advanced algorithms analyze thermal patterns to distinguish between normal temperature variations and potential hazards.',
+      descriptionCn: '先进算法分析热模式，区分正常温度变化和潜在危险。',
     },
-    { 
-      name: i18n.language === 'cn' ? '红外分辨率' : 'IR Resolution', 
-      value: '640 × 480 pixels' 
+    {
+      id: 4,
+      icon: <BellRing className="h-5 w-5"/>,
+      titleEn: 'Multi-Level Alerts',
+      titleCn: '多级警报',
+      descriptionEn: 'Customizable alert thresholds with escalating notification protocols based on temperature severity levels.',
+      descriptionCn: '可定制的警报阈值，基于温度严重程度级别的升级通知协议。',
     },
-    { 
-      name: i18n.language === 'cn' ? '镜头视角' : 'Field of View', 
-      value: '45° × 34°' 
+    {
+      id: 5,
+      icon: <BarChart3 className="h-5 w-5"/>,
+      titleEn: 'Historical Data Analysis',
+      titleCn: '历史数据分析',
+      descriptionEn: 'Track temperature trends over time to identify patterns and optimize storage conditions for different coal types.',
+      descriptionCn: '跟踪随时间变化的温度趋势，识别模式并优化不同煤种的存储条件。',
     },
-    { 
-      name: i18n.language === 'cn' ? '防护等级' : 'Protection Rating', 
-      value: 'IP67' 
-    }
+    {
+      id: 6,
+      icon: <Zap className="h-5 w-5"/>,
+      titleEn: 'Low-Light Effectiveness',
+      titleCn: '低光效能',
+      descriptionEn: 'Thermal imaging functions equally well day or night, unaffected by lighting conditions or weather.',
+      descriptionCn: '热成像在白天或夜间同样有效，不受照明条件或天气影响。',
+    },
   ];
 
-  // Sample application areas
-  const applicationAreas = [
-    {
-      title: i18n.language === 'cn' ? '自燃探测与预警' : 'Spontaneous Combustion Detection & Early Warning',
-      description: i18n.language === 'cn' 
-        ? '实时监测煤堆温度异常变化，在早期阶段发现自燃隐患，及时预警并采取措施' 
-        : 'Real-time monitoring of abnormal temperature changes in coal piles, detecting spontaneous combustion risks at an early stage, providing timely warnings and taking measures'
-    },
-    {
-      title: i18n.language === 'cn' ? '发热点精确定位' : 'Precise Hotspot Localization',
-      description: i18n.language === 'cn' 
-        ? '准确定位煤堆内部温度异常区域，指导有针对性的干预和处理' 
-        : 'Accurately locate temperature anomaly areas within coal piles, guiding targeted intervention and treatment'
-    },
-    {
-      title: i18n.language === 'cn' ? '环境条件监测' : 'Environmental Condition Monitoring',
-      description: i18n.language === 'cn' 
-        ? '监测煤场周围环境温度变化，分析对煤堆安全的潜在影响' 
-        : 'Monitor environmental temperature changes around coal yards and analyze potential impacts on coal pile safety'
-    },
-    {
-      title: i18n.language === 'cn' ? '煤质特性分析' : 'Coal Quality Characteristic Analysis',
-      description: i18n.language === 'cn' 
-        ? '通过温度分布特征辅助分析煤炭品质和特性，优化存储和使用策略' 
-        : 'Assist in analyzing coal quality and characteristics through temperature distribution patterns, optimizing storage and usage strategies'
-    },
-    {
-      title: i18n.language === 'cn' ? '安全与应急管理' : 'Safety & Emergency Management',
-      description: i18n.language === 'cn' 
-        ? '作为安全管理系统的关键组成部分，提供可靠的温度监测数据支持决策' 
-        : 'Serve as a key component of safety management systems, providing reliable temperature monitoring data to support decision-making'
-    }
+  const specs = [
+    { labelEn: 'Temperature Range', labelCn: '温度范围', valueEn: '-20°C to +600°C', valueCn: '-20°C 至 +600°C' },
+    { labelEn: 'Thermal Sensitivity', labelCn: '热灵敏度', valueEn: '<0.05°C at 30°C', valueCn: '<0.05°C（30°C时）' },
+    { labelEn: 'Detector Resolution', labelCn: '探测器分辨率', valueEn: '640 × 480 pixels', valueCn: '640 × 480 像素' },
+    { labelEn: 'Field of View', labelCn: '视场角', valueEn: '45° × 34°', valueCn: '45° × 34°' },
+    { labelEn: 'Image Refresh Rate', labelCn: '图像刷新率', valueEn: '30 Hz', valueCn: '30 赫兹' },
+    { labelEn: 'Early Warning Time', labelCn: '预警时间', valueEn: 'Up to 24 hours before combustion', valueCn: '燃烧前最长24小时' },
+    { labelEn: 'IP Rating', labelCn: 'IP防护等级', valueEn: 'IP67 (Dustproof, Waterproof)', valueCn: 'IP67（防尘防水）' },
+    { labelEn: 'Operating Environment', labelCn: '操作环境', valueEn: '-40°C to +60°C, 0-100% humidity', valueCn: '-40°C 至 +60°C，0-100%湿度' },
   ];
 
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-slate-900 to-slate-800 text-white py-24">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="mb-6">
-              <Link href="/services/storage-monitoring">
-                <Button variant="link" className="text-white p-0 mb-4">
-                  <span className="mr-2">←</span>
-                  {i18n.language === 'cn' ? '返回煤仓监管服务' : 'Back to Coal Storage Monitoring'}
-                </Button>
-              </Link>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                {i18n.language === 'cn' ? '热成像与温度感应系统' : 'Thermal Imaging & Temperature Sensing System'}
-              </h1>
-              <p className="text-xl text-gray-300 mb-8">
-                {i18n.language === 'cn' 
-                  ? '先进热成像技术实时监测煤堆温度变化，防止自燃事故，全面保障安全生产' 
-                  : 'Advanced thermal imaging technology to monitor coal pile temperature changes in real-time, prevent spontaneous combustion accidents, and fully ensure safe production'}
-              </p>
-            </div>
-            
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/consultation">
-                <Button className="bg-primary hover:bg-primary/90 text-white">
-                  {i18n.language === 'cn' ? '预约系统演示' : 'Schedule a Demo'}
-                </Button>
-              </Link>
-              <Link href="#technical-specifications">
-                <Button variant="outline" className="border-white text-white hover:bg-white/10">
-                  {i18n.language === 'cn' ? '查看技术规格' : 'View Technical Specifications'}
-                </Button>
-              </Link>
-            </div>
+    <div className="container py-8 max-w-7xl">
+      {/* Back link */}
+      <Link href="/services/storage-monitoring">
+        <Button variant="ghost" className="mb-4">
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          {lang === 'cn' ? '返回煤仓监管服务' : 'Back to Coal Storage Monitoring'}
+        </Button>
+      </Link>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+        {/* Content section */}
+        <div className="lg:col-span-2">
+          <h1 className="text-3xl font-bold mb-4">
+            {lang === 'cn' ? '热成像与温度感应系统' : 'Thermal Imaging & Temperature Sensing System'}
+          </h1>
+          
+          <div className="flex gap-2 mb-6">
+            <Badge variant="outline" className="bg-primary/10">
+              {lang === 'cn' ? '热点检测' : 'Hotspot Detection'}
+            </Badge>
+            <Badge variant="outline" className="bg-primary/10">
+              {lang === 'cn' ? '自燃预防' : 'Combustion Prevention'}
+            </Badge>
+            <Badge variant="outline" className="bg-primary/10">
+              {lang === 'cn' ? '安全管理' : 'Safety Management'}
+            </Badge>
           </div>
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent"></div>
-      </section>
-
-      {/* System Overview Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="text-3xl font-bold mb-6">
-                  {i18n.language === 'cn' ? '热成像系统概述' : 'Thermal Imaging System Overview'}
-                </h2>
-                <p className="text-gray-600 mb-4">
-                  {i18n.language === 'cn' 
-                    ? '我们的热成像与温度感应系统利用先进红外技术检测物体辐射的热能，并创建可视化的温度分布图，无需任何物理接触即可精确测量煤堆温度。' 
-                    : 'Our Thermal Imaging and Temperature Sensing System uses advanced infrared technology to detect heat radiated by objects and create visualized temperature distribution maps, precisely measuring coal pile temperatures without any physical contact.'}
-                </p>
-                <p className="text-gray-600 mb-6">
-                  {i18n.language === 'cn' 
-                    ? '系统配备高灵敏度热成像摄像机和精密温度传感器，连续监测煤炭储存区域的温度变化。当检测到温度异常时，系统立即发出警报，并自动记录详细数据用于后续分析。' 
-                    : 'The system is equipped with highly sensitive thermal imaging cameras and precise temperature sensors to continuously monitor temperature changes in coal storage areas. When temperature anomalies are detected, the system immediately issues alerts and automatically records detailed data for subsequent analysis.'}
-                </p>
-                <div className="space-y-4">
-                  <div className="flex items-start">
-                    <div className="mt-1 mr-4 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Thermometer className="h-4 w-4 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-medium">
-                        {i18n.language === 'cn' ? '温度连续监测' : 'Continuous Temperature Monitoring'}
-                      </h3>
-                      <p className="text-gray-600 text-sm">
-                        {i18n.language === 'cn' 
-                          ? '24小时不间断监测煤堆表面和内部温度变化' 
-                          : '24/7 uninterrupted monitoring of temperature changes on and within coal piles'}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="mt-1 mr-4 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
-                      <AlertCircle className="h-4 w-4 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-medium">
-                        {i18n.language === 'cn' ? '异常温度预警' : 'Abnormal Temperature Alert'}
-                      </h3>
-                      <p className="text-gray-600 text-sm">
-                        {i18n.language === 'cn' 
-                          ? '设置多级温度阈值，及时发现潜在风险区域' 
-                          : 'Set multi-level temperature thresholds to promptly identify potential risk areas'}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="mt-1 mr-4 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Flame className="h-4 w-4 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-medium">
-                        {i18n.language === 'cn' ? '自燃风险防控' : 'Spontaneous Combustion Risk Prevention'}
-                      </h3>
-                      <p className="text-gray-600 text-sm">
-                        {i18n.language === 'cn' 
-                          ? '提前识别自燃风险，指导预防性措施，避免火灾事故' 
-                          : 'Identify spontaneous combustion risks in advance, guide preventive measures, and avoid fire accidents'}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-gray-50 p-8 rounded-lg">
-                <h3 className="text-xl font-bold mb-4 text-center">
-                  {i18n.language === 'cn' ? '关键优势' : 'Key Advantages'}
-                </h3>
-                <div className="space-y-4">
-                  <div className="bg-white p-4 rounded border-l-4 border-primary shadow-sm">
-                    <div className="font-medium">
-                      {i18n.language === 'cn' ? '早期风险识别' : 'Early Risk Identification'}
-                    </div>
-                    <p className="text-gray-600 text-sm mt-1">
-                      {i18n.language === 'cn' 
-                        ? '在常规方法无法察觉的初级阶段发现热异常' 
-                        : 'Detect thermal anomalies at early stages when conventional methods can\'t perceive them'}
-                    </p>
-                  </div>
-                  <div className="bg-white p-4 rounded border-l-4 border-primary shadow-sm">
-                    <div className="font-medium">
-                      {i18n.language === 'cn' ? '无接触测量' : 'Non-contact Measurement'}
-                    </div>
-                    <p className="text-gray-600 text-sm mt-1">
-                      {i18n.language === 'cn' 
-                        ? '远距离安全测温，无需接触煤堆，保障人员安全' 
-                        : 'Safe temperature measurement from a distance without contacting coal piles, ensuring personnel safety'}
-                    </p>
-                  </div>
-                  <div className="bg-white p-4 rounded border-l-4 border-primary shadow-sm">
-                    <div className="font-medium">
-                      {i18n.language === 'cn' ? '全面覆盖监测' : 'Comprehensive Coverage Monitoring'}
-                    </div>
-                    <p className="text-gray-600 text-sm mt-1">
-                      {i18n.language === 'cn' 
-                        ? '大面积扫描检测，避免传统点测量遗漏风险区域' 
-                        : 'Large-area scan detection, avoiding traditional point measurement missing risk areas'}
-                    </p>
-                  </div>
-                  <div className="bg-white p-4 rounded border-l-4 border-primary shadow-sm">
-                    <div className="font-medium">
-                      {i18n.language === 'cn' ? '数据可视化' : 'Data Visualization'}
-                    </div>
-                    <p className="text-gray-600 text-sm mt-1">
-                      {i18n.language === 'cn' 
-                        ? '直观的温度分布热图，便于管理人员快速分析和决策' 
-                        : 'Intuitive temperature distribution heat maps for quick analysis and decision-making by management'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Application Areas Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold mb-12 text-center">
-              {i18n.language === 'cn' ? '应用领域' : 'Application Areas'}
+          
+          <p className="text-lg mb-6">
+            {lang === 'cn' 
+              ? '我们的热成像与温度感应系统采用高精度红外传感技术，为煤炭存储设施提供全面的温度监测解决方案。通过实时监测煤堆表面和内部温度变化，系统能够及早发现潜在的自燃风险，确保存储安全。'
+              : 'Our Thermal Imaging and Temperature Sensing System uses high-precision infrared sensing technology to provide a comprehensive temperature monitoring solution for coal storage facilities. By monitoring surface and internal temperature changes in real-time, the system can identify potential spontaneous combustion risks early, ensuring storage safety.'}
+          </p>
+          
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold mb-4">
+              {lang === 'cn' ? '主要功能' : 'Key Features'}
             </h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {applicationAreas.map((area, index) => (
-                <Card key={index} className="h-full border-border hover:shadow-md transition-shadow">
-                  <CardHeader>
-                    <CardTitle className="text-lg">{area.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-600">{area.description}</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {features.map((feature) => (
+                <Card key={feature.id} className="border-gray-200">
+                  <CardContent className="pt-6">
+                    <div className="flex items-start">
+                      <div className="p-2 rounded-md bg-primary/10 text-primary mr-4">
+                        {feature.icon}
+                      </div>
+                      <div>
+                        <h3 className="font-medium mb-2">
+                          {lang === 'cn' ? feature.titleCn : feature.titleEn}
+                        </h3>
+                        <p className="text-sm text-gray-500">
+                          {lang === 'cn' ? feature.descriptionCn : feature.descriptionEn}
+                        </p>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               ))}
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Technical Specifications */}
-      <section className="py-16" id="technical-specifications">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold mb-12 text-center">
-              {i18n.language === 'cn' ? '技术规格' : 'Technical Specifications'}
+          
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold mb-4">
+              {lang === 'cn' ? '技术参数' : 'Technical Specifications'}
             </h2>
             
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-              <div>
-                <h3 className="text-xl font-semibold mb-4">
-                  {i18n.language === 'cn' ? '热成像摄像机规格' : 'Thermal Imaging Camera Specifications'}
-                </h3>
-                <div className="bg-white rounded-lg p-6 shadow-sm">
-                  <Table>
-                    <TableBody>
-                      {thermalCameraSpecs.map((spec, index) => (
-                        <TableRow key={index}>
-                          <TableCell className="font-medium">{spec.name}</TableCell>
-                          <TableCell>{spec.value}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {specs.map((spec, index) => (
+                <div key={index} className="flex justify-between p-3 rounded-lg border border-gray-200">
+                  <span className="text-gray-600">{lang === 'cn' ? spec.labelCn : spec.labelEn}</span>
+                  <span className="font-medium">{lang === 'cn' ? spec.valueCn : spec.valueEn}</span>
                 </div>
-
-                <h3 className="text-xl font-semibold mt-8 mb-4">
-                  {i18n.language === 'cn' ? '温度监测系统特点' : 'Temperature Monitoring System Features'}
-                </h3>
-                <div className="space-y-4">
-                  <div className="flex items-start">
-                    <div className="mt-1 mr-4 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Cpu className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-medium">
-                        {i18n.language === 'cn' ? '智能分析算法' : 'Intelligent Analysis Algorithms'}
-                      </h4>
-                      <p className="text-gray-600 text-sm mt-1">
-                        {i18n.language === 'cn' 
-                          ? '采用专为煤堆温度监测优化的AI算法，可自动识别异常温度模式和趋势' 
-                          : 'Employs AI algorithms optimized for coal pile temperature monitoring, automatically identifying abnormal temperature patterns and trends'}
-                      </p>
-                    </div>
+              ))}
+            </div>
+          </div>
+          
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold mb-4">
+              {lang === 'cn' ? '温度风险级别指示' : 'Temperature Risk Level Indicators'}
+            </h2>
+            
+            <div className="space-y-4">
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-medium">{lang === 'cn' ? '正常' : 'Normal'}</span>
+                    <span className="text-sm text-gray-500">&lt; 40°C</span>
                   </div>
-                  <div className="flex items-start">
-                    <div className="mt-1 mr-4 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <BarChart3 className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-medium">
-                        {i18n.language === 'cn' ? '温度趋势分析' : 'Temperature Trend Analysis'}
-                      </h4>
-                      <p className="text-gray-600 text-sm mt-1">
-                        {i18n.language === 'cn' 
-                          ? '记录并分析长期温度变化趋势，提供预测性洞察和预警功能' 
-                          : 'Records and analyzes long-term temperature change trends, providing predictive insights and early warning functions'}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="mt-1 mr-4 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <CloudLightning className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-medium">
-                        {i18n.language === 'cn' ? '环境因素补偿' : 'Environmental Factor Compensation'}
-                      </h4>
-                      <p className="text-gray-600 text-sm mt-1">
-                        {i18n.language === 'cn' 
-                          ? '自动考虑环境温度、湿度和气象条件的影响，确保测量精度' 
-                          : 'Automatically accounts for the influence of environmental temperature, humidity, and meteorological conditions to ensure measurement accuracy'}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                  <Progress value={25} className="h-2 bg-gray-100" />
+                  <p className="text-xs text-gray-500 mt-2">
+                    {lang === 'cn' 
+                      ? '煤堆处于正常温度范围内，无需特别关注。'
+                      : 'Coal pile is within normal temperature range, no special attention required.'}
+                  </p>
+                </CardContent>
+              </Card>
               
-              <div>
-                <h3 className="text-xl font-semibold mb-4">
-                  {i18n.language === 'cn' ? '系统功能与能力' : 'System Functions & Capabilities'}
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-medium">{lang === 'cn' ? '注意' : 'Attention'}</span>
+                    <span className="text-sm text-gray-500">40°C - 60°C</span>
+                  </div>
+                  <Progress value={50} className="h-2 bg-gray-100" />
+                  <p className="text-xs text-gray-500 mt-2">
+                    {lang === 'cn' 
+                      ? '温度略高，建议增加监控频率，检查通风状况。'
+                      : 'Slightly elevated temperature, increased monitoring frequency recommended, check ventilation.'}
+                  </p>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-medium">{lang === 'cn' ? '警告' : 'Warning'}</span>
+                    <span className="text-sm text-gray-500">60°C - 80°C</span>
+                  </div>
+                  <Progress value={75} className="h-2 bg-gray-100" />
+                  <p className="text-xs text-gray-500 mt-2">
+                    {lang === 'cn' 
+                      ? '温度显著升高，可能存在自燃风险。应立即进行主动冷却措施，准备应急预案。'
+                      : 'Significantly elevated temperature, spontaneous combustion risk possible. Immediate active cooling measures should be taken, prepare emergency plans.'}
+                  </p>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-medium">{lang === 'cn' ? '危险' : 'Danger'}</span>
+                    <span className="text-sm text-gray-500">&gt; 80°C</span>
+                  </div>
+                  <Progress value={100} className="h-2 bg-gray-100" />
+                  <p className="text-xs text-gray-500 mt-2">
+                    {lang === 'cn' 
+                      ? '高度危险状态，自燃风险极高。应启动紧急处理流程，可能需要隔离和专业处理。'
+                      : 'Highly dangerous state, extreme spontaneous combustion risk. Emergency procedures should be initiated, isolation and professional handling may be required.'}
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+          
+          <Card className="mb-8">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-xl flex items-center">
+                <Info className="h-5 w-5 mr-2 text-amber-500" />
+                {lang === 'cn' ? '煤炭自燃风险管理' : 'Coal Spontaneous Combustion Risk Management'}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-4">
+                {lang === 'cn' 
+                  ? '煤炭自燃是煤炭储存过程中的主要安全隐患之一。当煤炭接触氧气并产生热量积累时，如果散热不足，温度会逐渐升高，最终导致自燃。我们的热成像系统能够在问题发展为严重火灾前检测到温度异常。'
+                  : 'Coal spontaneous combustion is one of the main safety hazards in coal storage. When coal comes into contact with oxygen and generates accumulated heat, if heat dissipation is insufficient, the temperature gradually rises, eventually leading to spontaneous combustion. Our thermal imaging system can detect temperature anomalies before the problem develops into a serious fire.'}
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <h4 className="font-medium mb-2 text-sm">
+                    {lang === 'cn' ? '预防措施' : 'Preventive Measures'}
+                  </h4>
+                  <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                    <li>{lang === 'cn' ? '确保适当的通风' : 'Ensure proper ventilation'}</li>
+                    <li>{lang === 'cn' ? '避免煤堆过高' : 'Avoid excessive pile heights'}</li>
+                    <li>{lang === 'cn' ? '定期压实煤堆' : 'Regularly compact coal piles'}</li>
+                    <li>{lang === 'cn' ? '考虑"先入先出"原则' : 'Consider "first-in, first-out" principle'}</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-medium mb-2 text-sm">
+                    {lang === 'cn' ? '应对措施' : 'Response Measures'}
+                  </h4>
+                  <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                    <li>{lang === 'cn' ? '隔离热点区域' : 'Isolate hotspot areas'}</li>
+                    <li>{lang === 'cn' ? '应用水雾冷却' : 'Apply water mist cooling'}</li>
+                    <li>{lang === 'cn' ? '加速使用热点区域的煤炭' : 'Accelerate the use of coal in hotspot areas'}</li>
+                    <li>{lang === 'cn' ? '在极端情况下移除受影响的煤炭' : 'Remove affected coal in extreme cases'}</li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        
+        {/* Demo preview section */}
+        <div className="lg:col-span-1">
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                {lang === 'cn' ? '系统演示' : 'System Demo'}
+              </CardTitle>
+              <CardDescription>
+                {lang === 'cn' ? '热成像系统样例展示' : 'Thermal imaging system sample display'}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Tabs defaultValue="thermal">
+                <TabsList className="mb-4">
+                  <TabsTrigger value="standard">
+                    {lang === 'cn' ? '标准视图' : 'Standard View'}
+                  </TabsTrigger>
+                  <TabsTrigger value="thermal">
+                    {lang === 'cn' ? '热成像视图' : 'Thermal View'}
+                  </TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="standard">
+                  <Mock3DVisualizer 
+                    title={lang === 'cn' ? '煤堆监测 - 标准视图' : 'Coal Pile Monitoring - Standard View'} 
+                    mode="default"
+                  />
+                  <p className="text-sm text-gray-500 mt-4">
+                    {lang === 'cn' 
+                      ? '标准可视化视图显示煤堆的物理形状和表面细节。'
+                      : 'Standard visualization view shows the physical shape and surface details of the coal pile.'}
+                  </p>
+                </TabsContent>
+                
+                <TabsContent value="thermal">
+                  <Mock3DVisualizer 
+                    title={lang === 'cn' ? '煤堆监测 - 热成像视图' : 'Coal Pile Monitoring - Thermal View'} 
+                    mode="thermal"
+                  />
+                  <p className="text-sm text-gray-500 mt-4">
+                    {lang === 'cn' 
+                      ? '热成像视图显示煤堆的温度分布，帮助快速识别热点区域。'
+                      : 'Thermal view shows temperature distribution of the coal pile, helping to quickly identify hotspot areas.'}
+                  </p>
+                </TabsContent>
+              </Tabs>
+              
+              <div className="mt-6 border-t pt-6">
+                <h3 className="font-medium mb-3">
+                  {lang === 'cn' ? '系统适用性' : 'System Applicability'}
                 </h3>
-                <div className="bg-white p-6 rounded-lg shadow-sm space-y-6">
-                  <div>
-                    <h4 className="font-semibold mb-2">
-                      {i18n.language === 'cn' ? '温度阈值设置' : 'Temperature Threshold Settings'}
-                    </h4>
-                    <p className="text-gray-600 text-sm">
-                      {i18n.language === 'cn' 
-                        ? '支持多级温度阈值设置，可根据不同煤种特性和季节条件灵活调整。系统提供预警(45-60°C)、警告(60-80°C)和紧急(>80°C)三级警报机制。' 
-                        : 'Supports multi-level temperature threshold settings that can be flexibly adjusted according to different coal type characteristics and seasonal conditions. The system provides a three-level alarm mechanism: pre-warning (45-60°C), warning (60-80°C), and emergency (>80°C).'}
-                    </p>
+                <div className="text-sm text-gray-600 space-y-2">
+                  <div className="flex justify-between">
+                    <span>{lang === 'cn' ? '煤种兼容性' : 'Coal Type Compatibility'}</span>
+                    <span className="font-medium">{lang === 'cn' ? '所有类型' : 'All Types'}</span>
                   </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">
-                      {i18n.language === 'cn' ? '温度分布可视化' : 'Temperature Distribution Visualization'}
-                    </h4>
-                    <p className="text-gray-600 text-sm">
-                      {i18n.language === 'cn' 
-                        ? '生成直观的煤堆表面温度热图，采用标准化色温显示方案。支持2D和3D可视化模式，方便从不同角度观察温度分布情况。' 
-                        : 'Generates intuitive coal pile surface temperature heat maps using standardized color temperature display schemes. Supports both 2D and 3D visualization modes for convenient observation of temperature distribution from different angles.'}
-                    </p>
+                  <div className="flex justify-between">
+                    <span>{lang === 'cn' ? '最大监测面积' : 'Maximum Monitoring Area'}</span>
+                    <span className="font-medium">20,000 m²</span>
                   </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">
-                      {i18n.language === 'cn' ? '历史数据分析' : 'Historical Data Analysis'}
-                    </h4>
-                    <p className="text-gray-600 text-sm">
-                      {i18n.language === 'cn' 
-                        ? '存储所有历史温度数据，提供丰富的回溯分析工具。支持时间序列分析、区域对比分析和趋势预测功能，帮助深入了解煤堆温度变化规律。' 
-                        : 'Stores all historical temperature data and provides rich retrospective analysis tools. Supports time series analysis, regional comparative analysis, and trend prediction functions to help gain in-depth understanding of coal pile temperature change patterns.'}
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">
-                      {i18n.language === 'cn' ? '多系统集成' : 'Multi-system Integration'}
-                    </h4>
-                    <p className="text-gray-600 text-sm">
-                      {i18n.language === 'cn' 
-                        ? '与消防系统、企业ERP和安全管理平台无缝集成，支持数据互通和联动响应。提供标准API接口，便于与第三方系统对接。' 
-                        : 'Seamlessly integrates with fire protection systems, enterprise ERP, and safety management platforms, supporting data interchange and linked responses. Provides standard API interfaces for easy connection with third-party systems.'}
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">
-                      {i18n.language === 'cn' ? '告警与通知' : 'Alerts & Notifications'}
-                    </h4>
-                    <p className="text-gray-600 text-sm">
-                      {i18n.language === 'cn' 
-                        ? '提供多渠道的告警通知，包括控制中心显示、手机APP推送、短信、邮件和声光警报等。支持告警升级机制和确认回复流程。' 
-                        : 'Provides multi-channel alert notifications, including control center display, mobile app push, SMS, email, and audio-visual alarms. Supports alarm escalation mechanisms and confirmation response processes.'}
-                    </p>
+                  <div className="flex justify-between">
+                    <span>{lang === 'cn' ? '最佳监测高度' : 'Optimal Monitoring Height'}</span>
+                    <span className="font-medium">15-30 m</span>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Case Study Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold mb-8 text-center">
-              {i18n.language === 'cn' ? '成功案例' : 'Success Case'}
-            </h2>
-            
-            <div className="bg-white p-8 rounded-lg shadow-sm">
-              <h3 className="text-xl font-bold mb-4">
-                {i18n.language === 'cn' ? '陕西某大型煤矿' : 'Large Coal Mine in Shaanxi'}
-              </h3>
-              <p className="text-gray-600 mb-6">
-                {i18n.language === 'cn' 
-                  ? '该煤矿露天堆场面积达12万平方米，年处理量超过800万吨。在部署我们的热成像与温度感应系统前，每年平均发生2-3次煤堆自燃事件，导致材料损失和严重的安全隐患。' 
-                  : 'This coal mine has an open-air stockyard area of 120,000 square meters with an annual throughput exceeding 8 million tons. Before deploying our thermal imaging and temperature sensing system, there were an average of 2-3 coal pile spontaneous combustion incidents per year, resulting in material losses and serious safety hazards.'}
-              </p>
-              <h4 className="font-semibold mb-2">
-                {i18n.language === 'cn' ? '解决方案' : 'Solution'}
-              </h4>
-              <p className="text-gray-600 mb-4">
-                {i18n.language === 'cn' 
-                  ? '我们部署了8台高精度热成像摄像机，覆盖整个堆场区域，建立了24小时温度监测系统。系统根据不同区域煤种特性设置了差异化温度阈值，并与矿区安全管理系统集成。' 
-                  : 'We deployed 8 high-precision thermal imaging cameras covering the entire stockyard area, establishing a 24-hour temperature monitoring system. The system set differentiated temperature thresholds according to coal type characteristics in different areas and integrated with the mine safety management system.'}
-              </p>
-              <h4 className="font-semibold mb-2">
-                {i18n.language === 'cn' ? '成效' : 'Results'}
-              </h4>
-              <ul className="list-disc list-inside space-y-2 text-gray-600 mb-6">
-                <li>
-                  {i18n.language === 'cn' 
-                    ? '系统投入使用两年内，成功预警并处理了16次早期自燃风险，无一发展为实际火灾事件' 
-                    : 'Within two years of system implementation, 16 early spontaneous combustion risks were successfully warned and handled, with none developing into actual fire incidents'}
-                </li>
-                <li>
-                  {i18n.language === 'cn' 
-                    ? '精确识别煤堆内的热异常区域，使处理措施更加精准和高效，减少了不必要的材料处理' 
-                    : 'Precisely identified thermal anomaly areas within coal piles, making treatment measures more accurate and efficient, reducing unnecessary material handling'}
-                </li>
-                <li>
-                  {i18n.language === 'cn' 
-                    ? '通过预警系统和及时干预，预计每年节约损失成本超过200万元' 
-                    : 'Through the early warning system and timely intervention, estimated annual loss cost savings exceeded 2 million yuan'}
-                </li>
-                <li>
-                  {i18n.language === 'cn' 
-                    ? '显著提升了矿区安全管理水平，获得安全生产监管部门的高度评价' 
-                    : 'Significantly improved the level of mine safety management, receiving high praise from safety production regulatory departments'}
-                </li>
-              </ul>
-              <div className="font-medium italic text-gray-700 border-l-4 border-primary pl-4 py-2">
-                {i18n.language === 'cn' 
-                  ? '"热成像系统极大提升了我们的煤堆安全管理能力，从被动应对转为主动预防。系统直观的温度可视化和智能预警功能，使我们能够在问题扩大前及时干预，保障了生产安全和财产安全。"' 
-                  : '"The thermal imaging system has greatly enhanced our coal pile safety management capability, shifting from passive response to proactive prevention. The system\'s intuitive temperature visualization and intelligent early warning functions allow us to intervene in a timely manner before problems escalate, ensuring production and property safety."'}
+            </CardContent>
+            <CardFooter className="border-t bg-gray-50">
+              <div className="w-full">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium">{lang === 'cn' ? '当前系统精确度' : 'Current System Accuracy'}</span>
+                  <span className="text-sm text-gray-500">98.7%</span>
+                </div>
+                <Progress value={98.7} className="h-1" />
               </div>
-              <div className="text-right mt-2 text-gray-600">
-                {i18n.language === 'cn' ? '— 陕西某大型煤矿安全总监' : '— Safety Director, Large Coal Mine in Shaanxi'}
-              </div>
-            </div>
-          </div>
+            </CardFooter>
+          </Card>
         </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-6">
-              {i18n.language === 'cn' ? '升级您的煤堆安全监测系统' : 'Upgrade Your Coal Pile Safety Monitoring System'}
-            </h2>
-            <p className="text-xl mb-8 text-gray-300">
-              {i18n.language === 'cn' 
-                ? '我们的热成像与温度感应系统是保障煤炭安全储存的理想解决方案，通过早期发现热异常，防患于未然。' 
-                : 'Our thermal imaging and temperature sensing system is the ideal solution for ensuring safe coal storage by detecting thermal anomalies early and preventing problems before they occur.'}
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link href="/consultation">
-                <Button size="lg" className="bg-white text-slate-900 hover:bg-gray-100">
-                  {i18n.language === 'cn' ? '联系我们了解更多' : 'Contact Us to Learn More'}
-                </Button>
-              </Link>
-              <Link href="/services/storage-monitoring">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                  {i18n.language === 'cn' ? '探索更多监控解决方案' : 'Explore More Monitoring Solutions'}
-                </Button>
-              </Link>
-            </div>
-          </div>
+      </div>
+      
+      {/* Call to action */}
+      <div className="bg-gradient rounded-xl p-8 text-white">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-2xl font-bold mb-4">
+            {lang === 'cn' ? '提升您的煤场安全管理' : 'Enhance Your Coal Yard Safety Management'}
+          </h2>
+          <p className="mb-6">
+            {lang === 'cn' 
+              ? '我们的热成像系统可以为您的煤炭存储设施提供全天候的温度监测和自燃风险管理，大幅降低安全隐患。'
+              : 'Our thermal imaging system can provide round-the-clock temperature monitoring and spontaneous combustion risk management for your coal storage facilities, significantly reducing safety hazards.'}
+          </p>
+          <Link href="/consultation">
+            <Button variant="outline" className="bg-white text-primary hover:bg-gray-100">
+              {lang === 'cn' ? '预约技术演示' : 'Schedule a Technical Demo'}
+            </Button>
+          </Link>
         </div>
-      </section>
+      </div>
     </div>
   );
 }
