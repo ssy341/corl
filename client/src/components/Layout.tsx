@@ -9,7 +9,7 @@ interface LayoutProps {
 
 export function Header() {
   const { t, i18n } = useTranslation();
-
+  
   const toggleLanguage = () => {
     const newLang = i18n.language === 'cn' ? 'en' : 'cn';
     i18n.changeLanguage(newLang);

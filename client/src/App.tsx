@@ -45,24 +45,24 @@ function Router() {
   }, []);
 
   return (
-    <Layout>
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/services" component={ServicesPage} />
-        <Route path="/services/:slug" component={ServiceDetail} />
-        <Route path="/consultation" component={ConsultationPage} />
-        <Route path="/about" component={AboutPage} />
-        <Route path="/contact" component={ContactPage} />
-        <Route component={NotFound} />
-      </Switch>
-    </Layout>
+    <Switch>
+      <Route path="/" component={Home} />
+      <Route path="/services" component={ServicesPage} />
+      <Route path="/services/:slug" component={ServiceDetail} />
+      <Route path="/consultation" component={ConsultationPage} />
+      <Route path="/about" component={AboutPage} />
+      <Route path="/contact" component={ContactPage} />
+      <Route component={NotFound} />
+    </Switch>
   );
 }
 
 function App() {
   return (
     <>
-      <Router />
+      <Layout>
+        <Router />
+      </Layout>
       <style dangerouslySetInnerHTML={{
         __html: `
         .bg-gradient {
