@@ -4,10 +4,11 @@ import Home from "@/pages/Home";
 import { useEffect } from "react";
 import Layout from "@/components/Layout";
 import ConsultationPage from "@/pages/Consultation";
+import ServiceDetail from "@/pages/ServiceDetail";
 
 // We'll implement these pages later
 const ServicesPage = () => <div className="container mx-auto px-4 py-12">Services Page</div>;
-const ServiceDetail = () => <div className="container mx-auto px-4 py-12">Service Detail Page</div>;
+const ServiceDetailPage = () => <div className="container mx-auto px-4 py-12">Service Detail Page</div>;
 const AboutPage = () => <div className="container mx-auto px-4 py-12">About Page</div>;
 const ContactPage = () => <div className="container mx-auto px-4 py-12">Contact Page</div>;
 
