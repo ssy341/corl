@@ -13,6 +13,13 @@ import {
   CardTitle 
 } from '@/components/ui/card';
 
+// Import SVG assets
+import CoalStorageSvg from '@/assets/images/coal-storage.svg';
+import SiteAssessmentSvg from '@/assets/implementation/site-assessment.svg';
+import SystemDesignSvg from '@/assets/implementation/system-design.svg';
+import EquipmentInstallationSvg from '@/assets/implementation/equipment-installation.svg';
+import TrainingSvg from '@/assets/implementation/training.svg';
+
 export default function CoalStorageMonitoring() {
   const { t, i18n } = useTranslation();
 
@@ -122,9 +129,9 @@ export default function CoalStorageMonitoring() {
               <div className="relative">
                 <div className="rounded-lg overflow-hidden shadow-xl">
                   <img
-                    src="https://images.unsplash.com/photo-1581093804475-577d72e35330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=900&q=80"
+                    src={CoalStorageSvg}
                     alt="Coal Storage Monitoring"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain bg-white p-4"
                   />
                 </div>
                 <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-primary/10 rounded-full z-[-1]"></div>
@@ -284,9 +291,9 @@ export default function CoalStorageMonitoring() {
                   </div>
                   <div className="md:w-1/2 order-3">
                     <img 
-                      src="https://images.unsplash.com/photo-1581093804661-b0441856ade7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" 
+                      src={SiteAssessmentSvg} 
                       alt="Site Assessment" 
-                      className="rounded-lg shadow-md"
+                      className="rounded-lg shadow-md bg-white p-2"
                     />
                   </div>
                 </div>
@@ -295,9 +302,9 @@ export default function CoalStorageMonitoring() {
                 <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
                   <div className="md:w-1/2 order-2 md:order-1">
                     <img 
-                      src="https://images.unsplash.com/photo-1581093805715-ca345c0e1ba5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" 
+                      src={SystemDesignSvg} 
                       alt="System Design" 
-                      className="rounded-lg shadow-md"
+                      className="rounded-lg shadow-md bg-white p-2"
                     />
                   </div>
                   <div className="md:w-12 md:mx-auto flex justify-center order-1 md:order-2">
@@ -336,9 +343,9 @@ export default function CoalStorageMonitoring() {
                   </div>
                   <div className="md:w-1/2 order-3">
                     <img 
-                      src="https://images.unsplash.com/photo-1581094378626-aa9fa6f24c20?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" 
+                      src={EquipmentInstallationSvg} 
                       alt="Equipment Installation" 
-                      className="rounded-lg shadow-md"
+                      className="rounded-lg shadow-md bg-white p-2"
                     />
                   </div>
                 </div>
@@ -347,9 +354,9 @@ export default function CoalStorageMonitoring() {
                 <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
                   <div className="md:w-1/2 order-2 md:order-1">
                     <img 
-                      src="https://images.unsplash.com/photo-1581093458792-9e68df18d438?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" 
+                      src={TrainingSvg} 
                       alt="Training" 
-                      className="rounded-lg shadow-md"
+                      className="rounded-lg shadow-md bg-white p-2"
                     />
                   </div>
                   <div className="md:w-12 md:mx-auto flex justify-center order-1 md:order-2">
