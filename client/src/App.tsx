@@ -5,10 +5,12 @@ import { useEffect } from "react";
 import Layout from "@/components/Layout";
 import ConsultationPage from "@/pages/Consultation";
 import ServiceDetail from "@/pages/ServiceDetail";
+import CaseStudies from "@/pages/CaseStudies";
+import CaseStudyDetail from "@/pages/CaseStudyDetail";
+import TechnologyDetails from "@/pages/ServicePages/TechnologyDetails";
 
 // We'll implement these pages later
 const ServicesPage = () => <div className="container mx-auto px-4 py-12">Services Page</div>;
-const ServiceDetailPage = () => <div className="container mx-auto px-4 py-12">Service Detail Page</div>;
 const AboutPage = () => <div className="container mx-auto px-4 py-12">About Page</div>;
 const ContactPage = () => <div className="container mx-auto px-4 py-12">Contact Page</div>;
 
@@ -49,6 +51,9 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/services" component={ServicesPage} />
       <Route path="/services/:slug" component={ServiceDetail} />
+      <Route path="/technology/:tech-type" component={TechnologyDetails} />
+      <Route path="/case-studies" component={CaseStudies} />
+      <Route path="/case-studies/:id" component={CaseStudyDetail} />
       <Route path="/consultation" component={ConsultationPage} />
       <Route path="/about" component={AboutPage} />
       <Route path="/contact" component={ContactPage} />
