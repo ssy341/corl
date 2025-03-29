@@ -173,9 +173,11 @@ export default function CoalStorageMonitoring() {
                   </p>
                 </CardContent>
                 <CardFooter>
-                  <Button variant="link" className="px-0 text-primary">
-                    {i18n.language === 'cn' ? '了解更多' : 'Learn more'} →
-                  </Button>
+                  <Link href="/sub-pages/video-monitoring">
+                    <Button variant="link" className="px-0 text-primary">
+                      {i18n.language === 'cn' ? '了解更多' : 'Learn more'} →
+                    </Button>
+                  </Link>
                 </CardFooter>
               </Card>
 
@@ -201,9 +203,11 @@ export default function CoalStorageMonitoring() {
                   </p>
                 </CardContent>
                 <CardFooter>
-                  <Button variant="link" className="px-0 text-primary">
-                    {i18n.language === 'cn' ? '了解更多' : 'Learn more'} →
-                  </Button>
+                  <Link href="/sub-pages/thermal-imaging">
+                    <Button variant="link" className="px-0 text-primary">
+                      {i18n.language === 'cn' ? '了解更多' : 'Learn more'} →
+                    </Button>
+                  </Link>
                 </CardFooter>
               </Card>
 
@@ -229,9 +233,11 @@ export default function CoalStorageMonitoring() {
                   </p>
                 </CardContent>
                 <CardFooter>
-                  <Button variant="link" className="px-0 text-primary">
-                    {i18n.language === 'cn' ? '了解更多' : 'Learn more'} →
-                  </Button>
+                  <Link href="/sub-pages/inventory-analysis">
+                    <Button variant="link" className="px-0 text-primary">
+                      {i18n.language === 'cn' ? '了解更多' : 'Learn more'} →
+                    </Button>
+                  </Link>
                 </CardFooter>
               </Card>
             </div>
@@ -301,12 +307,12 @@ export default function CoalStorageMonitoring() {
                   </div>
                   <div className="md:w-1/2 md:text-left order-3">
                     <h3 className="text-xl font-bold mb-3">
-                      {i18n.language === 'cn' ? '2. 系统设计与规划' : '2. System Design & Planning'}
+                      {i18n.language === 'cn' ? '2. 系统设计与定制' : '2. System Design & Customization'}
                     </h3>
                     <p className="text-gray-600">
                       {i18n.language === 'cn' 
-                        ? '根据评估结果，我们的工程师团队设计完整的监控解决方案，包括摄像头位置、传感器布局、网络架构和控制中心设置。我们确保系统设计满足您的具体需求，同时考虑未来扩展可能性。' 
-                        : 'Based on the assessment, our engineering team designs a comprehensive monitoring solution, including camera positions, sensor layout, network architecture, and control center setup. We ensure the system design meets your specific requirements while considering future expansion possibilities.'}
+                        ? '基于评估结果，我们设计完整的监控解决方案，包括设备选择、布局规划、数据处理和分析策略。每个系统都完全定制，以满足您的特定需求和预算限制。' 
+                        : 'Based on the assessment results, we design a complete monitoring solution, including equipment selection, layout planning, data processing, and analysis strategies. Each system is fully customized to meet your specific needs and budget constraints.'}
                     </p>
                   </div>
                 </div>
@@ -315,12 +321,12 @@ export default function CoalStorageMonitoring() {
                 <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
                   <div className="md:w-1/2 md:text-right order-2 md:order-1">
                     <h3 className="text-xl font-bold mb-3">
-                      {i18n.language === 'cn' ? '3. 设备安装与配置' : '3. Equipment Installation & Configuration'}
+                      {i18n.language === 'cn' ? '3. 设备安装与集成' : '3. Equipment Installation & Integration'}
                     </h3>
                     <p className="text-gray-600">
                       {i18n.language === 'cn' 
-                        ? '我们的技术人员安装所有监控设备，包括摄像头、传感器、网络设备和控制系统。所有设备均由专业人员进行测试和校准，确保系统按照设计规范运行。' 
-                        : 'Our technicians install all monitoring equipment, including cameras, sensors, network devices, and control systems. All equipment is tested and calibrated by professionals to ensure the system operates according to design specifications.'}
+                        ? '我们的技术团队负责所有设备的安装和调试，确保系统正常运行并与您现有的系统无缝集成。我们严格遵循安全标准，将对您正常运营的干扰降至最低。' 
+                        : 'Our technical team handles the installation and commissioning of all equipment, ensuring the system works properly and integrates seamlessly with your existing systems. We strictly follow safety standards and minimize disruption to your normal operations.'}
                     </p>
                   </div>
                   <div className="md:w-12 md:mx-auto flex justify-center order-1 md:order-2">
@@ -330,7 +336,7 @@ export default function CoalStorageMonitoring() {
                   </div>
                   <div className="md:w-1/2 order-3">
                     <img 
-                      src="https://images.unsplash.com/photo-1581093458791-9cd87427edf7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" 
+                      src="https://images.unsplash.com/photo-1581094378626-aa9fa6f24c20?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" 
                       alt="Equipment Installation" 
                       className="rounded-lg shadow-md"
                     />
@@ -341,8 +347,8 @@ export default function CoalStorageMonitoring() {
                 <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
                   <div className="md:w-1/2 order-2 md:order-1">
                     <img 
-                      src="https://images.unsplash.com/photo-1581093789050-9a432d5b3929?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" 
-                      alt="Training and Support" 
+                      src="https://images.unsplash.com/photo-1581093458792-9e68df18d438?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" 
+                      alt="Training" 
                       className="rounded-lg shadow-md"
                     />
                   </div>
@@ -353,12 +359,12 @@ export default function CoalStorageMonitoring() {
                   </div>
                   <div className="md:w-1/2 md:text-left order-3">
                     <h3 className="text-xl font-bold mb-3">
-                      {i18n.language === 'cn' ? '4. 培训与持续支持' : '4. Training & Ongoing Support'}
+                      {i18n.language === 'cn' ? '4. 培训与支持' : '4. Training & Support'}
                     </h3>
                     <p className="text-gray-600">
                       {i18n.language === 'cn' 
-                        ? '我们为您的团队提供全面培训，确保他们能够有效操作和管理监控系统。我们还提供持续的技术支持、定期维护服务和系统升级，确保您的监控系统始终处于最佳状态。' 
-                        : 'We provide comprehensive training for your team to ensure they can effectively operate and manage the monitoring system. We also offer ongoing technical support, regular maintenance services, and system upgrades to ensure your monitoring system always performs at its best.'}
+                        ? '我们为您的团队提供全面培训，确保他们能够有效操作和管理监控系统。我们还提供持续的技术支持和定期维护服务，确保系统始终处于最佳状态。' 
+                        : 'We provide comprehensive training for your team to ensure they can effectively operate and manage the monitoring system. We also offer ongoing technical support and regular maintenance services to keep the system in optimal condition.'}
                     </p>
                   </div>
                 </div>
@@ -368,182 +374,316 @@ export default function CoalStorageMonitoring() {
         </div>
       </section>
 
-      {/* Case Studies Section */}
-      <section className="py-16 bg-gray-50" id="case-studies">
+      {/* Features and Benefits Tabs */}
+      <section className="py-16 bg-gray-50" id="features">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4">
-                {i18n.language === 'cn' ? '成功案例' : 'Case Studies'}
+                {i18n.language === 'cn' ? '功能与优势' : 'Features & Benefits'}
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
                 {i18n.language === 'cn' 
-                  ? '了解我们如何帮助客户解决煤炭存储监管挑战' 
-                  : "See how we have helped clients solve their coal storage monitoring challenges"}
+                  ? '我们的煤仓监管服务提供全面的功能，为您的煤炭存储管理带来显著优势' 
+                  : 'Our coal storage monitoring service offers comprehensive features that bring significant advantages to your coal storage management'}
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* Case Study 1 */}
-              <Card className="overflow-hidden">
-                <div className="h-48 overflow-hidden">
-                  <img 
-                    src="https://images.unsplash.com/photo-1581093921758-7b6b3a048770?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
-                    alt="Large Mining Operation Case Study" 
-                    className="w-full h-full object-cover"
-                  />
+            <Tabs defaultValue="security">
+              <div className="flex justify-center mb-8">
+                <TabsList className="grid w-full max-w-3xl grid-cols-3">
+                  <TabsTrigger value="security">
+                    {i18n.language === 'cn' ? '安全与防盗' : 'Security & Theft Prevention'}
+                  </TabsTrigger>
+                  <TabsTrigger value="fire">
+                    {i18n.language === 'cn' ? '火灾预防' : 'Fire Prevention'}
+                  </TabsTrigger>
+                  <TabsTrigger value="inventory">
+                    {i18n.language === 'cn' ? '库存管理' : 'Inventory Management'}
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+
+              <TabsContent value="security">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                  <div>
+                    <h3 className="text-2xl font-bold mb-4">
+                      {i18n.language === 'cn' ? '增强的安全与防盗措施' : 'Enhanced Security & Theft Prevention'}
+                    </h3>
+                    <p className="text-gray-600 mb-6">
+                      {i18n.language === 'cn' 
+                        ? '我们的监控系统提供全面的安全保障，防止未经授权的访问和煤炭盗窃，保护您的宝贵资产。' 
+                        : 'Our monitoring system provides comprehensive security protection, preventing unauthorized access and coal theft, safeguarding your valuable assets.'}
+                    </p>
+                    <ul className="space-y-3">
+                      <li className="flex items-start">
+                        <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                          <span className="text-green-600 text-xs">✓</span>
+                        </div>
+                        <div>
+                          <span className="font-medium">
+                            {i18n.language === 'cn' ? '周界防护监控' : 'Perimeter Protection Monitoring'}
+                          </span>
+                          <p className="text-sm text-gray-600">
+                            {i18n.language === 'cn' 
+                              ? '全面监控存储区域周界，检测任何未经授权的入侵' 
+                              : 'Comprehensive monitoring of storage area perimeters, detecting any unauthorized intrusions'}
+                          </p>
+                        </div>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                          <span className="text-green-600 text-xs">✓</span>
+                        </div>
+                        <div>
+                          <span className="font-medium">
+                            {i18n.language === 'cn' ? '异常行为检测' : 'Anomalous Behavior Detection'}
+                          </span>
+                          <p className="text-sm text-gray-600">
+                            {i18n.language === 'cn' 
+                              ? '智能算法识别可疑行为和活动模式，预警潜在威胁' 
+                              : 'Intelligent algorithms identify suspicious behaviors and activity patterns, alerting to potential threats'}
+                          </p>
+                        </div>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                          <span className="text-green-600 text-xs">✓</span>
+                        </div>
+                        <div>
+                          <span className="font-medium">
+                            {i18n.language === 'cn' ? '实时警报系统' : 'Real-time Alert System'}
+                          </span>
+                          <p className="text-sm text-gray-600">
+                            {i18n.language === 'cn' 
+                              ? '即时通知安全人员和管理者任何安全事件，支持快速响应' 
+                              : 'Instant notification to security personnel and managers of any security incidents, supporting quick responses'}
+                          </p>
+                        </div>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                          <span className="text-green-600 text-xs">✓</span>
+                        </div>
+                        <div>
+                          <span className="font-medium">
+                            {i18n.language === 'cn' ? '访问控制集成' : 'Access Control Integration'}
+                          </span>
+                          <p className="text-sm text-gray-600">
+                            {i18n.language === 'cn' 
+                              ? '与门禁和访问控制系统集成，记录和管理人员进出' 
+                              : 'Integration with gate access and control systems, recording and managing personnel entry and exit'}
+                          </p>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <img 
+                      src="https://images.unsplash.com/photo-1580893246395-52aead8960dc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" 
+                      alt="Security Monitoring" 
+                      className="rounded-lg shadow-lg"
+                    />
+                  </div>
                 </div>
-                <CardHeader>
-                  <CardTitle>
-                    {i18n.language === 'cn' ? '大型矿业公司煤仓安全升级' : 'Large Mining Operation Security Upgrade'}
-                  </CardTitle>
-                  <CardDescription>
-                    {i18n.language === 'cn' ? '解决煤炭盗窃和安全挑战' : 'Addressing coal theft and security challenges'}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600">
-                    {i18n.language === 'cn' 
-                      ? '一家大型采矿公司面临严重的煤炭盗窃问题，每年损失数百万元。我们实施了全面的监控解决方案，包括AI驱动的视频监控、周界保护和访问控制系统，盗窃事件减少了95%，每年为客户节省超过800万元。' 
-                      : 'A large mining company was facing serious coal theft issues, losing millions annually. We implemented a comprehensive monitoring solution with AI-driven video surveillance, perimeter protection, and access control systems, reducing theft incidents by 95% and saving the client over $8 million annually.'}
-                  </p>
-                </CardContent>
-                <CardFooter>
-                  <Button variant="link" className="px-0 text-primary">
-                    {i18n.language === 'cn' ? '阅读详情' : 'Read full case study'} →
-                  </Button>
-                </CardFooter>
-              </Card>
+              </TabsContent>
 
-              {/* Case Study 2 */}
-              <Card className="overflow-hidden">
-                <div className="h-48 overflow-hidden">
-                  <img 
-                    src="https://images.unsplash.com/photo-1581093499603-ab4b094b30f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
-                    alt="Power Plant Case Study" 
-                    className="w-full h-full object-cover"
-                  />
+              <TabsContent value="fire">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                  <div>
+                    <img 
+                      src="https://images.unsplash.com/photo-1581093806275-6fd49533cebe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" 
+                      alt="Fire Prevention" 
+                      className="rounded-lg shadow-lg"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold mb-4">
+                      {i18n.language === 'cn' ? '先进的火灾预防技术' : 'Advanced Fire Prevention Technology'}
+                    </h3>
+                    <p className="text-gray-600 mb-6">
+                      {i18n.language === 'cn' 
+                        ? '我们的系统采用先进的热成像和温度监测技术，及早检测煤堆自燃风险，防止火灾事故。' 
+                        : 'Our system employs advanced thermal imaging and temperature monitoring technology to detect coal pile spontaneous combustion risks early, preventing fire accidents.'}
+                    </p>
+                    <ul className="space-y-3">
+                      <li className="flex items-start">
+                        <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                          <span className="text-green-600 text-xs">✓</span>
+                        </div>
+                        <div>
+                          <span className="font-medium">
+                            {i18n.language === 'cn' ? '早期热点检测' : 'Early Hotspot Detection'}
+                          </span>
+                          <p className="text-sm text-gray-600">
+                            {i18n.language === 'cn' 
+                              ? '识别煤堆中的温度异常，在问题恶化前采取行动' 
+                              : 'Identify temperature anomalies in coal piles and take action before problems escalate'}
+                          </p>
+                        </div>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                          <span className="text-green-600 text-xs">✓</span>
+                        </div>
+                        <div>
+                          <span className="font-medium">
+                            {i18n.language === 'cn' ? '多级温度警报' : 'Multi-level Temperature Alerts'}
+                          </span>
+                          <p className="text-sm text-gray-600">
+                            {i18n.language === 'cn' 
+                              ? '根据不同温度阈值设置分级警报，支持梯度响应策略' 
+                              : 'Set graduated alerts based on different temperature thresholds, supporting tiered response strategies'}
+                          </p>
+                        </div>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                          <span className="text-green-600 text-xs">✓</span>
+                        </div>
+                        <div>
+                          <span className="font-medium">
+                            {i18n.language === 'cn' ? '温度趋势分析' : 'Temperature Trend Analysis'}
+                          </span>
+                          <p className="text-sm text-gray-600">
+                            {i18n.language === 'cn' 
+                              ? '分析长期温度变化，预测潜在自燃风险区域' 
+                              : 'Analyze long-term temperature changes to predict potential spontaneous combustion risk areas'}
+                          </p>
+                        </div>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                          <span className="text-green-600 text-xs">✓</span>
+                        </div>
+                        <div>
+                          <span className="font-medium">
+                            {i18n.language === 'cn' ? '应急响应集成' : 'Emergency Response Integration'}
+                          </span>
+                          <p className="text-sm text-gray-600">
+                            {i18n.language === 'cn' 
+                              ? '与消防和应急系统集成，支持快速协调响应' 
+                              : 'Integration with fire fighting and emergency systems, supporting rapid coordinated responses'}
+                          </p>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
-                <CardHeader>
-                  <CardTitle>
-                    {i18n.language === 'cn' ? '发电厂煤炭自燃预防系统' : 'Power Plant Combustion Prevention System'}
-                  </CardTitle>
-                  <CardDescription>
-                    {i18n.language === 'cn' ? '利用热成像技术预防煤炭自燃' : 'Using thermal imaging to prevent coal spontaneous combustion'}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600">
-                    {i18n.language === 'cn' 
-                      ? '一家电力公司的煤炭存储区域曾多次发生自燃事件，造成重大损失。我们部署了先进的热成像系统和温度监测网络，能够提前检测潜在热点。系统实施后，成功预防了12起潜在自燃事件，保障了设施安全。' 
-                      : 'A power company experienced several spontaneous combustion incidents in their coal storage areas, resulting in significant losses. We deployed an advanced thermal imaging system and temperature monitoring network that could detect potential hotspots early. After implementation, the system successfully prevented 12 potential combustion incidents, ensuring facility safety.'}
-                  </p>
-                </CardContent>
-                <CardFooter>
-                  <Button variant="link" className="px-0 text-primary">
-                    {i18n.language === 'cn' ? '阅读详情' : 'Read full case study'} →
-                  </Button>
-                </CardFooter>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </section>
+              </TabsContent>
 
-      {/* FAQs Section */}
-      <section className="py-16" id="faqs">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">
-                {i18n.language === 'cn' ? '常见问题' : 'Frequently Asked Questions'}
-              </h2>
-              <p className="text-gray-600">
-                {i18n.language === 'cn' 
-                  ? '关于我们煤仓监管服务的常见问题解答' 
-                  : 'Common questions about our coal storage monitoring services'}
-              </p>
-            </div>
-
-            <div className="space-y-6">
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                <h3 className="text-lg font-semibold mb-2">
-                  {i18n.language === 'cn' 
-                    ? '煤仓监管系统的安装需要多长时间？' 
-                    : 'How long does it take to install a coal storage monitoring system?'}
-                </h3>
-                <p className="text-gray-600">
-                  {i18n.language === 'cn' 
-                    ? '安装时间取决于您设施的规模和复杂性。小型监控系统可能只需1-2周完成，而大型综合系统可能需要1-3个月。我们的团队会在项目开始前提供详细的时间表。' 
-                    : 'Installation time depends on the size and complexity of your facility. Small monitoring systems may be completed in 1-2 weeks, while large, comprehensive systems may take 1-3 months. Our team will provide a detailed timeline before the project begins.'}
-                </p>
-              </div>
-
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                <h3 className="text-lg font-semibold mb-2">
-                  {i18n.language === 'cn' 
-                    ? '系统是否能在恶劣天气条件下正常工作？' 
-                    : 'Does the system work in harsh weather conditions?'}
-                </h3>
-                <p className="text-gray-600">
-                  {i18n.language === 'cn' 
-                    ? '是的，我们的系统专为各种环境条件设计，包括极端温度、高湿度、灰尘和雨雪。我们使用工业级设备，能够在恶劣条件下维持可靠运行。' 
-                    : 'Yes, our systems are designed for various environmental conditions, including extreme temperatures, high humidity, dust, and precipitation. We use industrial-grade equipment that maintains reliable operation under harsh conditions.'}
-                </p>
-              </div>
-
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                <h3 className="text-lg font-semibold mb-2">
-                  {i18n.language === 'cn' 
-                    ? '监控系统是否需要持续的互联网连接？' 
-                    : 'Does the monitoring system require continuous internet connectivity?'}
-                </h3>
-                <p className="text-gray-600">
-                  {i18n.language === 'cn' 
-                    ? '尽管互联网连接可以提供远程访问和云存储功能，但我们的系统设计有本地存储和处理能力，可以在互联网中断期间继续运行。数据会在连接恢复后自动同步。' 
-                    : 'While internet connectivity provides remote access and cloud storage capabilities, our systems are designed with local storage and processing capabilities that can continue to operate during internet outages. Data will automatically synchronize when connectivity is restored.'}
-                </p>
-              </div>
-
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                <h3 className="text-lg font-semibold mb-2">
-                  {i18n.language === 'cn' 
-                    ? '你们提供哪些培训和支持服务？' 
-                    : 'What training and support services do you provide?'}
-                </h3>
-                <p className="text-gray-600">
-                  {i18n.language === 'cn' 
-                    ? '我们提供全面的操作人员培训，包括系统操作、基本维护和故障排除。我们还提供24/7技术支持、定期维护访问、软件更新和可选的扩展维护合同。' 
-                    : 'We provide comprehensive operator training, including system operation, basic maintenance, and troubleshooting. We also offer 24/7 technical support, regular maintenance visits, software updates, and optional extended maintenance contracts.'}
-                </p>
-              </div>
-            </div>
+              <TabsContent value="inventory">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                  <div>
+                    <h3 className="text-2xl font-bold mb-4">
+                      {i18n.language === 'cn' ? '智能库存管理系统' : 'Intelligent Inventory Management System'}
+                    </h3>
+                    <p className="text-gray-600 mb-6">
+                      {i18n.language === 'cn' 
+                        ? '我们的系统提供准确、实时的库存监控和数据分析，优化您的煤炭库存管理和运营决策。' 
+                        : 'Our system provides accurate, real-time inventory monitoring and data analysis, optimizing your coal inventory management and operational decisions.'}
+                    </p>
+                    <ul className="space-y-3">
+                      <li className="flex items-start">
+                        <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                          <span className="text-green-600 text-xs">✓</span>
+                        </div>
+                        <div>
+                          <span className="font-medium">
+                            {i18n.language === 'cn' ? '3D体积计算' : '3D Volume Calculation'}
+                          </span>
+                          <p className="text-sm text-gray-600">
+                            {i18n.language === 'cn' 
+                              ? '精确测量煤堆体积，提供准确的库存数据' 
+                              : 'Precise measurement of coal pile volumes, providing accurate inventory data'}
+                          </p>
+                        </div>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                          <span className="text-green-600 text-xs">✓</span>
+                        </div>
+                        <div>
+                          <span className="font-medium">
+                            {i18n.language === 'cn' ? '库存变动追踪' : 'Inventory Movement Tracking'}
+                          </span>
+                          <p className="text-sm text-gray-600">
+                            {i18n.language === 'cn' 
+                              ? '监控和记录煤炭进出情况，保持准确的库存记录' 
+                              : 'Monitor and record coal movements in and out, maintaining accurate inventory records'}
+                          </p>
+                        </div>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                          <span className="text-green-600 text-xs">✓</span>
+                        </div>
+                        <div>
+                          <span className="font-medium">
+                            {i18n.language === 'cn' ? '智能报告与分析' : 'Smart Reporting & Analytics'}
+                          </span>
+                          <p className="text-sm text-gray-600">
+                            {i18n.language === 'cn' 
+                              ? '生成详细的库存报告和分析，支持数据驱动决策' 
+                              : 'Generate detailed inventory reports and analytics, supporting data-driven decisions'}
+                          </p>
+                        </div>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                          <span className="text-green-600 text-xs">✓</span>
+                        </div>
+                        <div>
+                          <span className="font-medium">
+                            {i18n.language === 'cn' ? 'ERP系统集成' : 'ERP System Integration'}
+                          </span>
+                          <p className="text-sm text-gray-600">
+                            {i18n.language === 'cn' 
+                              ? '与企业现有ERP和库存管理系统无缝对接' 
+                              : 'Seamless integration with existing enterprise ERP and inventory management systems'}
+                          </p>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <img 
+                      src="https://images.unsplash.com/photo-1581093803931-2ee0439a5127?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" 
+                      alt="Inventory Management" 
+                      className="rounded-lg shadow-lg"
+                    />
+                  </div>
+                </div>
+              </TabsContent>
+            </Tabs>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="py-16 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">
-            {i18n.language === 'cn' ? '准备升级您的煤仓监管系统？' : 'Ready to Upgrade Your Coal Storage Monitoring?'}
-          </h2>
-          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            {i18n.language === 'cn' 
-              ? '联系我们获取免费咨询和演示，了解我们如何帮助您保护煤炭资产' 
-              : 'Contact us for a free consultation and demonstration to learn how we can help secure your coal assets'}
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link href="/consultation">
-              <Button size="lg" className="bg-white text-slate-900 hover:bg-gray-100">
-                {i18n.language === 'cn' ? '申请演示' : 'Request a Demo'}
-              </Button>
-            </Link>
-            <Link href="/contact">
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                {i18n.language === 'cn' ? '联系我们' : 'Contact Us'}
-              </Button>
-            </Link>
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl font-bold mb-6">
+              {i18n.language === 'cn' ? '升级您的煤炭储存安全与管理' : 'Upgrade Your Coal Storage Security & Management'}
+            </h2>
+            <p className="text-xl mb-8 text-gray-300">
+              {i18n.language === 'cn' 
+                ? '立即联系我们，了解我们的煤仓监管服务如何保护您的煤炭资产，提高运营效率。' 
+                : 'Contact us today to learn how our coal storage monitoring service can protect your coal assets and improve operational efficiency.'}
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <Link href="/consultation">
+                <Button size="lg" className="bg-white text-slate-900 hover:bg-gray-100">
+                  {i18n.language === 'cn' ? '预约免费咨询' : 'Schedule a Free Consultation'}
+                </Button>
+              </Link>
+              <Link href="/case-studies">
+                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                  {i18n.language === 'cn' ? '查看成功案例' : 'View Success Stories'}
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

@@ -8,6 +8,9 @@ import ServiceDetail from "@/pages/ServiceDetail";
 import CaseStudies from "@/pages/CaseStudies";
 import CaseStudyDetail from "@/pages/CaseStudyDetail";
 import TechnologyDetails from "@/pages/ServicePages/TechnologyDetails";
+import VideoMonitoring from "@/pages/SubPages/VideoMonitoring";
+import ThermalImaging from "@/pages/SubPages/ThermalImaging";
+import InventoryAnalysis from "@/pages/SubPages/InventoryAnalysis";
 
 // We'll implement these pages later
 const ServicesPage = () => <div className="container mx-auto px-4 py-12">Services Page</div>;
@@ -57,6 +60,9 @@ function Router() {
       <Route path="/consultation" component={ConsultationPage} />
       <Route path="/about" component={AboutPage} />
       <Route path="/contact" component={ContactPage} />
+      <Route path="/sub-pages/video-monitoring" component={VideoMonitoring} />
+      <Route path="/sub-pages/thermal-imaging" component={ThermalImaging} />
+      <Route path="/sub-pages/inventory-analysis" component={InventoryAnalysis} />
       <Route component={NotFound} />
     </Switch>
   );
