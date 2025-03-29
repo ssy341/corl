@@ -41,8 +41,7 @@
   <circle cx="380" cy="40" r="3" fill="#EF4444" />
   <circle cx="420" cy="70" r="3" fill="#EF4444" />
   
-  <!-- Site Assessment text -->
-  <text x="50%" y="18" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="white">Site Assessment</text>
+<!-- Removed text label -->
   
   <!-- Gradient definition -->
   <defs>

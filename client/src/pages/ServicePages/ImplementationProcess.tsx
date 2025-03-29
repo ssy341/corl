@@ -88,11 +88,16 @@ export default function ImplementationProcess() {
                 {/* 图片在奇数步骤的左边，偶数步骤的右边 */}
                 <div className={`w-full md:w-1/2 flex ${index % 2 === 0 ? 'md:pl-16 md:justify-start md:order-2' : 'md:pr-16 md:justify-end'}`}>
                   <Card className="border-0 shadow-lg overflow-hidden p-0 w-full max-w-lg">
-                    <img 
-                      src={step.imageSrc} 
-                      alt={lang === 'cn' ? step.titleCn : step.titleEn}
-                      className="w-full h-auto object-contain"
-                    />
+                    <div className="bg-primary/5 p-4 flex flex-col items-center justify-center">
+                      <img 
+                        src={step.imageSrc} 
+                        alt={lang === 'cn' ? step.titleCn : step.titleEn}
+                        className="w-full h-[120px] object-contain"
+                      />
+                      <h3 className="mt-3 text-primary font-semibold">
+                        {lang === 'cn' ? step.titleCn : step.titleEn}
+                      </h3>
+                    </div>
                   </Card>
                 </div>
               </div>

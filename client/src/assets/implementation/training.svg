@@ -68,8 +68,7 @@
   <line x1="85" y1="60" x2="105" y2="60" stroke="#93C5FD" stroke-width="1" />
   <line x1="85" y1="65" x2="95" y2="65" stroke="#93C5FD" stroke-width="1" />
   
-  <!-- Training and Support text -->
-  <text x="50%" y="18" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="white">Training and Support</text>
+<!-- Removed text label -->
   
   <!-- Gradient definition -->
   <defs>

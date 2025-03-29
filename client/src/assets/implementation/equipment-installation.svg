@@ -61,8 +61,7 @@
   <path d="M400 38L325 55" stroke="#60A5FA" stroke-width="1" stroke-dasharray="3 2" />
   <path d="M200 75L300 70" stroke="#60A5FA" stroke-width="1" stroke-dasharray="3 2" />
   
-  <!-- Equipment Installation text -->
-  <text x="50%" y="18" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="white">Equipment Installation</text>
+<!-- Removed text label -->
   
   <!-- Gradient definition -->
   <defs>

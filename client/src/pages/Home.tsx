@@ -125,7 +125,7 @@ export default function Home() {
                 <div key={service.id} className="bg-white rounded-lg shadow-md p-6 transition-all duration-300 hover:shadow-lg hover:translate-y-[-5px] feature-card border border-gray-100">
                   <div className="w-20 h-20 mb-4 bg-primary/5 rounded-lg p-1 overflow-hidden">
                     <img 
-                      src={`/${service.icon}`} 
+                      src={`${service.icon}`} 
                       alt={i18n.language === 'cn' ? service.nameCn : service.nameEn}
                       className="w-full h-full object-contain"
                     />
