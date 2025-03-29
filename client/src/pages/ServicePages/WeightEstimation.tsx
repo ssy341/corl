@@ -11,6 +11,9 @@ import {
   CardTitle 
 } from '@/components/ui/card';
 
+// Import SVG assets
+import WeightEstimationSvg from '@/assets/images/weight-estimation.svg';
+
 export default function WeightEstimation() {
   const { t, i18n } = useTranslation();
 
@@ -120,9 +123,9 @@ export default function WeightEstimation() {
               <div className="relative">
                 <div className="rounded-lg overflow-hidden shadow-xl">
                   <img
-                    src="https://images.unsplash.com/photo-1581093458791-9cd87427edf7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=900&q=80"
+                    src={WeightEstimationSvg}
                     alt="Coal Weight Estimation"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain bg-white p-4"
                   />
                 </div>
                 <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-primary/10 rounded-full z-[-1]"></div>
@@ -334,9 +337,9 @@ export default function WeightEstimation() {
                 <div className="flex flex-col md:flex-row gap-8 items-center">
                   <div className="md:w-1/3">
                     <img 
-                      src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
-                      alt="Case Study"
-                      className="rounded-lg shadow-md w-full"
+                      src={WeightEstimationSvg}
+                      alt="Case Study" 
+                      className="rounded-lg shadow-md w-full bg-white p-4"
                     />
                   </div>
                   <div className="md:w-2/3">
