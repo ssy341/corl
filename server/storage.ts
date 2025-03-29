@@ -123,7 +123,7 @@ export class MemStorage implements IStorage {
       },
       {
         slug: "quality-testing",
-        icon: "src/assets/images/quality-testing.svg",
+        icon: "src/assets/icons/quality-testing-icon.svg",
         nameEn: "Coal Quality Testing Services",
         nameCn: "煤质检测服务",
         descriptionEn: "Advanced laboratory testing for coal quality assurance.",
@@ -133,7 +133,7 @@ export class MemStorage implements IStorage {
       },
       {
         slug: "industry-consultation",
-        icon: "src/assets/images/consultation.svg",
+        icon: "src/assets/icons/consultation-icon.svg",
         nameEn: "Coal Industry Consultation Services",
         nameCn: "煤事咨询服务",
         descriptionEn: "Expert advice from industry professionals for coal-related businesses powered by AI.",
