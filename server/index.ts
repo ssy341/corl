@@ -2,6 +2,11 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
+// 设置环境变量，使用本地LLM或DeepSeek API
+// 在开发阶段使用本地Ollama模型，生产环境可切换到DeepSeek API
+process.env.USE_LOCAL_LLM = process.env.USE_LOCAL_LLM || 'true';
+console.log(`LLM Mode: ${process.env.USE_LOCAL_LLM === 'true' ? 'Local Ollama' : 'DeepSeek API'}`);
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

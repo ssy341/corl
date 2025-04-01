@@ -461,7 +461,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // AI咨询服务 - 连接到DeepSeek API，带有回退机制
+  // AI咨询服务 - 支持DeepSeek API或本地Ollama模型
   app.post("/api/ai-consultation", async (req, res) => {
     try {
       const { message } = req.body;
@@ -475,13 +475,59 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       let aiResponse;
       
-      // 检查是否有DeepSeek API密钥
-      if (!process.env.DEEPSEEK_API_KEY) {
-        console.warn("DeepSeek API key is not configured, using fallback response");
-        aiResponse = generateFallbackResponse(message);
-      } else {
+      // 系统提示词 - 设置AI角色为煤炭行业专家
+      const systemPrompt = `你是一位煤炭行业专家，擅长回答关于煤炭市场、产品、价格、政策、技术和行业趋势的问题。
+                       请提供专业、准确、有深度的回答，并在适当的时候引用数据和趋势。
+                       如果用户用英文提问，请用英文回答；如果用中文提问，请用中文回答。`;
+
+      // 使用环境变量来决定使用哪种模型服务
+      // 如果设置了USE_LOCAL_LLM=true，则使用本地Ollama模型
+      // 否则尝试使用DeepSeek API（如果有密钥）
+      if (process.env.USE_LOCAL_LLM === 'true') {
         try {
-          // 尝试调用DeepSeek API获取回复
+          console.log("Using local Ollama model for AI consultation");
+          
+          // 调用本地Ollama API (默认运行在http://localhost:11434)
+          const ollamaResponse = await fetch('http://localhost:11434/api/generate', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              model: 'deepseek-r1', // 使用本地部署的模型名称
+              prompt: `${systemPrompt}\n\n用户: ${message}\n\n助手:`,
+              stream: false,
+              options: {
+                temperature: 0.7,
+                top_p: 0.9,
+                max_tokens: 800
+              }
+            })
+          });
+          
+          if (!ollamaResponse.ok) {
+            throw new Error(`Ollama API error: ${ollamaResponse.statusText}`);
+          }
+          
+          const ollamaData = await ollamaResponse.json();
+          aiResponse = ollamaData.response;
+          
+          if (!aiResponse || aiResponse.trim() === '') {
+            console.warn("Empty response from Ollama, using fallback");
+            aiResponse = generateFallbackResponse(message);
+          }
+        } catch (ollamaError) {
+          console.error("Ollama API call failed:", ollamaError);
+          console.log("Using fallback response due to Ollama error");
+          aiResponse = generateFallbackResponse(message);
+        }
+      } 
+      // 如果没有设置使用本地模型，尝试使用DeepSeek API
+      else if (process.env.DEEPSEEK_API_KEY) {
+        try {
+          console.log("Using DeepSeek API for AI consultation");
+          
+          // 调用DeepSeek API获取回复
           const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
             method: 'POST',
             headers: {
@@ -493,9 +539,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               messages: [
                 {
                   role: 'system', 
-                  content: `你是一位煤炭行业专家，擅长回答关于煤炭市场、产品、价格、政策、技术和行业趋势的问题。
-                            请提供专业、准确、有深度的回答，并在适当的时候引用数据和趋势。
-                            如果用户用英文提问，请用英文回答；如果用中文提问，请用中文回答。`
+                  content: systemPrompt
                 },
                 {role: 'user', content: message}
               ],
@@ -521,10 +565,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
             aiResponse = data.choices[0].message.content;
           }
         } catch (apiError) {
-          console.error("API call failed:", apiError);
+          console.error("DeepSeek API call failed:", apiError);
           // 如果API调用失败，使用回退响应
           aiResponse = generateFallbackResponse(message);
         }
+      } else {
+        // 既没有设置使用本地模型，也没有DeepSeek API密钥
+        console.warn("Neither local LLM nor DeepSeek API configured, using fallback response");
+        aiResponse = generateFallbackResponse(message);
       }
       
       return res.json({ 
@@ -544,9 +592,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // 生成回退响应函数
   function generateFallbackResponse(message: string): string {
     // 检测消息是英文还是中文（简单判断）
-    const isEnglish = /^[a-zA-Z0-9\s\p{P}]*$/u.test(message.slice(0, 10));
+    // 如果消息中含有中文字符，则认为是中文
+    const hasChinese = /[\u4e00-\u9fa5]/.test(message);
     
-    if (isEnglish) {
+    if (!hasChinese) {
       return `Thank you for your inquiry about "${message.substring(0, 30)}...". From a coal industry professional perspective, I can offer the following insights:
 
 1. Market Trends: The coal market currently shows stability with an upward trend, though seasonal factors cause fluctuations.
