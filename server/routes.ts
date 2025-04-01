@@ -324,6 +324,190 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     }
   });
+  
+  // 获取热门行业内参
+  app.get("/api/industry-insights", async (req, res) => {
+    try {
+      // 在实际项目中，这里应该从数据库获取内参数据
+      // 现在我们返回模拟数据 - 这里是模拟API响应
+      const insights = [
+        {
+          id: 1,
+          titleCn: "2025年第一季度煤炭价格分析报告",
+          titleEn: "2025 Q1 Coal Price Analysis Report",
+          sourceCn: "中国煤炭经济研究院",
+          sourceEn: "China Coal Economy Research Institute",
+          publishDate: "2025-03-30",
+          readCount: 1856,
+          linkUrl: "/insights/1",
+          isPremium: false
+        },
+        {
+          id: 2,
+          titleCn: "国内动力煤市场供需趋势预测",
+          titleEn: "Supply and Demand Trends in Domestic Thermal Coal Market",
+          sourceCn: "煤炭工业协会",
+          sourceEn: "Coal Industry Association",
+          publishDate: "2025-03-29",
+          readCount: 1723,
+          linkUrl: "/insights/2",
+          isPremium: false
+        },
+        {
+          id: 3,
+          titleCn: "新能源替代下的煤炭行业转型路径研究",
+          titleEn: "Research on Coal Industry Transformation Path under New Energy Substitution",
+          sourceCn: "国家能源研究中心",
+          sourceEn: "National Energy Research Center",
+          publishDate: "2025-03-28",
+          readCount: 1542,
+          linkUrl: "/insights/3",
+          isPremium: true
+        },
+        {
+          id: 4,
+          titleCn: "煤炭企业ESG发展报告：绿色矿山建设进展",
+          titleEn: "Coal Enterprise ESG Development Report: Green Mine Construction Progress",
+          sourceCn: "中国矿业大学",
+          sourceEn: "China University of Mining and Technology",
+          publishDate: "2025-03-27",
+          readCount: 1429,
+          linkUrl: "/insights/4",
+          isPremium: false
+        },
+        {
+          id: 5,
+          titleCn: "环保政策调整对煤炭生产的影响分析",
+          titleEn: "Analysis of Environmental Policy Adjustments on Coal Production",
+          sourceCn: "生态环境部研究所",
+          sourceEn: "Research Institute of Ministry of Ecology and Environment",
+          publishDate: "2025-03-26",
+          readCount: 1387,
+          linkUrl: "/insights/5",
+          isPremium: false
+        },
+        {
+          id: 6,
+          titleCn: "国际煤炭贸易格局变化与中国应对策略",
+          titleEn: "Changes in International Coal Trade Pattern and China's Response Strategy",
+          sourceCn: "对外经济贸易大学",
+          sourceEn: "University of International Business and Economics",
+          publishDate: "2025-03-25",
+          readCount: 1246,
+          linkUrl: "/insights/6",
+          isPremium: true
+        },
+        {
+          id: 7,
+          titleCn: "煤炭智能开采技术最新进展",
+          titleEn: "Latest Progress in Coal Intelligent Mining Technology",
+          sourceCn: "中国矿业协会",
+          sourceEn: "China Mining Association",
+          publishDate: "2025-03-24",
+          readCount: 1132,
+          linkUrl: "/insights/7",
+          isPremium: false
+        },
+        {
+          id: 8,
+          titleCn: "碳中和背景下煤炭行业发展战略研究",
+          titleEn: "Research on Coal Industry Development Strategy under Carbon Neutrality",
+          sourceCn: "国家发改委能源研究所",
+          sourceEn: "Energy Research Institute of NDRC",
+          publishDate: "2025-03-23",
+          readCount: 1045,
+          linkUrl: "/insights/8",
+          isPremium: true
+        },
+        {
+          id: 9,
+          titleCn: "煤炭物流运输成本优化方案分析",
+          titleEn: "Analysis of Coal Logistics Transportation Cost Optimization Solutions",
+          sourceCn: "交通运输部规划研究院",
+          sourceEn: "Planning Research Institute of Ministry of Transport",
+          publishDate: "2025-03-22",
+          readCount: 987,
+          linkUrl: "/insights/9",
+          isPremium: false
+        },
+        {
+          id: 10,
+          titleCn: "煤炭企业数字化转型案例与经验分享",
+          titleEn: "Coal Enterprise Digital Transformation Cases and Experience Sharing",
+          sourceCn: "中国煤炭工业出版社",
+          sourceEn: "China Coal Industry Publishing House",
+          publishDate: "2025-03-21",
+          readCount: 924,
+          linkUrl: "/insights/10",
+          isPremium: false
+        }
+      ];
+      
+      return res.status(200).json({
+        success: true,
+        message: "Successfully retrieved industry insights",
+        data: insights
+      });
+    } catch (error) {
+      console.error("Error fetching industry insights:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch industry insights" 
+      });
+    }
+  });
+
+  // AI咨询服务 - 在实际应用中应该连接到deepseek API
+  app.post("/api/ai-consultation", async (req, res) => {
+    try {
+      const { message } = req.body;
+      
+      if (!message) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Message is required" 
+        });
+      }
+      
+      // 实际项目中，这里应该调用deepseek API获取回复
+      // 例如:
+      // const response = await fetch('https://api.deepseek.com/v1/chat', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Authorization': `Bearer ${process.env.DEEPSEEK_API_KEY}`
+      //   },
+      //   body: JSON.stringify({
+      //     model: 'deepseek-r1',
+      //     messages: [{role: 'user', content: message}]
+      //   })
+      // });
+      // const data = await response.json();
+      // const aiResponse = data.choices[0].message.content;
+      
+      // 模拟AI回复
+      const aiResponse = `感谢您的咨询。您的问题关于"${message.substring(0, 30)}..."，从煤炭行业专业角度来看，我建议您考虑以下几点:
+
+1. 市场趋势分析: 当前煤炭市场整体呈现稳中有升态势，但受季节性因素影响存在波动。
+2. 供需平衡预测: 根据近期数据，国内动力煤供应充足，但优质焦煤仍有结构性短缺。
+3. 政策影响评估: 考虑到最新环保政策要求，建议关注合规性生产和清洁利用技术。
+4. 运营建议: 加强数字化转型，优化供应链管理，提高资源利用效率。
+
+如果您需要更具体的分析和建议，欢迎提供更多详细信息，我可以为您提供更针对性的专业意见。`;
+      
+      return res.json({ 
+        success: true, 
+        message: "AI response generated successfully",
+        data: aiResponse
+      });
+    } catch (error) {
+      console.error("Error generating AI response:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to generate AI response" 
+      });
+    }
+  });
 
   // Admin endpoints (would require authentication in production)
   app.post("/api/admin/services", async (req, res) => {
