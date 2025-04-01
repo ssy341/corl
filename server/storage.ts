@@ -3,7 +3,10 @@ import {
   waitlistEntries, type WaitlistEntry, type InsertWaitlistEntry,
   coalServices, type CoalService, type InsertCoalService,
   servicePages, type ServicePage, type InsertServicePage,
-  consultationRequests, type ConsultationRequest, type InsertConsultationRequest
+  consultationRequests, type ConsultationRequest, type InsertConsultationRequest,
+  testingAgencies, type TestingAgency, type InsertTestingAgency,
+  testingItems, type TestingItem, type InsertTestingItem,
+  testingRecords, type TestingRecord, type InsertTestingRecord
 } from "@shared/schema";
 
 export interface IStorage {
@@ -37,6 +40,32 @@ export interface IStorage {
   getConsultationRequestById(id: number): Promise<ConsultationRequest | undefined>;
   getAllConsultationRequests(): Promise<ConsultationRequest[]>;
   updateConsultationRequestStatus(id: number, status: string): Promise<ConsultationRequest | undefined>;
+  
+  // Testing Agency methods
+  createTestingAgency(agency: InsertTestingAgency): Promise<TestingAgency>;
+  getTestingAgencyById(id: number): Promise<TestingAgency | undefined>;
+  getTestingAgencyByCode(code: string): Promise<TestingAgency | undefined>;
+  getAllTestingAgencies(): Promise<TestingAgency[]>;
+  updateTestingAgency(id: number, agency: Partial<InsertTestingAgency>): Promise<TestingAgency | undefined>;
+  
+  // Testing Item methods
+  createTestingItem(item: InsertTestingItem): Promise<TestingItem>;
+  getTestingItemById(id: number): Promise<TestingItem | undefined>;
+  getTestingItemByCode(code: string): Promise<TestingItem | undefined>;
+  getAllTestingItems(): Promise<TestingItem[]>;
+  updateTestingItem(id: number, item: Partial<InsertTestingItem>): Promise<TestingItem | undefined>;
+  
+  // Testing Record methods
+  createTestingRecord(record: InsertTestingRecord): Promise<TestingRecord>;
+  getTestingRecordById(id: number): Promise<TestingRecord | undefined>;
+  getTestingRecordsBySampleId(sampleId: string): Promise<TestingRecord[]>;
+  getTestingRecordsByAgencyId(agencyId: number): Promise<TestingRecord[]>;
+  getTestingRecordsByUserId(userId: number): Promise<TestingRecord[]>;
+  getAllTestingRecords(): Promise<TestingRecord[]>;
+  updateTestingRecord(id: number, record: Partial<InsertTestingRecord>): Promise<TestingRecord | undefined>;
+  
+  // Calculate Weighted Average for Testing Results
+  calculateWeightedAverage(testingRecordId: number): Promise<object | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -45,12 +74,18 @@ export class MemStorage implements IStorage {
   private coalServices: Map<number, CoalService>;
   private servicePages: Map<number, ServicePage>;
   private consultationRequests: Map<number, ConsultationRequest>;
+  private testingAgencies: Map<number, TestingAgency>;
+  private testingItems: Map<number, TestingItem>;
+  private testingRecords: Map<number, TestingRecord>;
   
   currentUserId: number;
   currentWaitlistId: number;
   currentCoalServiceId: number;
   currentServicePageId: number;
   currentConsultationRequestId: number;
+  currentTestingAgencyId: number;
+  currentTestingItemId: number;
+  currentTestingRecordId: number;
 
   constructor() {
     this.users = new Map();
@@ -58,15 +93,98 @@ export class MemStorage implements IStorage {
     this.coalServices = new Map();
     this.servicePages = new Map();
     this.consultationRequests = new Map();
+    this.testingAgencies = new Map();
+    this.testingItems = new Map();
+    this.testingRecords = new Map();
     
     this.currentUserId = 1;
     this.currentWaitlistId = 1;
     this.currentCoalServiceId = 1;
     this.currentServicePageId = 1;
     this.currentConsultationRequestId = 1;
+    this.currentTestingAgencyId = 1;
+    this.currentTestingItemId = 1;
+    this.currentTestingRecordId = 1;
     
-    // Initialize with coal services
+    // Initialize with coal services and testing data
     this.initializeCoalServices();
+    this.initializeTestingItems();
+  }
+
+  // Initialize common testing items for coal
+  private async initializeTestingItems() {
+    const testingItems = [
+      {
+        code: "CV",
+        nameEn: "Calorific Value",
+        nameCn: "热值",
+        descriptionEn: "The amount of heat released during the complete combustion of coal.",
+        descriptionCn: "煤炭完全燃烧时释放的热量。",
+        unit: "kcal/kg",
+        minValue: "4500",
+        maxValue: "7500",
+        standardValue: "6000"
+      },
+      {
+        code: "MT",
+        nameEn: "Moisture Total",
+        nameCn: "全水分",
+        descriptionEn: "The total moisture content in coal as received.",
+        descriptionCn: "收到基煤炭中的总水分含量。",
+        unit: "%",
+        minValue: "5",
+        maxValue: "40",
+        standardValue: "12"
+      },
+      {
+        code: "ASH",
+        nameEn: "Ash Content",
+        nameCn: "灰分",
+        descriptionEn: "The non-combustible residue left after coal is burnt.",
+        descriptionCn: "煤炭燃烧后的不可燃残渣。",
+        unit: "%",
+        minValue: "5",
+        maxValue: "30",
+        standardValue: "10"
+      },
+      {
+        code: "VM",
+        nameEn: "Volatile Matter",
+        nameCn: "挥发分",
+        descriptionEn: "Components of coal, except for moisture, which are liberated at high temperature in the absence of air.",
+        descriptionCn: "除水分外，在缺氧高温条件下释放的煤炭成分。",
+        unit: "%",
+        minValue: "15",
+        maxValue: "45",
+        standardValue: "28"
+      },
+      {
+        code: "FC",
+        nameEn: "Fixed Carbon",
+        nameCn: "固定碳",
+        descriptionEn: "The carbon remaining after volatile materials are driven off.",
+        descriptionCn: "挥发物质驱除后剩余的碳。",
+        unit: "%",
+        minValue: "30",
+        maxValue: "80",
+        standardValue: "50"
+      },
+      {
+        code: "S",
+        nameEn: "Sulfur Content",
+        nameCn: "硫含量",
+        descriptionEn: "The amount of sulfur in coal, which affects environmental emissions and equipment corrosion.",
+        descriptionCn: "煤炭中的硫含量，影响环境排放和设备腐蚀。",
+        unit: "%",
+        minValue: "0.1",
+        maxValue: "5",
+        standardValue: "0.8"
+      }
+    ];
+
+    for (const item of testingItems) {
+      await this.createTestingItem(item as InsertTestingItem);
+    }
   }
 
   private async initializeCoalServices() {
@@ -351,6 +469,322 @@ export class MemStorage implements IStorage {
 
     this.consultationRequests.set(id, updatedRequest);
     return updatedRequest;
+  }
+  
+  // Testing Agency methods
+  async createTestingAgency(agency: InsertTestingAgency): Promise<TestingAgency> {
+    // Check if code already exists
+    const existingAgency = await this.getTestingAgencyByCode(agency.code);
+    if (existingAgency) {
+      throw new Error(`Testing agency with code ${agency.code} already exists`);
+    }
+    
+    const id = this.currentTestingAgencyId++;
+    const now = new Date();
+    
+    const testingAgency: TestingAgency = {
+      id,
+      code: agency.code,
+      nameEn: agency.nameEn,
+      nameCn: agency.nameCn,
+      descriptionEn: agency.descriptionEn ?? null,
+      descriptionCn: agency.descriptionCn ?? null,
+      address: agency.address ?? null,
+      contactPerson: agency.contactPerson ?? null,
+      contactPhone: agency.contactPhone ?? null,
+      contactEmail: agency.contactEmail ?? null,
+      certifications: agency.certifications ?? null,
+      apiEndpoint: agency.apiEndpoint ?? null,
+      apiKey: agency.apiKey ?? null,
+      isActive: agency.isActive ?? true,
+      createdAt: now,
+      updatedAt: now
+    };
+    
+    this.testingAgencies.set(id, testingAgency);
+    return testingAgency;
+  }
+  
+  async getTestingAgencyById(id: number): Promise<TestingAgency | undefined> {
+    return this.testingAgencies.get(id);
+  }
+  
+  async getTestingAgencyByCode(code: string): Promise<TestingAgency | undefined> {
+    return Array.from(this.testingAgencies.values()).find(
+      (agency) => agency.code === code
+    );
+  }
+  
+  async getAllTestingAgencies(): Promise<TestingAgency[]> {
+    return Array.from(this.testingAgencies.values());
+  }
+  
+  async updateTestingAgency(id: number, agency: Partial<InsertTestingAgency>): Promise<TestingAgency | undefined> {
+    const existingAgency = await this.getTestingAgencyById(id);
+    if (!existingAgency) return undefined;
+    
+    const now = new Date();
+    
+    const updatedAgency: TestingAgency = {
+      ...existingAgency,
+      code: agency.code ?? existingAgency.code,
+      nameEn: agency.nameEn ?? existingAgency.nameEn,
+      nameCn: agency.nameCn ?? existingAgency.nameCn,
+      descriptionEn: agency.descriptionEn !== undefined ? agency.descriptionEn : existingAgency.descriptionEn,
+      descriptionCn: agency.descriptionCn !== undefined ? agency.descriptionCn : existingAgency.descriptionCn,
+      address: agency.address !== undefined ? agency.address : existingAgency.address,
+      contactPerson: agency.contactPerson !== undefined ? agency.contactPerson : existingAgency.contactPerson,
+      contactPhone: agency.contactPhone !== undefined ? agency.contactPhone : existingAgency.contactPhone,
+      contactEmail: agency.contactEmail !== undefined ? agency.contactEmail : existingAgency.contactEmail,
+      certifications: agency.certifications !== undefined ? agency.certifications : existingAgency.certifications,
+      apiEndpoint: agency.apiEndpoint !== undefined ? agency.apiEndpoint : existingAgency.apiEndpoint,
+      apiKey: agency.apiKey !== undefined ? agency.apiKey : existingAgency.apiKey,
+      isActive: agency.isActive !== undefined ? agency.isActive : existingAgency.isActive,
+      updatedAt: now
+    };
+    
+    this.testingAgencies.set(id, updatedAgency);
+    return updatedAgency;
+  }
+  
+  // Testing Item methods
+  async createTestingItem(item: InsertTestingItem): Promise<TestingItem> {
+    // Check if code already exists
+    const existingItem = await this.getTestingItemByCode(item.code);
+    if (existingItem) {
+      throw new Error(`Testing item with code ${item.code} already exists`);
+    }
+    
+    const id = this.currentTestingItemId++;
+    const now = new Date();
+    
+    const testingItem: TestingItem = {
+      id,
+      code: item.code,
+      nameEn: item.nameEn,
+      nameCn: item.nameCn,
+      descriptionEn: item.descriptionEn ?? null,
+      descriptionCn: item.descriptionCn ?? null,
+      unit: item.unit,
+      minValue: item.minValue ?? null,
+      maxValue: item.maxValue ?? null,
+      standardValue: item.standardValue ?? null,
+      createdAt: now,
+      updatedAt: now
+    };
+    
+    this.testingItems.set(id, testingItem);
+    return testingItem;
+  }
+  
+  async getTestingItemById(id: number): Promise<TestingItem | undefined> {
+    return this.testingItems.get(id);
+  }
+  
+  async getTestingItemByCode(code: string): Promise<TestingItem | undefined> {
+    return Array.from(this.testingItems.values()).find(
+      (item) => item.code === code
+    );
+  }
+  
+  async getAllTestingItems(): Promise<TestingItem[]> {
+    return Array.from(this.testingItems.values());
+  }
+  
+  async updateTestingItem(id: number, item: Partial<InsertTestingItem>): Promise<TestingItem | undefined> {
+    const existingItem = await this.getTestingItemById(id);
+    if (!existingItem) return undefined;
+    
+    const now = new Date();
+    
+    const updatedItem: TestingItem = {
+      ...existingItem,
+      code: item.code ?? existingItem.code,
+      nameEn: item.nameEn ?? existingItem.nameEn,
+      nameCn: item.nameCn ?? existingItem.nameCn,
+      descriptionEn: item.descriptionEn !== undefined ? item.descriptionEn : existingItem.descriptionEn,
+      descriptionCn: item.descriptionCn !== undefined ? item.descriptionCn : existingItem.descriptionCn,
+      unit: item.unit ?? existingItem.unit,
+      minValue: item.minValue !== undefined ? item.minValue : existingItem.minValue,
+      maxValue: item.maxValue !== undefined ? item.maxValue : existingItem.maxValue,
+      standardValue: item.standardValue !== undefined ? item.standardValue : existingItem.standardValue,
+      updatedAt: now
+    };
+    
+    this.testingItems.set(id, updatedItem);
+    return updatedItem;
+  }
+  
+  // Testing Record methods
+  async createTestingRecord(record: InsertTestingRecord): Promise<TestingRecord> {
+    const id = this.currentTestingRecordId++;
+    const now = new Date();
+    
+    // Validate agency exists
+    const agency = await this.getTestingAgencyById(record.agencyId);
+    if (!agency) {
+      throw new Error(`Testing agency with ID ${record.agencyId} does not exist`);
+    }
+    
+    // Validate user exists if provided
+    if (record.userId) {
+      const user = await this.getUser(record.userId);
+      if (!user) {
+        throw new Error(`User with ID ${record.userId} does not exist`);
+      }
+    }
+    
+    const testingRecord: TestingRecord = {
+      id,
+      agencyId: record.agencyId,
+      userId: record.userId ?? null,
+      sampleId: record.sampleId,
+      sampleDate: record.sampleDate,
+      sampleLocation: record.sampleLocation ?? null,
+      coalType: record.coalType ?? null,
+      testDate: record.testDate,
+      testReport: record.testReport ?? null,
+      results: record.results,
+      weightedResults: record.weightedResults ?? null,
+      notes: record.notes ?? null,
+      attachments: record.attachments ?? null,
+      status: record.status ?? "completed",
+      createdAt: now,
+      updatedAt: now
+    };
+    
+    this.testingRecords.set(id, testingRecord);
+    
+    // Calculate weighted average if results provided
+    if (record.results && Array.isArray(record.results) && record.results.length > 0) {
+      await this.calculateWeightedAverage(id);
+    }
+    
+    return testingRecord;
+  }
+  
+  async getTestingRecordById(id: number): Promise<TestingRecord | undefined> {
+    return this.testingRecords.get(id);
+  }
+  
+  async getTestingRecordsBySampleId(sampleId: string): Promise<TestingRecord[]> {
+    return Array.from(this.testingRecords.values()).filter(
+      (record) => record.sampleId === sampleId
+    );
+  }
+  
+  async getTestingRecordsByAgencyId(agencyId: number): Promise<TestingRecord[]> {
+    return Array.from(this.testingRecords.values()).filter(
+      (record) => record.agencyId === agencyId
+    );
+  }
+  
+  async getTestingRecordsByUserId(userId: number): Promise<TestingRecord[]> {
+    return Array.from(this.testingRecords.values()).filter(
+      (record) => record.userId === userId
+    );
+  }
+  
+  async getAllTestingRecords(): Promise<TestingRecord[]> {
+    return Array.from(this.testingRecords.values());
+  }
+  
+  async updateTestingRecord(id: number, record: Partial<InsertTestingRecord>): Promise<TestingRecord | undefined> {
+    const existingRecord = await this.getTestingRecordById(id);
+    if (!existingRecord) return undefined;
+    
+    const now = new Date();
+    
+    // Validate agency exists if changing
+    if (record.agencyId && record.agencyId !== existingRecord.agencyId) {
+      const agency = await this.getTestingAgencyById(record.agencyId);
+      if (!agency) {
+        throw new Error(`Testing agency with ID ${record.agencyId} does not exist`);
+      }
+    }
+    
+    // Validate user exists if changing
+    if (record.userId && record.userId !== existingRecord.userId) {
+      const user = await this.getUser(record.userId);
+      if (!user) {
+        throw new Error(`User with ID ${record.userId} does not exist`);
+      }
+    }
+    
+    const updatedRecord: TestingRecord = {
+      ...existingRecord,
+      agencyId: record.agencyId ?? existingRecord.agencyId,
+      userId: record.userId !== undefined ? record.userId : existingRecord.userId,
+      sampleId: record.sampleId ?? existingRecord.sampleId,
+      sampleDate: record.sampleDate ?? existingRecord.sampleDate,
+      sampleLocation: record.sampleLocation !== undefined ? record.sampleLocation : existingRecord.sampleLocation,
+      coalType: record.coalType !== undefined ? record.coalType : existingRecord.coalType,
+      testDate: record.testDate ?? existingRecord.testDate,
+      testReport: record.testReport !== undefined ? record.testReport : existingRecord.testReport,
+      results: record.results ?? existingRecord.results,
+      weightedResults: record.weightedResults !== undefined ? record.weightedResults : existingRecord.weightedResults,
+      notes: record.notes !== undefined ? record.notes : existingRecord.notes,
+      attachments: record.attachments !== undefined ? record.attachments : existingRecord.attachments,
+      status: record.status ?? existingRecord.status,
+      updatedAt: now
+    };
+    
+    this.testingRecords.set(id, updatedRecord);
+    
+    // Recalculate weighted average if results changed
+    if (record.results) {
+      await this.calculateWeightedAverage(id);
+    }
+    
+    return updatedRecord;
+  }
+  
+  // Calculate weighted average for test results
+  async calculateWeightedAverage(testingRecordId: number): Promise<Record<string, number> | undefined> {
+    const record = await this.getTestingRecordById(testingRecordId);
+    if (!record || !record.results) return undefined;
+    
+    interface TestResult {
+      itemCode: string;
+      value: string | number;
+      weight?: string | number;
+    }
+    
+    const results = record.results as TestResult[];
+    if (!Array.isArray(results) || results.length === 0) return undefined;
+    
+    // Group results by item code
+    const groupedResults: Record<string, TestResult[]> = {};
+    const weightedSums: Record<string, number> = {};
+    const totalWeights: Record<string, number> = {};
+    
+    // Perform weighted average calculation
+    results.forEach(result => {
+      const { itemCode, value, weight = 1 } = result;
+      
+      if (!groupedResults[itemCode]) {
+        groupedResults[itemCode] = [];
+        weightedSums[itemCode] = 0;
+        totalWeights[itemCode] = 0;
+      }
+      
+      groupedResults[itemCode].push(result);
+      weightedSums[itemCode] += parseFloat(value.toString()) * parseFloat(weight.toString());
+      totalWeights[itemCode] += parseFloat(weight.toString());
+    });
+    
+    // Calculate final weighted averages
+    const weightedAverages: Record<string, number> = {};
+    
+    Object.keys(groupedResults).forEach(itemCode => {
+      weightedAverages[itemCode] = weightedSums[itemCode] / totalWeights[itemCode];
+    });
+    
+    // Update the record
+    record.weightedResults = weightedAverages;
+    this.testingRecords.set(testingRecordId, record);
+    
+    return weightedAverages;
   }
 }
 

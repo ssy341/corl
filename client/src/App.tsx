@@ -13,6 +13,8 @@ import ThermalImaging from "@/pages/SubPages/ThermalImaging";
 import InventoryAnalysis from "@/pages/SubPages/InventoryAnalysis";
 import ImplementationProcess from "@/pages/ServicePages/ImplementationProcess";
 import Transport from "@/pages/ServicePages/Transport";
+import QualityTesting from "@/pages/ServicePages/QualityTesting";
+import TestingRecords from "@/pages/ServicePages/TestingRecords";
 import { LanguageProvider } from "@/hooks/use-language";
 
 // We'll implement these pages later
@@ -57,7 +59,11 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/services" component={ServicesPage} />
       <Route path="/services/transport" component={Transport} />
+      <Route path="/services/quality-testing" component={QualityTesting} />
+      <Route path="/services/testing-records" component={TestingRecords} />
       <Route path="/ServicePages/Transport" component={Transport} />
+      <Route path="/ServicePages/QualityTesting" component={QualityTesting} />
+      <Route path="/ServicePages/TestingRecords" component={TestingRecords} />
       <Route path="/services/:slug" component={ServiceDetail} />
       <Route path="/technology/:tech-type" component={TechnologyDetails} />
       <Route path="/case-studies" component={CaseStudies} />

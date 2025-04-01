@@ -5,7 +5,10 @@ import {
   insertWaitlistSchema, 
   insertConsultationRequestSchema,
   insertServicePageSchema,
-  insertCoalServiceSchema
+  insertCoalServiceSchema,
+  insertTestingAgencySchema,
+  insertTestingItemSchema,
+  insertTestingRecordSchema
 } from "@shared/schema";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
@@ -371,6 +374,463 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(500).json({ 
         success: false, 
         message: "Failed to create service page"
+      });
+    }
+  });
+
+  // Coal Quality Testing API Endpoints
+  
+  // Testing Agencies endpoints
+  app.get("/api/testing-agencies", async (req, res) => {
+    try {
+      const agencies = await storage.getAllTestingAgencies();
+      return res.status(200).json({
+        success: true,
+        data: agencies
+      });
+    } catch (error) {
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch testing agencies"
+      });
+    }
+  });
+  
+  app.get("/api/testing-agencies/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      if (isNaN(id)) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Invalid agency ID" 
+        });
+      }
+      
+      const agency = await storage.getTestingAgencyById(id);
+      
+      if (!agency) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Testing agency not found" 
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        data: agency
+      });
+    } catch (error) {
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch testing agency"
+      });
+    }
+  });
+  
+  app.post("/api/testing-agencies", async (req, res) => {
+    try {
+      const result = insertTestingAgencySchema.safeParse(req.body);
+      
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({ 
+          success: false, 
+          message: validationError.message
+        });
+      }
+      
+      const agency = await storage.createTestingAgency(result.data);
+      return res.status(201).json({
+        success: true,
+        message: "Testing agency created successfully",
+        data: agency
+      });
+    } catch (error) {
+      if (error instanceof Error && error.message.includes("already exists")) {
+        return res.status(409).json({
+          success: false,
+          message: error.message
+        });
+      }
+      
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to create testing agency"
+      });
+    }
+  });
+  
+  app.patch("/api/testing-agencies/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      if (isNaN(id)) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Invalid agency ID" 
+        });
+      }
+      
+      const result = insertTestingAgencySchema.partial().safeParse(req.body);
+      
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({ 
+          success: false, 
+          message: validationError.message
+        });
+      }
+      
+      const updatedAgency = await storage.updateTestingAgency(id, result.data);
+      
+      if (!updatedAgency) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Testing agency not found" 
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        message: "Testing agency updated successfully",
+        data: updatedAgency
+      });
+    } catch (error) {
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to update testing agency"
+      });
+    }
+  });
+  
+  // Testing Items endpoints
+  app.get("/api/testing-items", async (req, res) => {
+    try {
+      const items = await storage.getAllTestingItems();
+      return res.status(200).json({
+        success: true,
+        data: items
+      });
+    } catch (error) {
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch testing items"
+      });
+    }
+  });
+  
+  app.get("/api/testing-items/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      if (isNaN(id)) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Invalid item ID" 
+        });
+      }
+      
+      const item = await storage.getTestingItemById(id);
+      
+      if (!item) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Testing item not found" 
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        data: item
+      });
+    } catch (error) {
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch testing item"
+      });
+    }
+  });
+  
+  app.post("/api/testing-items", async (req, res) => {
+    try {
+      const result = insertTestingItemSchema.safeParse(req.body);
+      
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({ 
+          success: false, 
+          message: validationError.message
+        });
+      }
+      
+      const item = await storage.createTestingItem(result.data);
+      return res.status(201).json({
+        success: true,
+        message: "Testing item created successfully",
+        data: item
+      });
+    } catch (error) {
+      if (error instanceof Error && error.message.includes("already exists")) {
+        return res.status(409).json({
+          success: false,
+          message: error.message
+        });
+      }
+      
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to create testing item"
+      });
+    }
+  });
+  
+  app.patch("/api/testing-items/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      if (isNaN(id)) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Invalid item ID" 
+        });
+      }
+      
+      const result = insertTestingItemSchema.partial().safeParse(req.body);
+      
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({ 
+          success: false, 
+          message: validationError.message
+        });
+      }
+      
+      const updatedItem = await storage.updateTestingItem(id, result.data);
+      
+      if (!updatedItem) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Testing item not found" 
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        message: "Testing item updated successfully",
+        data: updatedItem
+      });
+    } catch (error) {
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to update testing item"
+      });
+    }
+  });
+  
+  // Testing Records endpoints
+  app.get("/api/testing-records", async (req, res) => {
+    try {
+      const records = await storage.getAllTestingRecords();
+      return res.status(200).json({
+        success: true,
+        data: records
+      });
+    } catch (error) {
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch testing records"
+      });
+    }
+  });
+  
+  app.get("/api/testing-records/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      if (isNaN(id)) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Invalid record ID" 
+        });
+      }
+      
+      const record = await storage.getTestingRecordById(id);
+      
+      if (!record) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Testing record not found" 
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        data: record
+      });
+    } catch (error) {
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch testing record"
+      });
+    }
+  });
+  
+  app.get("/api/testing-records/sample/:sampleId", async (req, res) => {
+    try {
+      const { sampleId } = req.params;
+      const records = await storage.getTestingRecordsBySampleId(sampleId);
+      
+      return res.status(200).json({
+        success: true,
+        data: records
+      });
+    } catch (error) {
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch testing records by sample ID"
+      });
+    }
+  });
+  
+  app.get("/api/testing-records/agency/:agencyId", async (req, res) => {
+    try {
+      const agencyId = parseInt(req.params.agencyId);
+      
+      if (isNaN(agencyId)) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Invalid agency ID" 
+        });
+      }
+      
+      const records = await storage.getTestingRecordsByAgencyId(agencyId);
+      
+      return res.status(200).json({
+        success: true,
+        data: records
+      });
+    } catch (error) {
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch testing records by agency ID"
+      });
+    }
+  });
+  
+  app.post("/api/testing-records", async (req, res) => {
+    try {
+      const result = insertTestingRecordSchema.safeParse(req.body);
+      
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({ 
+          success: false, 
+          message: validationError.message
+        });
+      }
+      
+      const record = await storage.createTestingRecord(result.data);
+      
+      return res.status(201).json({
+        success: true,
+        message: "Testing record created successfully",
+        data: record
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(400).json({
+          success: false,
+          message: error.message
+        });
+      }
+      
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to create testing record"
+      });
+    }
+  });
+  
+  app.patch("/api/testing-records/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      if (isNaN(id)) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Invalid record ID" 
+        });
+      }
+      
+      const result = insertTestingRecordSchema.partial().safeParse(req.body);
+      
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({ 
+          success: false, 
+          message: validationError.message
+        });
+      }
+      
+      const updatedRecord = await storage.updateTestingRecord(id, result.data);
+      
+      if (!updatedRecord) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Testing record not found" 
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        message: "Testing record updated successfully",
+        data: updatedRecord
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(400).json({
+          success: false,
+          message: error.message
+        });
+      }
+      
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to update testing record"
+      });
+    }
+  });
+  
+  // Calculate weighted average for a testing record
+  app.get("/api/testing-records/:id/weighted-average", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      if (isNaN(id)) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Invalid record ID" 
+        });
+      }
+      
+      const weightedAverage = await storage.calculateWeightedAverage(id);
+      
+      if (!weightedAverage) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Testing record not found or has no results" 
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        data: weightedAverage
+      });
+    } catch (error) {
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to calculate weighted average"
       });
     }
   });

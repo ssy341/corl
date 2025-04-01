@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, timestamp, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, jsonb, decimal, date } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -73,6 +73,84 @@ export const consultationRequests = pgTable("consultation_requests", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+// Testing agencies (third-party coal quality inspection agencies)
+export const testingAgencies = pgTable("testing_agencies", {
+  id: serial("id").primaryKey(),
+  code: text("code").notNull().unique(), // Unique agency code
+  
+  // Multi-language content
+  nameEn: text("name_en").notNull(),
+  nameCn: text("name_cn").notNull(),
+  descriptionEn: text("description_en"),
+  descriptionCn: text("description_cn"),
+  
+  address: text("address"),
+  contactPerson: text("contact_person"),
+  contactPhone: text("contact_phone"),
+  contactEmail: text("contact_email"),
+  
+  // Agency certifications and accreditations
+  certifications: jsonb("certifications"),
+  
+  // API connection information (for direct data integration)
+  apiEndpoint: text("api_endpoint"),
+  apiKey: text("api_key"),
+  
+  isActive: boolean("is_active").default(true).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Testing items (parameters that can be tested)
+export const testingItems = pgTable("testing_items", {
+  id: serial("id").primaryKey(),
+  code: text("code").notNull().unique(), // Unique item code (e.g., CV, MT, ASH)
+  
+  // Multi-language content
+  nameEn: text("name_en").notNull(),
+  nameCn: text("name_cn").notNull(),
+  descriptionEn: text("description_en"),
+  descriptionCn: text("description_cn"),
+  
+  unit: text("unit").notNull(), // Measurement unit
+  minValue: decimal("min_value"), // Minimum possible value
+  maxValue: decimal("max_value"), // Maximum possible value
+  standardValue: decimal("standard_value"), // Reference standard value
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Testing records (actual test results)
+export const testingRecords = pgTable("testing_records", {
+  id: serial("id").primaryKey(),
+  agencyId: integer("agency_id").notNull().references(() => testingAgencies.id),
+  userId: integer("user_id").references(() => users.id),
+  
+  // Coal sample information
+  sampleId: text("sample_id").notNull(),
+  sampleDate: date("sample_date").notNull(),
+  sampleLocation: text("sample_location"),
+  coalType: text("coal_type"),
+  
+  // Test information
+  testDate: date("test_date").notNull(),
+  testReport: text("test_report"), // Report number or identifier
+  
+  // Test results (stored as JSON for flexibility)
+  results: jsonb("results").notNull(), // Array of {itemCode, value, weight}
+  
+  // Weighted average results (calculated)
+  weightedResults: jsonb("weighted_results"),
+  
+  notes: text("notes"),
+  attachments: jsonb("attachments"), // URLs to attached documents, images
+  
+  status: text("status").default("completed").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 // Schemas for inserting data
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
@@ -120,6 +198,53 @@ export const insertConsultationRequestSchema = createInsertSchema(consultationRe
   message: true,
 });
 
+// Testing agencies schema
+export const insertTestingAgencySchema = createInsertSchema(testingAgencies).pick({
+  code: true,
+  nameEn: true,
+  nameCn: true,
+  descriptionEn: true,
+  descriptionCn: true,
+  address: true,
+  contactPerson: true,
+  contactPhone: true,
+  contactEmail: true,
+  certifications: true,
+  apiEndpoint: true,
+  apiKey: true,
+  isActive: true,
+});
+
+// Testing items schema
+export const insertTestingItemSchema = createInsertSchema(testingItems).pick({
+  code: true,
+  nameEn: true,
+  nameCn: true,
+  descriptionEn: true,
+  descriptionCn: true,
+  unit: true,
+  minValue: true,
+  maxValue: true,
+  standardValue: true,
+});
+
+// Testing records schema
+export const insertTestingRecordSchema = createInsertSchema(testingRecords).pick({
+  agencyId: true,
+  userId: true,
+  sampleId: true,
+  sampleDate: true,
+  sampleLocation: true,
+  coalType: true,
+  testDate: true,
+  testReport: true,
+  results: true,
+  weightedResults: true,
+  notes: true,
+  attachments: true,
+  status: true,
+});
+
 // Export types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -135,3 +260,12 @@ export type ServicePage = typeof servicePages.$inferSelect;
 
 export type InsertConsultationRequest = z.infer<typeof insertConsultationRequestSchema>;
 export type ConsultationRequest = typeof consultationRequests.$inferSelect;
+
+export type InsertTestingAgency = z.infer<typeof insertTestingAgencySchema>;
+export type TestingAgency = typeof testingAgencies.$inferSelect;
+
+export type InsertTestingItem = z.infer<typeof insertTestingItemSchema>;
+export type TestingItem = typeof testingItems.$inferSelect;
+
+export type InsertTestingRecord = z.infer<typeof insertTestingRecordSchema>;
+export type TestingRecord = typeof testingRecords.$inferSelect;
