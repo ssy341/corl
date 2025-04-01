@@ -245,6 +245,131 @@ export const insertTestingRecordSchema = createInsertSchema(testingRecords).pick
   status: true,
 });
 
+// 煤炭产品表 - 用于煤险处置
+export const coalProducts = pgTable("coal_products", {
+  id: serial("id").primaryKey(),
+  productCode: text("product_code").notNull().unique(),
+  titleCn: text("title_cn").notNull(),
+  titleEn: text("title_en").notNull(),
+  descriptionCn: text("description_cn"),
+  descriptionEn: text("description_en"),
+  coalType: text("coal_type").notNull(),
+  quantity: decimal("quantity").notNull(), // 以吨为单位
+  originalPrice: decimal("original_price").notNull(), // 原始价格
+  currentPrice: decimal("current_price").notNull(), // 当前价格
+  location: text("location").notNull(), // 存放位置
+  quality: jsonb("quality").$type<Record<string, string | number>>().notNull(), // 煤炭质量参数
+  imageUrl: text("image_url"),
+  status: text("status").default("available").notNull(), // available, reserved, sold
+  disposalType: text("disposal_type").notNull(), // auction(竞拍), discount(定向降价)
+  auctionEndTime: timestamp("auction_end_time"), // 竞拍结束时间（如果是竞拍）
+  minDiscountPrice: decimal("min_discount_price"), // 最低折扣价（如果是定向降价）
+  collateralRatio: decimal("collateral_ratio"), // 原抵押比率
+  riskLevel: text("risk_level").notNull(), // high, medium, low
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// 竞拍出价表
+export const coalBids = pgTable("coal_bids", {
+  id: serial("id").primaryKey(),
+  productId: integer("product_id").notNull().references(() => coalProducts.id),
+  userId: integer("user_id").references(() => users.id),
+  bidderName: text("bidder_name").notNull(),
+  bidderContact: text("bidder_contact").notNull(),
+  bidAmount: decimal("bid_amount").notNull(),
+  bidTime: timestamp("bid_time").defaultNow().notNull(),
+  status: text("status").default("pending").notNull(), // pending, accepted, rejected
+  notes: text("notes"),
+});
+
+// 煤炭订单表
+export const coalOrders = pgTable("coal_orders", {
+  id: serial("id").primaryKey(),
+  orderNumber: text("order_number").notNull().unique(),
+  productId: integer("product_id").notNull().references(() => coalProducts.id),
+  userId: integer("user_id").references(() => users.id),
+  buyerName: text("buyer_name").notNull(),
+  buyerContact: text("buyer_contact").notNull(),
+  buyerCompany: text("buyer_company"),
+  quantity: decimal("quantity").notNull(),
+  totalAmount: decimal("total_amount").notNull(),
+  paymentStatus: text("payment_status").default("pending").notNull(), // pending, paid, refunded
+  deliveryStatus: text("delivery_status").default("pending").notNull(), // pending, processing, shipped, delivered
+  transactionType: text("transaction_type").notNull(), // auction, direct
+  bidId: integer("bid_id").references(() => coalBids.id), // 如果是通过竞拍购买
+  deliveryAddress: text("delivery_address"),
+  deliveryContact: text("delivery_contact"),
+  deliveryPhone: text("delivery_phone"),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// 产品收藏表
+export const coalFavorites = pgTable("coal_favorites", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id),
+  productId: integer("product_id").notNull().references(() => coalProducts.id),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// 插入数据模式定义
+export const insertCoalProductSchema = createInsertSchema(coalProducts).pick({
+  productCode: true,
+  titleCn: true,
+  titleEn: true,
+  descriptionCn: true,
+  descriptionEn: true,
+  coalType: true,
+  quantity: true,
+  originalPrice: true,
+  currentPrice: true,
+  location: true,
+  quality: true,
+  imageUrl: true,
+  status: true,
+  disposalType: true,
+  auctionEndTime: true,
+  minDiscountPrice: true,
+  collateralRatio: true,
+  riskLevel: true,
+});
+
+export const insertCoalBidSchema = createInsertSchema(coalBids).pick({
+  productId: true,
+  userId: true,
+  bidderName: true,
+  bidderContact: true,
+  bidAmount: true,
+  status: true,
+  notes: true,
+});
+
+export const insertCoalOrderSchema = createInsertSchema(coalOrders).pick({
+  orderNumber: true,
+  productId: true,
+  userId: true,
+  buyerName: true,
+  buyerContact: true,
+  buyerCompany: true,
+  quantity: true,
+  totalAmount: true,
+  paymentStatus: true,
+  deliveryStatus: true,
+  transactionType: true,
+  bidId: true,
+  deliveryAddress: true,
+  deliveryContact: true,
+  deliveryPhone: true,
+  notes: true,
+});
+
+export const insertCoalFavoriteSchema = createInsertSchema(coalFavorites).pick({
+  userId: true,
+  productId: true,
+});
+
 // Export types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -269,3 +394,15 @@ export type TestingItem = typeof testingItems.$inferSelect;
 
 export type InsertTestingRecord = z.infer<typeof insertTestingRecordSchema>;
 export type TestingRecord = typeof testingRecords.$inferSelect;
+
+export type InsertCoalProduct = z.infer<typeof insertCoalProductSchema>;
+export type CoalProduct = typeof coalProducts.$inferSelect;
+
+export type InsertCoalBid = z.infer<typeof insertCoalBidSchema>;
+export type CoalBid = typeof coalBids.$inferSelect;
+
+export type InsertCoalOrder = z.infer<typeof insertCoalOrderSchema>;
+export type CoalOrder = typeof coalOrders.$inferSelect;
+
+export type InsertCoalFavorite = z.infer<typeof insertCoalFavoriteSchema>;
+export type CoalFavorite = typeof coalFavorites.$inferSelect;

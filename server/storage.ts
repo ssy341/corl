@@ -6,7 +6,11 @@ import {
   consultationRequests, type ConsultationRequest, type InsertConsultationRequest,
   testingAgencies, type TestingAgency, type InsertTestingAgency,
   testingItems, type TestingItem, type InsertTestingItem,
-  testingRecords, type TestingRecord, type InsertTestingRecord
+  testingRecords, type TestingRecord, type InsertTestingRecord,
+  coalProducts, type CoalProduct, type InsertCoalProduct,
+  coalBids, type CoalBid, type InsertCoalBid,
+  coalOrders, type CoalOrder, type InsertCoalOrder,
+  coalFavorites, type CoalFavorite, type InsertCoalFavorite
 } from "@shared/schema";
 
 export interface IStorage {
@@ -66,6 +70,41 @@ export interface IStorage {
   
   // Calculate Weighted Average for Testing Results
   calculateWeightedAverage(testingRecordId: number): Promise<object | undefined>;
+  
+  // Coal Product methods (煤险处置 - 煤炭产品)
+  createCoalProduct(product: InsertCoalProduct): Promise<CoalProduct>;
+  getCoalProductById(id: number): Promise<CoalProduct | undefined>;
+  getCoalProductByCode(productCode: string): Promise<CoalProduct | undefined>;
+  getAllCoalProducts(): Promise<CoalProduct[]>;
+  getCoalProductsByDisposalType(disposalType: string): Promise<CoalProduct[]>;
+  getCoalProductsByStatus(status: string): Promise<CoalProduct[]>;
+  getCoalProductsByRiskLevel(riskLevel: string): Promise<CoalProduct[]>;
+  updateCoalProduct(id: number, product: Partial<InsertCoalProduct>): Promise<CoalProduct | undefined>;
+  updateCoalProductStatus(id: number, status: string): Promise<CoalProduct | undefined>;
+  
+  // Coal Bid methods (煤险处置 - 竞拍出价)
+  createCoalBid(bid: InsertCoalBid): Promise<CoalBid>;
+  getCoalBidById(id: number): Promise<CoalBid | undefined>;
+  getCoalBidsByProductId(productId: number): Promise<CoalBid[]>;
+  getCoalBidsByUserId(userId: number): Promise<CoalBid[]>;
+  getHighestBidForProduct(productId: number): Promise<CoalBid | undefined>;
+  updateCoalBidStatus(id: number, status: string): Promise<CoalBid | undefined>;
+  
+  // Coal Order methods (煤险处置 - 煤炭订单)
+  createCoalOrder(order: InsertCoalOrder): Promise<CoalOrder>;
+  getCoalOrderById(id: number): Promise<CoalOrder | undefined>;
+  getCoalOrderByOrderNumber(orderNumber: string): Promise<CoalOrder | undefined>;
+  getCoalOrdersByProductId(productId: number): Promise<CoalOrder[]>;
+  getCoalOrdersByUserId(userId: number): Promise<CoalOrder[]>;
+  getAllCoalOrders(): Promise<CoalOrder[]>;
+  updateCoalOrderStatus(id: number, paymentStatus: string, deliveryStatus: string): Promise<CoalOrder | undefined>;
+  
+  // Coal Favorites methods (煤险处置 - 收藏夹)
+  createCoalFavorite(favorite: InsertCoalFavorite): Promise<CoalFavorite>;
+  getCoalFavoriteById(id: number): Promise<CoalFavorite | undefined>;
+  getCoalFavoritesByUserId(userId: number): Promise<CoalFavorite[]>;
+  removeCoalFavorite(id: number): Promise<boolean>;
+  isProductFavoritedByUser(productId: number, userId: number | null | undefined): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -785,6 +824,319 @@ export class MemStorage implements IStorage {
     this.testingRecords.set(testingRecordId, record);
     
     return weightedAverages;
+  }
+
+  // === 煤险处置相关存储方法 ===
+  
+  // 添加煤险处置相关的Map存储
+  private coalProducts = new Map<number, CoalProduct>();
+  private coalBids = new Map<number, CoalBid>();
+  private coalOrders = new Map<number, CoalOrder>();
+  private coalFavorites = new Map<number, CoalFavorite>();
+  
+  // 添加计数器
+  currentCoalProductId = 1;
+  currentCoalBidId = 1;
+  currentCoalOrderId = 1;
+  currentCoalFavoriteId = 1;
+  
+  // Coal Product methods (煤险处置 - 煤炭产品)
+  async createCoalProduct(product: InsertCoalProduct): Promise<CoalProduct> {
+    const id = this.currentCoalProductId++;
+    const now = new Date();
+    
+    const coalProduct: CoalProduct = {
+      id,
+      productCode: product.productCode,
+      titleCn: product.titleCn,
+      titleEn: product.titleEn,
+      descriptionCn: product.descriptionCn || null,
+      descriptionEn: product.descriptionEn || null,
+      coalType: product.coalType,
+      quantity: product.quantity,
+      originalPrice: product.originalPrice,
+      currentPrice: product.currentPrice,
+      location: product.location,
+      quality: product.quality,
+      imageUrl: product.imageUrl || null,
+      status: product.status || 'available',
+      disposalType: product.disposalType,
+      auctionEndTime: product.auctionEndTime || null,
+      minDiscountPrice: product.minDiscountPrice || null,
+      collateralRatio: product.collateralRatio || null,
+      riskLevel: product.riskLevel,
+      createdAt: now,
+      updatedAt: now
+    };
+    
+    this.coalProducts.set(id, coalProduct);
+    return coalProduct;
+  }
+  
+  async getCoalProductById(id: number): Promise<CoalProduct | undefined> {
+    return this.coalProducts.get(id);
+  }
+  
+  async getCoalProductByCode(productCode: string): Promise<CoalProduct | undefined> {
+    return Array.from(this.coalProducts.values()).find(
+      (product) => product.productCode === productCode
+    );
+  }
+  
+  async getAllCoalProducts(): Promise<CoalProduct[]> {
+    return Array.from(this.coalProducts.values());
+  }
+  
+  async getCoalProductsByDisposalType(disposalType: string): Promise<CoalProduct[]> {
+    return Array.from(this.coalProducts.values()).filter(
+      (product) => product.disposalType === disposalType
+    );
+  }
+  
+  async getCoalProductsByStatus(status: string): Promise<CoalProduct[]> {
+    return Array.from(this.coalProducts.values()).filter(
+      (product) => product.status === status
+    );
+  }
+  
+  async getCoalProductsByRiskLevel(riskLevel: string): Promise<CoalProduct[]> {
+    return Array.from(this.coalProducts.values()).filter(
+      (product) => product.riskLevel === riskLevel
+    );
+  }
+  
+  async updateCoalProduct(id: number, product: Partial<InsertCoalProduct>): Promise<CoalProduct | undefined> {
+    const existingProduct = await this.getCoalProductById(id);
+    if (!existingProduct) {
+      return undefined;
+    }
+    
+    const updatedProduct: CoalProduct = {
+      ...existingProduct,
+      ...product,
+      updatedAt: new Date()
+    };
+    
+    this.coalProducts.set(id, updatedProduct);
+    return updatedProduct;
+  }
+  
+  async updateCoalProductStatus(id: number, status: string): Promise<CoalProduct | undefined> {
+    return this.updateCoalProduct(id, { status } as Partial<InsertCoalProduct>);
+  }
+  
+  // Coal Bid methods (煤险处置 - 竞拍出价)
+  async createCoalBid(bid: InsertCoalBid): Promise<CoalBid> {
+    const id = this.currentCoalBidId++;
+    const now = new Date();
+    
+    const coalBid: CoalBid = {
+      id,
+      productId: bid.productId,
+      userId: bid.userId || null,
+      bidderName: bid.bidderName,
+      bidderContact: bid.bidderContact,
+      bidAmount: bid.bidAmount,
+      bidTime: now,
+      status: bid.status || 'pending',
+      notes: bid.notes || null
+    };
+    
+    this.coalBids.set(id, coalBid);
+    
+    // Check if this is the highest bid and update product price if necessary
+    const product = await this.getCoalProductById(bid.productId);
+    if (product && product.disposalType === 'auction') {
+      const highestBid = await this.getHighestBidForProduct(bid.productId);
+      if (highestBid && highestBid.bidAmount > product.currentPrice) {
+        await this.updateCoalProduct(bid.productId, { 
+          currentPrice: highestBid.bidAmount 
+        } as Partial<InsertCoalProduct>);
+      }
+    }
+    
+    return coalBid;
+  }
+  
+  async getCoalBidById(id: number): Promise<CoalBid | undefined> {
+    return this.coalBids.get(id);
+  }
+  
+  async getCoalBidsByProductId(productId: number): Promise<CoalBid[]> {
+    return Array.from(this.coalBids.values()).filter(
+      (bid) => bid.productId === productId
+    );
+  }
+  
+  async getCoalBidsByUserId(userId: number): Promise<CoalBid[]> {
+    return Array.from(this.coalBids.values()).filter(
+      (bid) => bid.userId === userId
+    );
+  }
+  
+  async getHighestBidForProduct(productId: number): Promise<CoalBid | undefined> {
+    const bids = await this.getCoalBidsByProductId(productId);
+    if (bids.length === 0) {
+      return undefined;
+    }
+    
+    return bids.reduce((highest, current) => {
+      return current.bidAmount > highest.bidAmount ? current : highest;
+    });
+  }
+  
+  async updateCoalBidStatus(id: number, status: string): Promise<CoalBid | undefined> {
+    const bid = await this.getCoalBidById(id);
+    if (!bid) {
+      return undefined;
+    }
+    
+    const updatedBid: CoalBid = {
+      ...bid,
+      status
+    };
+    
+    this.coalBids.set(id, updatedBid);
+    return updatedBid;
+  }
+  
+  // Coal Order methods (煤险处置 - 煤炭订单)
+  async createCoalOrder(order: InsertCoalOrder): Promise<CoalOrder> {
+    const id = this.currentCoalOrderId++;
+    const now = new Date();
+    
+    const coalOrder: CoalOrder = {
+      id,
+      orderNumber: order.orderNumber,
+      productId: order.productId,
+      userId: order.userId || null,
+      buyerName: order.buyerName,
+      buyerContact: order.buyerContact,
+      buyerCompany: order.buyerCompany || null,
+      quantity: order.quantity,
+      totalAmount: order.totalAmount,
+      paymentStatus: order.paymentStatus || 'pending',
+      deliveryStatus: order.deliveryStatus || 'pending',
+      transactionType: order.transactionType,
+      bidId: order.bidId || null,
+      deliveryAddress: order.deliveryAddress || null,
+      deliveryContact: order.deliveryContact || null,
+      deliveryPhone: order.deliveryPhone || null,
+      notes: order.notes || null,
+      createdAt: now,
+      updatedAt: now
+    };
+    
+    this.coalOrders.set(id, coalOrder);
+    
+    // Update product status to reserved
+    await this.updateCoalProductStatus(order.productId, 'reserved');
+    
+    // If order was from an auction, update the corresponding bid status
+    if (order.bidId) {
+      await this.updateCoalBidStatus(order.bidId, 'accepted');
+    }
+    
+    return coalOrder;
+  }
+  
+  async getCoalOrderById(id: number): Promise<CoalOrder | undefined> {
+    return this.coalOrders.get(id);
+  }
+  
+  async getCoalOrderByOrderNumber(orderNumber: string): Promise<CoalOrder | undefined> {
+    return Array.from(this.coalOrders.values()).find(
+      (order) => order.orderNumber === orderNumber
+    );
+  }
+  
+  async getCoalOrdersByProductId(productId: number): Promise<CoalOrder[]> {
+    return Array.from(this.coalOrders.values()).filter(
+      (order) => order.productId === productId
+    );
+  }
+  
+  async getCoalOrdersByUserId(userId: number): Promise<CoalOrder[]> {
+    return Array.from(this.coalOrders.values()).filter(
+      (order) => order.userId === userId
+    );
+  }
+  
+  async getAllCoalOrders(): Promise<CoalOrder[]> {
+    return Array.from(this.coalOrders.values());
+  }
+  
+  async updateCoalOrderStatus(id: number, paymentStatus: string, deliveryStatus: string): Promise<CoalOrder | undefined> {
+    const order = await this.getCoalOrderById(id);
+    if (!order) {
+      return undefined;
+    }
+    
+    const updatedOrder: CoalOrder = {
+      ...order,
+      paymentStatus,
+      deliveryStatus,
+      updatedAt: new Date()
+    };
+    
+    this.coalOrders.set(id, updatedOrder);
+    
+    // If both payment and delivery are completed, mark the product as sold
+    if (paymentStatus === 'paid' && deliveryStatus === 'delivered') {
+      await this.updateCoalProductStatus(order.productId, 'sold');
+    }
+    
+    return updatedOrder;
+  }
+  
+  // Coal Favorites methods (煤险处置 - 收藏夹)
+  async createCoalFavorite(favorite: InsertCoalFavorite): Promise<CoalFavorite> {
+    // Check if product is already favorited
+    if (favorite.userId === null || favorite.userId === undefined) {
+      throw new Error("User ID is required");
+    }
+    
+    const isAlreadyFavorited = await this.isProductFavoritedByUser(favorite.productId, favorite.userId);
+    if (isAlreadyFavorited) {
+      throw new Error("Product already in favorites");
+    }
+    
+    const id = this.currentCoalFavoriteId++;
+    
+    const coalFavorite: CoalFavorite = {
+      id,
+      userId: favorite.userId,
+      productId: favorite.productId,
+      createdAt: new Date()
+    };
+    
+    this.coalFavorites.set(id, coalFavorite);
+    return coalFavorite;
+  }
+  
+  async getCoalFavoriteById(id: number): Promise<CoalFavorite | undefined> {
+    return this.coalFavorites.get(id);
+  }
+  
+  async getCoalFavoritesByUserId(userId: number): Promise<CoalFavorite[]> {
+    return Array.from(this.coalFavorites.values()).filter(
+      (favorite) => favorite.userId === userId
+    );
+  }
+  
+  async removeCoalFavorite(id: number): Promise<boolean> {
+    const favorite = await this.getCoalFavoriteById(id);
+    if (!favorite) {
+      return false;
+    }
+    
+    return this.coalFavorites.delete(id);
+  }
+  
+  async isProductFavoritedByUser(productId: number, userId: number | null | undefined): Promise<boolean> {
+    if (userId === null || userId === undefined) return false;
+    const favorites = await this.getCoalFavoritesByUserId(userId);
+    return favorites.some(fav => fav.productId === productId);
   }
 }
 

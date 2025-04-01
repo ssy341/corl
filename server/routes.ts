@@ -8,7 +8,11 @@ import {
   insertCoalServiceSchema,
   insertTestingAgencySchema,
   insertTestingItemSchema,
-  insertTestingRecordSchema
+  insertTestingRecordSchema,
+  insertCoalProductSchema,
+  insertCoalBidSchema,
+  insertCoalOrderSchema,
+  insertCoalFavoriteSchema
 } from "@shared/schema";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
@@ -1015,6 +1019,720 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(500).json({ 
         success: false, 
         message: "Failed to calculate weighted average"
+      });
+    }
+  });
+
+  // 煤险处置 API 路由 - 煤炭产品API
+
+  // 获取所有煤炭产品
+  app.get("/api/coal-products", async (req, res) => {
+    try {
+      // 支持筛选参数
+      const { disposalType, status, riskLevel } = req.query;
+      
+      let products;
+      
+      if (disposalType && typeof disposalType === 'string') {
+        products = await storage.getCoalProductsByDisposalType(disposalType);
+      } else if (status && typeof status === 'string') {
+        products = await storage.getCoalProductsByStatus(status);
+      } else if (riskLevel && typeof riskLevel === 'string') {
+        products = await storage.getCoalProductsByRiskLevel(riskLevel);
+      } else {
+        products = await storage.getAllCoalProducts();
+      }
+      
+      return res.status(200).json({
+        success: true,
+        data: products
+      });
+    } catch (error) {
+      console.error("Error fetching coal products:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch coal products" 
+      });
+    }
+  });
+  
+  // 获取单个煤炭产品
+  app.get("/api/coal-products/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      if (isNaN(id)) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Invalid product ID" 
+        });
+      }
+      
+      const product = await storage.getCoalProductById(id);
+      
+      if (!product) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Coal product not found" 
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        data: product
+      });
+    } catch (error) {
+      console.error("Error fetching coal product:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch coal product" 
+      });
+    }
+  });
+  
+  // 创建煤炭产品 (管理员端点)
+  app.post("/api/admin/coal-products", async (req, res) => {
+    try {
+      const result = insertCoalProductSchema.safeParse(req.body);
+      
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({ 
+          success: false, 
+          message: validationError.message
+        });
+      }
+      
+      const product = await storage.createCoalProduct(result.data);
+      return res.status(201).json({
+        success: true,
+        message: "Coal product created successfully",
+        data: product
+      });
+    } catch (error) {
+      console.error("Error creating coal product:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to create coal product" 
+      });
+    }
+  });
+  
+  // 更新煤炭产品 (管理员端点)
+  app.patch("/api/admin/coal-products/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      if (isNaN(id)) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Invalid product ID" 
+        });
+      }
+      
+      // 部分验证请求体 (允许部分更新)
+      const updateData = req.body;
+      
+      const updatedProduct = await storage.updateCoalProduct(id, updateData);
+      
+      if (!updatedProduct) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Coal product not found" 
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        message: "Coal product updated successfully",
+        data: updatedProduct
+      });
+    } catch (error) {
+      console.error("Error updating coal product:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to update coal product" 
+      });
+    }
+  });
+  
+  // 更新煤炭产品状态 (管理员端点)
+  app.patch("/api/admin/coal-products/:id/status", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { status } = req.body;
+      
+      if (isNaN(id)) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Invalid product ID" 
+        });
+      }
+      
+      if (!status || typeof status !== 'string') {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Status is required" 
+        });
+      }
+      
+      const updatedProduct = await storage.updateCoalProductStatus(id, status);
+      
+      if (!updatedProduct) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Coal product not found" 
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        message: "Product status updated successfully",
+        data: updatedProduct
+      });
+    } catch (error) {
+      console.error("Error updating product status:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to update product status" 
+      });
+    }
+  });
+  
+  // 煤炭竞拍出价API
+  
+  // 提交竞拍出价
+  app.post("/api/coal-bids", async (req, res) => {
+    try {
+      const result = insertCoalBidSchema.safeParse(req.body);
+      
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({ 
+          success: false, 
+          message: validationError.message
+        });
+      }
+      
+      // 检查产品是否存在
+      const product = await storage.getCoalProductById(result.data.productId);
+      if (!product) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Coal product not found" 
+        });
+      }
+      
+      // 检查产品是否是竞拍类型
+      if (product.disposalType !== 'auction') {
+        return res.status(400).json({ 
+          success: false, 
+          message: "This product is not available for auction" 
+        });
+      }
+      
+      // 检查产品是否仍然可用
+      if (product.status !== 'available') {
+        return res.status(400).json({ 
+          success: false, 
+          message: "This product is no longer available for bidding" 
+        });
+      }
+      
+      // 检查竞拍是否已结束
+      if (product.auctionEndTime && new Date(product.auctionEndTime) < new Date()) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "The auction for this product has ended" 
+        });
+      }
+      
+      // 检查出价是否高于当前最高出价
+      const highestBid = await storage.getHighestBidForProduct(product.id);
+      if (highestBid && highestBid.bidAmount >= result.data.bidAmount) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Your bid must be higher than the current highest bid" 
+        });
+      }
+      
+      // 创建竞拍出价
+      const bid = await storage.createCoalBid(result.data);
+      
+      return res.status(201).json({
+        success: true,
+        message: "Bid submitted successfully",
+        data: {
+          bidId: bid.id,
+          productId: bid.productId,
+          bidAmount: bid.bidAmount,
+          status: bid.status,
+          bidTime: bid.bidTime
+        }
+      });
+    } catch (error) {
+      console.error("Error submitting bid:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to submit bid" 
+      });
+    }
+  });
+  
+  // 获取产品的所有竞拍出价
+  app.get("/api/coal-products/:productId/bids", async (req, res) => {
+    try {
+      const productId = parseInt(req.params.productId);
+      
+      if (isNaN(productId)) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Invalid product ID" 
+        });
+      }
+      
+      // 检查产品是否存在
+      const product = await storage.getCoalProductById(productId);
+      if (!product) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Coal product not found" 
+        });
+      }
+      
+      const bids = await storage.getCoalBidsByProductId(productId);
+      
+      return res.status(200).json({
+        success: true,
+        data: bids
+      });
+    } catch (error) {
+      console.error("Error fetching bids:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch bids" 
+      });
+    }
+  });
+  
+  // 获取最高出价
+  app.get("/api/coal-products/:productId/highest-bid", async (req, res) => {
+    try {
+      const productId = parseInt(req.params.productId);
+      
+      if (isNaN(productId)) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Invalid product ID" 
+        });
+      }
+      
+      const product = await storage.getCoalProductById(productId);
+      if (!product) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Coal product not found" 
+        });
+      }
+      
+      const highestBid = await storage.getHighestBidForProduct(productId);
+      
+      if (!highestBid) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "No bids found for this product" 
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        data: highestBid
+      });
+    } catch (error) {
+      console.error("Error fetching highest bid:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch highest bid" 
+      });
+    }
+  });
+  
+  // 煤炭订单API
+  
+  // 创建订单
+  app.post("/api/coal-orders", async (req, res) => {
+    try {
+      const result = insertCoalOrderSchema.safeParse(req.body);
+      
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({ 
+          success: false, 
+          message: validationError.message
+        });
+      }
+      
+      // 检查产品是否存在
+      const product = await storage.getCoalProductById(result.data.productId);
+      if (!product) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Coal product not found" 
+        });
+      }
+      
+      // 检查产品是否仍然可用
+      if (product.status !== 'available') {
+        return res.status(400).json({ 
+          success: false, 
+          message: "This product is no longer available for purchase" 
+        });
+      }
+      
+      // 如果是竞拍交易，检查出价ID
+      if (result.data.transactionType === 'auction' && !result.data.bidId) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Bid ID is required for auction transactions" 
+        });
+      }
+      
+      // 如果有出价ID，检查出价是否存在
+      if (result.data.bidId) {
+        const bid = await storage.getCoalBidById(result.data.bidId);
+        if (!bid) {
+          return res.status(404).json({ 
+            success: false, 
+            message: "Bid not found" 
+          });
+        }
+        
+        // 检查出价是否属于该产品
+        if (bid.productId !== result.data.productId) {
+          return res.status(400).json({ 
+            success: false, 
+            message: "Bid does not match the product" 
+          });
+        }
+      }
+      
+      // 创建订单
+      const order = await storage.createCoalOrder(result.data);
+      
+      return res.status(201).json({
+        success: true,
+        message: "Order created successfully",
+        data: {
+          orderId: order.id,
+          orderNumber: order.orderNumber,
+          productId: order.productId,
+          totalAmount: order.totalAmount,
+          status: {
+            payment: order.paymentStatus,
+            delivery: order.deliveryStatus
+          },
+          createdAt: order.createdAt
+        }
+      });
+    } catch (error) {
+      console.error("Error creating order:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to create order" 
+      });
+    }
+  });
+  
+  // 获取所有订单 (管理员端点)
+  app.get("/api/admin/coal-orders", async (req, res) => {
+    try {
+      const orders = await storage.getAllCoalOrders();
+      
+      return res.status(200).json({
+        success: true,
+        data: orders
+      });
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch orders" 
+      });
+    }
+  });
+  
+  // 获取单个订单
+  app.get("/api/coal-orders/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      if (isNaN(id)) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Invalid order ID" 
+        });
+      }
+      
+      const order = await storage.getCoalOrderById(id);
+      
+      if (!order) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Order not found" 
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        data: order
+      });
+    } catch (error) {
+      console.error("Error fetching order:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch order" 
+      });
+    }
+  });
+  
+  // 按订单号获取订单
+  app.get("/api/coal-orders/number/:orderNumber", async (req, res) => {
+    try {
+      const { orderNumber } = req.params;
+      
+      if (!orderNumber) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Order number is required" 
+        });
+      }
+      
+      const order = await storage.getCoalOrderByOrderNumber(orderNumber);
+      
+      if (!order) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Order not found" 
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        data: order
+      });
+    } catch (error) {
+      console.error("Error fetching order:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch order" 
+      });
+    }
+  });
+  
+  // 更新订单状态
+  app.patch("/api/coal-orders/:id/status", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { paymentStatus, deliveryStatus } = req.body;
+      
+      if (isNaN(id)) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Invalid order ID" 
+        });
+      }
+      
+      if ((!paymentStatus || typeof paymentStatus !== 'string') && 
+          (!deliveryStatus || typeof deliveryStatus !== 'string')) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Payment status or delivery status is required" 
+        });
+      }
+      
+      const order = await storage.getCoalOrderById(id);
+      if (!order) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Order not found" 
+        });
+      }
+      
+      const updatedOrder = await storage.updateCoalOrderStatus(
+        id, 
+        paymentStatus || order.paymentStatus,
+        deliveryStatus || order.deliveryStatus
+      );
+      
+      return res.status(200).json({
+        success: true,
+        message: "Order status updated successfully",
+        data: updatedOrder
+      });
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to update order status" 
+      });
+    }
+  });
+  
+  // 收藏夹API
+  
+  // 添加收藏
+  app.post("/api/coal-favorites", async (req, res) => {
+    try {
+      const result = insertCoalFavoriteSchema.safeParse(req.body);
+      
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({ 
+          success: false, 
+          message: validationError.message
+        });
+      }
+      
+      // 检查产品是否存在
+      const product = await storage.getCoalProductById(result.data.productId);
+      if (!product) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Coal product not found" 
+        });
+      }
+      
+      try {
+        const favorite = await storage.createCoalFavorite(result.data);
+        
+        return res.status(201).json({
+          success: true,
+          message: "Product added to favorites",
+          data: favorite
+        });
+      } catch (error) {
+        if (error instanceof Error && error.message === "Product already in favorites") {
+          return res.status(409).json({ 
+            success: false, 
+            message: "This product is already in your favorites" 
+          });
+        }
+        throw error;
+      }
+    } catch (error) {
+      console.error("Error adding to favorites:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to add product to favorites" 
+      });
+    }
+  });
+  
+  // 获取用户收藏列表
+  app.get("/api/users/:userId/favorites", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      
+      if (isNaN(userId)) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Invalid user ID" 
+        });
+      }
+      
+      const favorites = await storage.getCoalFavoritesByUserId(userId);
+      
+      // 获取每个收藏对应的产品详情
+      const favoriteProducts = await Promise.all(
+        favorites.map(async (favorite) => {
+          const product = await storage.getCoalProductById(favorite.productId);
+          return {
+            favoriteId: favorite.id,
+            product: product,
+            addedAt: favorite.createdAt
+          };
+        })
+      );
+      
+      return res.status(200).json({
+        success: true,
+        data: favoriteProducts
+      });
+    } catch (error) {
+      console.error("Error fetching favorites:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch favorites" 
+      });
+    }
+  });
+  
+  // 移除收藏
+  app.delete("/api/coal-favorites/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      if (isNaN(id)) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Invalid favorite ID" 
+        });
+      }
+      
+      const favorite = await storage.getCoalFavoriteById(id);
+      if (!favorite) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Favorite not found" 
+        });
+      }
+      
+      const result = await storage.removeCoalFavorite(id);
+      
+      if (!result) {
+        return res.status(500).json({ 
+          success: false, 
+          message: "Failed to remove from favorites" 
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        message: "Product removed from favorites"
+      });
+    } catch (error) {
+      console.error("Error removing from favorites:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to remove product from favorites" 
+      });
+    }
+  });
+  
+  // 检查产品是否被用户收藏
+  app.get("/api/users/:userId/favorites/:productId", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const productId = parseInt(req.params.productId);
+      
+      if (isNaN(userId) || isNaN(productId)) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Invalid user ID or product ID" 
+        });
+      }
+      
+      const isFavorited = await storage.isProductFavoritedByUser(productId, userId);
+      
+      return res.status(200).json({
+        success: true,
+        data: { isFavorited }
+      });
+    } catch (error) {
+      console.error("Error checking favorite status:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Failed to check favorite status" 
       });
     }
   });

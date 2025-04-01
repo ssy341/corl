@@ -15,6 +15,7 @@ import ImplementationProcess from "@/pages/ServicePages/ImplementationProcess";
 import Transport from "@/pages/ServicePages/Transport";
 import QualityTesting from "@/pages/ServicePages/QualityTesting";
 import TestingRecords from "@/pages/ServicePages/TestingRecords";
+import CoalRiskDisposal from "@/pages/ServicePages/CoalRiskDisposal";
 import { LanguageProvider } from "@/hooks/use-language";
 
 // We'll implement these pages later
@@ -61,9 +62,14 @@ function Router() {
       <Route path="/services/transport" component={Transport} />
       <Route path="/services/quality-testing" component={QualityTesting} />
       <Route path="/services/testing-records" component={TestingRecords} />
+      <Route path="/services/coal-risk-disposal" component={CoalRiskDisposal} />
       <Route path="/ServicePages/Transport" component={Transport} />
       <Route path="/ServicePages/QualityTesting" component={QualityTesting} />
       <Route path="/ServicePages/TestingRecords" component={TestingRecords} />
+      <Route path="/ServicePages/CoalRiskDisposal" component={CoalRiskDisposal} />
+      <Route path="/coal-products/:id" component={CoalRiskDisposal} />
+      <Route path="/coal-products/:id/bid" component={CoalRiskDisposal} />
+      <Route path="/coal-products/:id/purchase" component={CoalRiskDisposal} />
       <Route path="/services/:slug" component={ServiceDetail} />
       <Route path="/technology/:tech-type" component={TechnologyDetails} />
       <Route path="/case-studies" component={CaseStudies} />
