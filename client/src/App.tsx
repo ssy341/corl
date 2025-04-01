@@ -12,6 +12,7 @@ import VideoMonitoring from "@/pages/SubPages/VideoMonitoring";
 import ThermalImaging from "@/pages/SubPages/ThermalImaging";
 import InventoryAnalysis from "@/pages/SubPages/InventoryAnalysis";
 import ImplementationProcess from "@/pages/ServicePages/ImplementationProcess";
+import Transport from "@/pages/ServicePages/Transport";
 
 // We'll implement these pages later
 const ServicesPage = () => <div className="container mx-auto px-4 py-12">Services Page</div>;
@@ -54,6 +55,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/services" component={ServicesPage} />
+      <Route path="/services/transport" component={Transport} />
       <Route path="/services/:slug" component={ServiceDetail} />
       <Route path="/technology/:tech-type" component={TechnologyDetails} />
       <Route path="/case-studies" component={CaseStudies} />
