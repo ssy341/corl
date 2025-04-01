@@ -462,6 +462,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // AI咨询服务 - 支持DeepSeek API或本地Ollama模型
+  // AI咨询服务 - 支持DeepSeek API、本地Ollama模型或预设回复
   app.post("/api/ai-consultation", async (req, res) => {
     try {
       const { message } = req.body;
@@ -480,12 +481,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
                        请提供专业、准确、有深度的回答，并在适当的时候引用数据和趋势。
                        如果用户用英文提问，请用英文回答；如果用中文提问，请用中文回答。`;
 
-      // 使用环境变量来决定使用哪种模型服务
-      // 如果设置了USE_LOCAL_LLM=true，则使用本地Ollama模型
-      // 否则尝试使用DeepSeek API（如果有密钥）
-      if (process.env.USE_LOCAL_LLM === 'true') {
+      // 根据当前设置的模型优先级选择AI处理方式
+      console.log(`Using model priority: ${currentModelPriority}`);
+      
+      // 只使用fallback模式
+      if (currentModelPriority === 'fallback' || process.env.USE_FALLBACK_ONLY === 'true') {
+        console.log("Using fallback response mode");
+        aiResponse = generateFallbackResponse(message);
+        return res.json({
+          success: true,
+          data: aiResponse
+        });
+      }
+      // 优先使用本地Ollama
+      if (currentModelPriority === 'local' || (currentModelPriority === 'auto' && process.env.USE_LOCAL_LLM === 'true')) {
         try {
-          console.log("Using local Ollama model for AI consultation");
+          console.log("Attempting to use local Ollama model for AI consultation");
           
           // 确定Ollama API地址
           // 默认使用localhost，但允许通过环境变量配置
@@ -528,16 +539,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
         } catch (ollamaError) {
           console.error("Ollama API call failed:", ollamaError);
-          console.log("Using fallback response due to Ollama error");
+          console.log("Ollama failed, checking if we need to fall back or try another method");
           // 如果是网络连接错误，提供更详细的错误信息
           if (ollamaError instanceof TypeError && ollamaError.message.includes('fetch failed')) {
             console.error("Network error details:", ollamaError.cause);
           }
-          aiResponse = generateFallbackResponse(message);
+          
+          // 如果当前是local模式但失败，或者是auto模式
+          if (currentModelPriority === 'local') {
+            console.log("Local model priority set but failed, using fallback");
+            aiResponse = generateFallbackResponse(message);
+            return res.json({
+              success: true,
+              data: aiResponse
+            });
+          } 
+          
+          // auto模式下，如果有API模式可用，不立即设置aiResponse
+          if (currentModelPriority === 'auto' && process.env.DEEPSEEK_API_KEY) {
+            console.log("Local model failed in auto mode, trying API next...");
+            // 继续执行到API尝试部分
+          } else {
+            // 如果没有其他选择，才使用fallback
+            console.log("No other AI options available, using fallback");
+            aiResponse = generateFallbackResponse(message);
+          }
         }
       } 
-      // 如果没有设置使用本地模型，尝试使用DeepSeek API
-      else if (process.env.DEEPSEEK_API_KEY) {
+      // 尝试使用DeepSeek API (API模式或auto模式下本地失败后)
+      else if (currentModelPriority === 'api' || (currentModelPriority === 'auto' && process.env.DEEPSEEK_API_KEY)) {
         try {
           console.log("Using DeepSeek API for AI consultation");
           
@@ -604,6 +634,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // 生成回退响应函数
+  // 模型优先级设置 (默认为'auto')
+  let currentModelPriority = 'auto'; // 'auto', 'api', 'local', 'fallback'
+
+  // 设置模型优先级的API
+  app.post("/api/set-model-priority", (req, res) => {
+    try {
+      const { priority } = req.body;
+      
+      if (!priority || !['auto', 'api', 'local', 'fallback'].includes(priority)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid priority value. Must be one of: auto, api, local, fallback"
+        });
+      }
+      
+      // 更新当前模型优先级
+      currentModelPriority = priority;
+      console.log(`Model priority set to: ${priority}`);
+      
+      // 根据优先级设置环境变量
+      if (priority === 'local') {
+        process.env.USE_LOCAL_LLM = 'true';
+      } else if (priority === 'api') {
+        process.env.USE_LOCAL_LLM = 'false';
+      } else if (priority === 'fallback') {
+        process.env.USE_FALLBACK_ONLY = 'true';
+      } else {
+        // auto模式
+        process.env.USE_LOCAL_LLM = process.env.OLLAMA_HOST ? 'true' : 'false';
+        process.env.USE_FALLBACK_ONLY = 'false';
+      }
+      
+      return res.status(200).json({
+        success: true,
+        message: `AI model priority set to ${priority}`,
+        data: priority
+      });
+    } catch (error) {
+      console.error("Error setting model priority:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to set model priority"
+      });
+    }
+  });
+  
+  // 获取当前模型优先级
+  app.get("/api/get-model-priority", (req, res) => {
+    return res.status(200).json({
+      success: true,
+      data: currentModelPriority
+    });
+  });
+
   function generateFallbackResponse(message: string): string {
     // 检测消息是英文还是中文（简单判断）
     // 如果消息中含有中文字符，则认为是中文
