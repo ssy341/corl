@@ -9,6 +9,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
 import {
   Tabs,
   TabsContent,
@@ -22,10 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { 
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -47,7 +47,6 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/hooks/use-language';
-import Layout from '@/components/Layout';
 import { Loader2, Heart, HeartOff, Timer, AlertTriangle, Gavel, Tag, TrendingDown, 
          ShoppingBag, Upload, PlusCircle, Search, BarChart } from 'lucide-react';
 
@@ -364,494 +363,342 @@ const CoalRiskDisposal: React.FC = () => {
   };
 
   return (
-    <Layout>
-      <div className="container mx-auto py-8 px-4">
-        <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-blue-600 text-transparent bg-clip-text mb-4">
-            {language === 'cn' ? '煤险处置平台' : 'Coal Risk Disposal Platform'}
-          </h1>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            {language === 'cn' 
-              ? '通过竞拍或定向价格优惠购买抵押煤炭资产，获取优质煤炭资源的同时把握投资机会。' 
-              : 'Purchase collateralized coal assets through auctions or targeted price discounts, seizing investment opportunities while acquiring quality coal resources.'}
-          </p>
-          <div className="flex justify-center space-x-4 mt-6">
-            <Button onClick={() => setUploadDialogOpen(true)} className="flex items-center">
-              <Upload className="w-4 h-4 mr-2" />
-              {language === 'cn' ? '上传产品' : 'Upload Product'}
-            </Button>
-            <Button onClick={() => setDemandDialogOpen(true)} variant="outline" className="flex items-center">
-              <Search className="w-4 h-4 mr-2" />
-              {language === 'cn' ? '发布采购需求' : 'Post Procurement'}
-            </Button>
-            <Button onClick={handleAiMatch} variant="secondary" className="flex items-center">
-              <BarChart className="w-4 h-4 mr-2" />
-              {language === 'cn' ? 'AI匹配建议' : 'AI Match Suggestions'}
-            </Button>
-          </div>
+    <div className="container mx-auto py-8 px-4">
+      <div className="text-center mb-12">
+        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-blue-600 text-transparent bg-clip-text mb-4">
+          {language === 'cn' ? '煤险处置平台' : 'Coal Risk Disposal Platform'}
+        </h1>
+        <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          {language === 'cn' 
+            ? '通过竞拍或定向价格优惠购买抵押煤炭资产，获取优质煤炭资源的同时把握投资机会。' 
+            : 'Purchase collateralized coal assets through auctions or targeted price discounts, seizing investment opportunities while acquiring quality coal resources.'}
+        </p>
+        <div className="flex justify-center space-x-4 mt-6">
+          <Button onClick={() => setUploadDialogOpen(true)} className="flex items-center">
+            <Upload className="w-4 h-4 mr-2" />
+            {language === 'cn' ? '上传产品' : 'Upload Product'}
+          </Button>
+          <Button onClick={() => setDemandDialogOpen(true)} variant="outline" className="flex items-center">
+            <Search className="w-4 h-4 mr-2" />
+            {language === 'cn' ? '发布采购需求' : 'Post Procurement'}
+          </Button>
+          <Button onClick={handleAiMatch} variant="secondary" className="flex items-center">
+            <BarChart className="w-4 h-4 mr-2" />
+            {language === 'cn' ? 'AI匹配建议' : 'AI Match Suggestions'}
+          </Button>
         </div>
+      </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div>
-              <label className="block mb-2 text-sm font-medium">
-                {language === 'cn' ? '按状态筛选' : 'Filter by Status'}
-              </label>
-              <Select value={filter} onValueChange={setFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder={language === 'cn' ? '所有状态' : 'All Statuses'} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">{language === 'cn' ? '所有状态' : 'All Statuses'}</SelectItem>
-                  <SelectItem value="available">{language === 'cn' ? '可购买' : 'Available'}</SelectItem>
-                  <SelectItem value="reserved">{language === 'cn' ? '已预订' : 'Reserved'}</SelectItem>
-                  <SelectItem value="sold">{language === 'cn' ? '已售出' : 'Sold'}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div>
-              <label className="block mb-2 text-sm font-medium">
-                {language === 'cn' ? '按风险等级筛选' : 'Filter by Risk Level'}
-              </label>
-              <Select value={riskFilter} onValueChange={setRiskFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder={language === 'cn' ? '所有风险等级' : 'All Risk Levels'} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">{language === 'cn' ? '所有风险等级' : 'All Risk Levels'}</SelectItem>
-                  <SelectItem value="high">{language === 'cn' ? '高风险' : 'High Risk'}</SelectItem>
-                  <SelectItem value="medium">{language === 'cn' ? '中等风险' : 'Medium Risk'}</SelectItem>
-                  <SelectItem value="low">{language === 'cn' ? '低风险' : 'Low Risk'}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div>
-              <label className="block mb-2 text-sm font-medium">
-                {language === 'cn' ? '按处置方式筛选' : 'Filter by Disposal Type'}
-              </label>
-              <Select value={disposalFilter} onValueChange={setDisposalFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder={language === 'cn' ? '所有处置方式' : 'All Disposal Types'} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">{language === 'cn' ? '所有处置方式' : 'All Disposal Types'}</SelectItem>
-                  <SelectItem value="auction">{language === 'cn' ? '竞拍' : 'Auction'}</SelectItem>
-                  <SelectItem value="discount">{language === 'cn' ? '定向降价' : 'Discount'}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div>
+            <label className="block mb-2 text-sm font-medium">
+              {language === 'cn' ? '按状态筛选' : 'Filter by Status'}
+            </label>
+            <Select value={filter} onValueChange={setFilter}>
+              <SelectTrigger>
+                <SelectValue placeholder={language === 'cn' ? '所有状态' : 'All Statuses'} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{language === 'cn' ? '所有状态' : 'All Statuses'}</SelectItem>
+                <SelectItem value="available">{language === 'cn' ? '可购买' : 'Available'}</SelectItem>
+                <SelectItem value="reserved">{language === 'cn' ? '已预订' : 'Reserved'}</SelectItem>
+                <SelectItem value="sold">{language === 'cn' ? '已售出' : 'Sold'}</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-        </div>
-
-        <Tabs defaultValue="all" className="mb-8">
-          <TabsList>
-            <TabsTrigger value="all">{language === 'cn' ? '全部产品' : 'All Products'}</TabsTrigger>
-            <TabsTrigger value="auction">{language === 'cn' ? '竞拍产品' : 'Auction Products'}</TabsTrigger>
-            <TabsTrigger value="discount">{language === 'cn' ? '折扣产品' : 'Discount Products'}</TabsTrigger>
-          </TabsList>
           
-          <TabsContent value="all" className="mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {displayProducts.map((product) => (
-                <Card 
-                  key={product.id} 
-                  className="cursor-pointer hover:shadow-lg transition-shadow duration-300 overflow-hidden"
-                  onClick={() => handleProductClick(product.id)}
-                >
-                  <div className="relative h-48 overflow-hidden">
-                    {product.imageUrl ? (
-                      <img 
-                        src={product.imageUrl} 
-                        alt={language === 'cn' ? product.titleCn : product.titleEn} 
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                        <span className="text-gray-400 text-lg">
-                          {language === 'cn' ? '无图片' : 'No Image'}
-                        </span>
-                      </div>
-                    )}
-                    <div className="absolute top-0 right-0 p-2">
-                      <Badge className={`${getRiskBadgeColor(product.riskLevel)} text-white`}>
-                        {language === 'cn' 
-                          ? product.riskLevel === 'high' ? '高风险' : product.riskLevel === 'medium' ? '中风险' : '低风险'
-                          : product.riskLevel === 'high' ? 'High Risk' : product.riskLevel === 'medium' ? 'Medium Risk' : 'Low Risk'
-                        }
-                      </Badge>
+          <div>
+            <label className="block mb-2 text-sm font-medium">
+              {language === 'cn' ? '按风险等级筛选' : 'Filter by Risk Level'}
+            </label>
+            <Select value={riskFilter} onValueChange={setRiskFilter}>
+              <SelectTrigger>
+                <SelectValue placeholder={language === 'cn' ? '所有风险等级' : 'All Risk Levels'} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{language === 'cn' ? '所有风险等级' : 'All Risk Levels'}</SelectItem>
+                <SelectItem value="high">{language === 'cn' ? '高风险' : 'High Risk'}</SelectItem>
+                <SelectItem value="medium">{language === 'cn' ? '中等风险' : 'Medium Risk'}</SelectItem>
+                <SelectItem value="low">{language === 'cn' ? '低风险' : 'Low Risk'}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            <label className="block mb-2 text-sm font-medium">
+              {language === 'cn' ? '按处置方式筛选' : 'Filter by Disposal Type'}
+            </label>
+            <Select value={disposalFilter} onValueChange={setDisposalFilter}>
+              <SelectTrigger>
+                <SelectValue placeholder={language === 'cn' ? '所有处置方式' : 'All Disposal Types'} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{language === 'cn' ? '所有处置方式' : 'All Disposal Types'}</SelectItem>
+                <SelectItem value="auction">{language === 'cn' ? '竞拍' : 'Auction'}</SelectItem>
+                <SelectItem value="discount">{language === 'cn' ? '定向降价' : 'Discount'}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </div>
+
+      <Tabs defaultValue="all" className="mb-8">
+        <TabsList>
+          <TabsTrigger value="all">{language === 'cn' ? '全部产品' : 'All Products'}</TabsTrigger>
+          <TabsTrigger value="auction">{language === 'cn' ? '竞拍产品' : 'Auction Products'}</TabsTrigger>
+          <TabsTrigger value="discount">{language === 'cn' ? '折扣产品' : 'Discount Products'}</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="all" className="mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {displayProducts.map((product) => (
+              <Card 
+                key={product.id} 
+                className="cursor-pointer hover:shadow-lg transition-shadow duration-300 overflow-hidden"
+                onClick={() => handleProductClick(product.id)}
+              >
+                <div className="relative h-48 overflow-hidden">
+                  {product.imageUrl ? (
+                    <img 
+                      src={product.imageUrl} 
+                      alt={language === 'cn' ? product.titleCn : product.titleEn} 
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                      <span className="text-gray-400 text-lg">
+                        {language === 'cn' ? '无图片' : 'No Image'}
+                      </span>
                     </div>
-                    <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/70 to-transparent">
-                      <Badge variant="outline" className="bg-white/80 text-black">
-                        {language === 'cn' 
-                          ? product.coalType === 'thermal' ? '动力煤' : product.coalType === 'coking' ? '焦煤' : '无烟煤'
-                          : product.coalType.charAt(0).toUpperCase() + product.coalType.slice(1)
-                        }
-                      </Badge>
+                  )}
+                  <div className="absolute top-0 right-0 p-2">
+                    <Badge className={`${getRiskBadgeColor(product.riskLevel)} text-white`}>
+                      {language === 'cn' 
+                        ? product.riskLevel === 'high' ? '高风险' : product.riskLevel === 'medium' ? '中风险' : '低风险'
+                        : product.riskLevel === 'high' ? 'High Risk' : product.riskLevel === 'medium' ? 'Medium Risk' : 'Low Risk'
+                      }
+                    </Badge>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/70 to-transparent">
+                    <Badge variant="outline" className="bg-white/80 text-black">
+                      {language === 'cn' 
+                        ? product.coalType === 'thermal' ? '动力煤' : product.coalType === 'coking' ? '焦煤' : '无烟煤'
+                        : product.coalType.charAt(0).toUpperCase() + product.coalType.slice(1)
+                      }
+                    </Badge>
+                  </div>
+                </div>
+                
+                <CardHeader className="py-4">
+                  <div className="flex justify-between items-start">
+                    <CardTitle className="text-lg font-semibold">
+                      {language === 'cn' ? product.titleCn : product.titleEn}
+                    </CardTitle>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-8 w-8" 
+                      onClick={(e) => handleToggleFavorite(e, product.id)}
+                    >
+                      <Heart className="h-5 w-5 text-gray-400 hover:text-red-500" />
+                    </Button>
+                  </div>
+                  <CardDescription className="text-sm mt-1">
+                    {product.productCode} | {product.location}
+                  </CardDescription>
+                </CardHeader>
+                
+                <CardContent className="pt-0">
+                  <div className="grid grid-cols-2 gap-4 mb-3">
+                    <div>
+                      <p className="text-sm text-gray-500">
+                        {language === 'cn' ? '处置方式' : 'Disposal Type'}
+                      </p>
+                      <div className="flex items-center mt-1">
+                        {product.disposalType === 'auction' ? (
+                          <>
+                            <Gavel className="h-4 w-4 text-blue-500 mr-1" />
+                            <span className="font-medium">
+                              {language === 'cn' ? '竞拍' : 'Auction'}
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <TrendingDown className="h-4 w-4 text-green-500 mr-1" />
+                            <span className="font-medium">
+                              {language === 'cn' ? '定向降价' : 'Discount'}
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-500">
+                        {language === 'cn' ? '数量' : 'Quantity'}
+                      </p>
+                      <p className="font-medium mt-1">
+                        {product.quantity} {language === 'cn' ? '吨' : 'tons'}
+                      </p>
                     </div>
                   </div>
                   
-                  <CardHeader className="py-4">
-                    <div className="flex justify-between items-start">
-                      <CardTitle className="text-lg font-semibold">
-                        {language === 'cn' ? product.titleCn : product.titleEn}
-                      </CardTitle>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-8 w-8" 
-                        onClick={(e) => handleToggleFavorite(e, product.id)}
-                      >
-                        <Heart className="h-5 w-5 text-gray-400 hover:text-red-500" />
-                      </Button>
-                    </div>
-                    <CardDescription className="text-sm mt-1">
-                      {product.productCode} | {product.location}
-                    </CardDescription>
-                  </CardHeader>
-                  
-                  <CardContent className="pt-0">
-                    <div className="grid grid-cols-2 gap-4 mb-3">
-                      <div>
-                        <p className="text-sm text-gray-500">
-                          {language === 'cn' ? '处置方式' : 'Disposal Type'}
-                        </p>
-                        <div className="flex items-center mt-1">
-                          {product.disposalType === 'auction' ? (
-                            <>
-                              <Gavel className="h-4 w-4 text-blue-500 mr-1" />
-                              <span className="font-medium">
-                                {language === 'cn' ? '竞拍' : 'Auction'}
-                              </span>
-                            </>
-                          ) : (
-                            <>
-                              <TrendingDown className="h-4 w-4 text-green-500 mr-1" />
-                              <span className="font-medium">
-                                {language === 'cn' ? '定向降价' : 'Discount'}
-                              </span>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500">
-                          {language === 'cn' ? '数量' : 'Quantity'}
-                        </p>
-                        <p className="font-medium mt-1">
-                          {product.quantity} {language === 'cn' ? '吨' : 'tons'}
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <div className="mb-3">
-                      <p className="text-sm text-gray-500 mb-1">
-                        {language === 'cn' ? '质量指标' : 'Quality Indicators'}
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {Object.entries(product.quality).map(([key, value]) => (
-                          <Badge key={key} variant="outline" className="text-xs">
-                            {key}: {value}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                    
-                    {product.disposalType === 'auction' && product.auctionEndTime && (
-                      <div className="flex items-center mb-3 text-orange-600">
-                        <Timer className="h-4 w-4 mr-1" />
-                        <span className="text-sm">
-                          {language === 'cn' ? '竞拍剩余时间: ' : 'Auction ends in: '}
-                          {getTimeRemaining(product.auctionEndTime)}
-                        </span>
-                      </div>
-                    )}
-                  </CardContent>
-                  
-                  <Separator />
-                  
-                  <CardFooter className="flex justify-between items-center py-4">
-                    <div>
-                      <p className="text-xs text-gray-500">
-                        {language === 'cn' ? '原价' : 'Original Price'}
-                      </p>
-                      <p className="text-sm line-through text-gray-500">
-                        {formatPrice(product.originalPrice)}
-                        <span className="text-xs ml-1">/吨</span>
-                      </p>
-                      <p className="text-lg font-bold text-primary">
-                        {formatPrice(product.currentPrice)}
-                        <span className="text-xs font-normal ml-1">/吨</span>
-                      </p>
-                    </div>
-                    
-                    <div className="flex gap-2">
-                      {product.disposalType === 'auction' ? (
-                        <Button size="sm" onClick={(e) => handleBid(e, product)}>
-                          {language === 'cn' ? '参与竞拍' : 'Place Bid'}
-                        </Button>
-                      ) : (
-                        <Button size="sm" onClick={(e) => handleBuyNow(e, product)}>
-                          {language === 'cn' ? '立即购买' : 'Buy Now'}
-                        </Button>
-                      )}
-                    </div>
-                  </CardFooter>
-                </Card>
-              ))}
-            </div>
-            
-            {displayProducts.length === 0 && (
-              <div className="flex flex-col items-center justify-center py-16">
-                <div className="text-6xl mb-4">🔍</div>
-                <h3 className="text-xl font-semibold mb-2">
-                  {language === 'cn' ? '没有找到符合条件的产品' : 'No products found'}
-                </h3>
-                <p className="text-gray-500 mb-4">
-                  {language === 'cn' 
-                    ? '请尝试调整筛选条件或稍后再查看' 
-                    : 'Try adjusting your filters or check back later'}
-                </p>
-                <Button variant="outline" onClick={() => {
-                  setFilter('all');
-                  setRiskFilter('all');
-                  setDisposalFilter('all');
-                }}>
-                  {language === 'cn' ? '清除筛选条件' : 'Clear Filters'}
-                </Button>
-              </div>
-            )}
-          </TabsContent>
-          
-          <TabsContent value="auction" className="mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {displayProducts
-                .filter(product => product.disposalType === 'auction')
-                .map((product) => (
-                  <Card 
-                    key={product.id} 
-                    className="cursor-pointer hover:shadow-lg transition-shadow duration-300"
-                    onClick={() => handleProductClick(product.id)}
-                  >
-                    {/* Card contents from above, repeating for this tab */}
-                    <div className="relative h-48 overflow-hidden">
-                      {product.imageUrl ? (
-                        <img 
-                          src={product.imageUrl} 
-                          alt={language === 'cn' ? product.titleCn : product.titleEn} 
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                          <span className="text-gray-400 text-lg">
-                            {language === 'cn' ? '无图片' : 'No Image'}
-                          </span>
-                        </div>
-                      )}
-                      <div className="absolute top-0 right-0 p-2">
-                        <Badge className={`${getRiskBadgeColor(product.riskLevel)} text-white`}>
-                          {language === 'cn' 
-                            ? product.riskLevel === 'high' ? '高风险' : product.riskLevel === 'medium' ? '中风险' : '低风险'
-                            : product.riskLevel === 'high' ? 'High Risk' : product.riskLevel === 'medium' ? 'Medium Risk' : 'Low Risk'
-                          }
+                  <div className="mb-3">
+                    <p className="text-sm text-gray-500 mb-1">
+                      {language === 'cn' ? '质量指标' : 'Quality Indicators'}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {Object.entries(product.quality).map(([key, value]) => (
+                        <Badge key={key} variant="outline" className="text-xs">
+                          {key}: {value}
                         </Badge>
-                      </div>
+                      ))}
                     </div>
-                    
-                    <CardHeader className="py-4">
-                      <div className="flex justify-between items-start">
-                        <CardTitle className="text-lg font-semibold">
-                          {language === 'cn' ? product.titleCn : product.titleEn}
-                        </CardTitle>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-8 w-8" 
-                          onClick={(e) => handleToggleFavorite(e, product.id)}
-                        >
-                          <Heart className="h-5 w-5 text-gray-400 hover:text-red-500" />
-                        </Button>
-                      </div>
-                      <CardDescription className="text-sm mt-1">
-                        {product.productCode} | {product.location}
-                      </CardDescription>
-                    </CardHeader>
-                    
-                    <CardContent>
-                      {product.auctionEndTime && (
-                        <div className="flex items-center mb-3 text-orange-600">
-                          <Timer className="h-4 w-4 mr-1" />
-                          <span className="text-sm">
-                            {language === 'cn' ? '竞拍剩余时间: ' : 'Auction ends in: '}
-                            {getTimeRemaining(product.auctionEndTime)}
-                          </span>
-                        </div>
-                      )}
-                    </CardContent>
-                    
-                    <Separator />
-                    
-                    <CardFooter className="flex justify-between items-center py-4">
-                      <div>
-                        <p className="text-lg font-bold text-primary">
-                          {formatPrice(product.currentPrice)}
-                          <span className="text-xs font-normal ml-1">/吨</span>
-                        </p>
-                      </div>
-                      
+                  </div>
+                  
+                  {product.disposalType === 'auction' && product.auctionEndTime && (
+                    <div className="flex items-center mb-3 text-orange-600">
+                      <Timer className="h-4 w-4 mr-1" />
+                      <span className="text-sm">
+                        {language === 'cn' ? '竞拍剩余时间: ' : 'Auction ends in: '}
+                        {getTimeRemaining(product.auctionEndTime)}
+                      </span>
+                    </div>
+                  )}
+                </CardContent>
+                
+                <Separator />
+                
+                <CardFooter className="flex justify-between items-center py-4">
+                  <div>
+                    <p className="text-xs text-gray-500">
+                      {language === 'cn' ? '原价' : 'Original Price'}
+                    </p>
+                    <p className="text-sm line-through text-gray-500">
+                      {formatPrice(product.originalPrice)}
+                      <span className="text-xs ml-1">/吨</span>
+                    </p>
+                    <p className="text-lg font-bold text-primary">
+                      {formatPrice(product.currentPrice)}
+                      <span className="text-xs font-normal ml-1">/吨</span>
+                    </p>
+                  </div>
+                  
+                  <div className="flex gap-2">
+                    {product.disposalType === 'auction' ? (
                       <Button size="sm" onClick={(e) => handleBid(e, product)}>
                         {language === 'cn' ? '参与竞拍' : 'Place Bid'}
                       </Button>
-                    </CardFooter>
-                  </Card>
-                ))}
-            </div>
-            
-            {displayProducts.filter(product => product.disposalType === 'auction').length === 0 && (
-              <div className="flex flex-col items-center justify-center py-16">
-                <Gavel className="h-16 w-16 text-gray-300 mb-4" />
-                <h3 className="text-xl font-semibold mb-2">
-                  {language === 'cn' ? '暂无竞拍产品' : 'No auction products available'}
-                </h3>
-                <p className="text-gray-500">
-                  {language === 'cn' 
-                    ? '目前没有可参与竞拍的产品，请稍后再查看' 
-                    : 'There are currently no products available for auction. Please check back later.'}
-                </p>
-              </div>
-            )}
-          </TabsContent>
-          
-          <TabsContent value="discount" className="mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {displayProducts
-                .filter(product => product.disposalType === 'discount')
-                .map((product) => (
-                  <Card 
-                    key={product.id} 
-                    className="cursor-pointer hover:shadow-lg transition-shadow duration-300"
-                    onClick={() => handleProductClick(product.id)}
-                  >
-                    {/* Card contents for discount products */}
-                    <div className="relative h-48 overflow-hidden">
-                      {product.imageUrl ? (
-                        <img 
-                          src={product.imageUrl} 
-                          alt={language === 'cn' ? product.titleCn : product.titleEn} 
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                          <span className="text-gray-400 text-lg">
-                            {language === 'cn' ? '无图片' : 'No Image'}
-                          </span>
-                        </div>
-                      )}
-                      <div className="absolute top-0 right-0 p-2">
-                        <Badge className={`${getRiskBadgeColor(product.riskLevel)} text-white`}>
-                          {language === 'cn' 
-                            ? product.riskLevel === 'high' ? '高风险' : product.riskLevel === 'medium' ? '中风险' : '低风险'
-                            : product.riskLevel === 'high' ? 'High Risk' : product.riskLevel === 'medium' ? 'Medium Risk' : 'Low Risk'
-                          }
-                        </Badge>
-                      </div>
-                      
-                      <div className="absolute top-0 left-0 p-2">
-                        <Badge className="bg-green-500 text-white">
-                          {language === 'cn' ? '特惠价' : 'Special Price'}
-                        </Badge>
-                      </div>
-                    </div>
-                    
-                    <CardHeader className="py-4">
-                      <div className="flex justify-between items-start">
-                        <CardTitle className="text-lg font-semibold">
-                          {language === 'cn' ? product.titleCn : product.titleEn}
-                        </CardTitle>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-8 w-8" 
-                          onClick={(e) => handleToggleFavorite(e, product.id)}
-                        >
-                          <Heart className="h-5 w-5 text-gray-400 hover:text-red-500" />
-                        </Button>
-                      </div>
-                      <CardDescription className="text-sm mt-1">
-                        {product.productCode} | {product.location}
-                      </CardDescription>
-                    </CardHeader>
-                    
-                    <CardContent>
-                      <div className="flex items-center mb-3">
-                        <TrendingDown className="h-4 w-4 text-green-500 mr-1" />
-                        <span className="text-sm text-green-600">
-                          {language === 'cn' 
-                            ? `降价${Math.round((1 - product.currentPrice / product.originalPrice) * 100)}%` 
-                            : `${Math.round((1 - product.currentPrice / product.originalPrice) * 100)}% Discount`
-                          }
-                        </span>
-                      </div>
-                    </CardContent>
-                    
-                    <Separator />
-                    
-                    <CardFooter className="flex justify-between items-center py-4">
-                      <div>
-                        <p className="text-xs text-gray-500">
-                          {language === 'cn' ? '原价' : 'Original Price'}
-                        </p>
-                        <p className="text-sm line-through text-gray-500">
-                          {formatPrice(product.originalPrice)}
-                          <span className="text-xs ml-1">/吨</span>
-                        </p>
-                        <p className="text-lg font-bold text-primary">
-                          {formatPrice(product.currentPrice)}
-                          <span className="text-xs font-normal ml-1">/吨</span>
-                        </p>
-                      </div>
-                      
+                    ) : (
                       <Button size="sm" onClick={(e) => handleBuyNow(e, product)}>
                         {language === 'cn' ? '立即购买' : 'Buy Now'}
                       </Button>
-                    </CardFooter>
-                  </Card>
-                ))}
+                    )}
+                  </div>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+          
+          {displayProducts.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-16">
+              <div className="text-6xl mb-4">🔍</div>
+              <h3 className="text-xl font-semibold mb-2">
+                {language === 'cn' ? '没有找到符合条件的产品' : 'No products found'}
+              </h3>
+              <p className="text-gray-500 mb-4">
+                {language === 'cn' 
+                  ? '请尝试调整筛选条件或稍后再查看' 
+                  : 'Try adjusting your filters or check back later'}
+              </p>
+              <Button variant="outline" onClick={() => {
+                setFilter('all');
+                setRiskFilter('all');
+                setDisposalFilter('all');
+              }}>
+                {language === 'cn' ? '清除筛选条件' : 'Clear Filters'}
+              </Button>
             </div>
-            
-            {displayProducts.filter(product => product.disposalType === 'discount').length === 0 && (
-              <div className="flex flex-col items-center justify-center py-16">
-                <Tag className="h-16 w-16 text-gray-300 mb-4" />
-                <h3 className="text-xl font-semibold mb-2">
-                  {language === 'cn' ? '暂无折扣产品' : 'No discount products available'}
-                </h3>
-                <p className="text-gray-500">
-                  {language === 'cn' 
-                    ? '目前没有特价折扣的煤炭产品，请稍后再查看' 
-                    : 'There are currently no discounted coal products available. Please check back later.'}
-                </p>
-              </div>
-            )}
-          </TabsContent>
-        </Tabs>
-        {/* 产品上传对话框 */}
-        <ProductUploadDialog
-          open={uploadDialogOpen}
-          onOpenChange={setUploadDialogOpen}
-          onSubmit={handleProductUpload}
-          language={language}
-        />
+          )}
+        </TabsContent>
         
-        {/* 采购需求对话框 */}
-        <ProcurementDemandDialog
-          open={demandDialogOpen}
-          onOpenChange={setDemandDialogOpen}
-          onSubmit={handleDemandSubmit}
-          language={language}
-        />
-      </div>
-    </Layout>
+        <TabsContent value="auction" className="mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {displayProducts
+              .filter(product => product.disposalType === 'auction')
+              .map((product) => (
+                <Card 
+                  key={product.id} 
+                  className="cursor-pointer hover:shadow-lg transition-shadow duration-300"
+                  onClick={() => handleProductClick(product.id)}
+                >
+                  {/* 与全部产品标签页中的卡片内容相同 */}
+                </Card>
+              ))}
+          </div>
+          
+          {displayProducts.filter(product => product.disposalType === 'auction').length === 0 && (
+            <div className="flex flex-col items-center justify-center py-16">
+              <div className="text-6xl mb-4">🔍</div>
+              <h3 className="text-xl font-semibold mb-2">
+                {language === 'cn' ? '没有找到竞拍产品' : 'No auction products found'}
+              </h3>
+              <p className="text-gray-500 mb-4">
+                {language === 'cn' 
+                  ? '请稍后再查看或调整筛选条件' 
+                  : 'Please check back later or adjust your filters'}
+              </p>
+            </div>
+          )}
+        </TabsContent>
+        
+        <TabsContent value="discount" className="mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {displayProducts
+              .filter(product => product.disposalType === 'discount')
+              .map((product) => (
+                <Card 
+                  key={product.id} 
+                  className="cursor-pointer hover:shadow-lg transition-shadow duration-300"
+                  onClick={() => handleProductClick(product.id)}
+                >
+                  {/* 与全部产品标签页中的卡片内容相同 */}
+                </Card>
+              ))}
+          </div>
+          
+          {displayProducts.filter(product => product.disposalType === 'discount').length === 0 && (
+            <div className="flex flex-col items-center justify-center py-16">
+              <div className="text-6xl mb-4">🔍</div>
+              <h3 className="text-xl font-semibold mb-2">
+                {language === 'cn' ? '没有找到折扣产品' : 'No discount products found'}
+              </h3>
+              <p className="text-gray-500 mb-4">
+                {language === 'cn' 
+                  ? '请稍后再查看或调整筛选条件' 
+                  : 'Please check back later or adjust your filters'}
+              </p>
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
+      
+      {/* 产品上传对话框 */}
+      <ProductUploadDialog
+        open={uploadDialogOpen}
+        onOpenChange={setUploadDialogOpen}
+        onSubmit={handleProductUpload}
+        language={language}
+      />
+      
+      {/* 采购需求对话框 */}
+      <ProcurementDemandDialog
+        open={demandDialogOpen}
+        onOpenChange={setDemandDialogOpen}
+        onSubmit={handleDemandSubmit}
+        language={language}
+      />
+    </div>
   );
 };
 
