@@ -13,6 +13,7 @@ import ThermalImaging from "@/pages/SubPages/ThermalImaging";
 import InventoryAnalysis from "@/pages/SubPages/InventoryAnalysis";
 import ImplementationProcess from "@/pages/ServicePages/ImplementationProcess";
 import Transport from "@/pages/ServicePages/Transport";
+import { LanguageProvider } from "@/hooks/use-language";
 
 // We'll implement these pages later
 const ServicesPage = () => <div className="container mx-auto px-4 py-12">Services Page</div>;
@@ -75,9 +76,11 @@ function Router() {
 function App() {
   return (
     <>
-      <Layout>
-        <Router />
-      </Layout>
+      <LanguageProvider>
+        <Layout>
+          <Router />
+        </Layout>
+      </LanguageProvider>
       <style dangerouslySetInnerHTML={{
         __html: `
         .bg-gradient {
