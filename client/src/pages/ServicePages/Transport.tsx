@@ -7,10 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getQueryFn } from "@/lib/queryClient";
 
 // Import icons instead of SVG files
-import { Truck, ClipboardList, Users, Map } from "lucide-react";
-
-// Import UI components
-import Layout from "@/components/Layout";
+import { Truck, ClipboardList, Users, Map, Clock, Package, CheckCircle } from "lucide-react";
 
 export default function Transport() {
   const { language } = useLanguage();
@@ -23,8 +20,7 @@ export default function Transport() {
   });
 
   return (
-    <Layout>
-      <section className="container max-w-7xl mx-auto px-4 py-12">
+    <section className="container max-w-7xl mx-auto px-4 py-12">
         <div className="flex flex-col gap-6">
           {/* Hero Section */}
           <div className="text-center mb-8">
@@ -190,10 +186,7 @@ export default function Transport() {
                   <div className="flex items-start gap-4">
                     <div className="flex-shrink-0">
                       <div className="h-16 w-16 rounded-full bg-blue-50 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500">
-                          <path d="M16.5 9.4l-9-5.19M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
-                          <path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12" />
-                        </svg>
+                        <Package size={32} className="text-blue-500" />
                       </div>
                     </div>
                     <div>
@@ -215,10 +208,7 @@ export default function Transport() {
                   <div className="flex items-start gap-4">
                     <div className="flex-shrink-0">
                       <div className="h-16 w-16 rounded-full bg-blue-50 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500">
-                          <circle cx="12" cy="12" r="10" />
-                          <path d="M12 6v6l4 2" />
-                        </svg>
+                        <Clock size={32} className="text-blue-500" />
                       </div>
                     </div>
                     <div>
@@ -250,9 +240,7 @@ export default function Transport() {
                 </h3>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-200" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
+                    <CheckCircle className="h-5 w-5 text-blue-200" />
                     <span>
                       {isEnglish ? "Reduced logistics complexity" : "降低物流复杂性"}
                     </span>
@@ -428,6 +416,5 @@ export default function Transport() {
           </div>
         </div>
       </section>
-    </Layout>
-  );
+    );
 }
