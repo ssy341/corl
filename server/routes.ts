@@ -487,14 +487,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         try {
           console.log("Using local Ollama model for AI consultation");
           
-          // 调用本地Ollama API (默认运行在http://localhost:11434)
-          const ollamaResponse = await fetch('http://localhost:11434/api/generate', {
+          // 确定Ollama API地址
+          // 默认使用localhost，但允许通过环境变量配置
+          const ollamaHost = process.env.OLLAMA_HOST || 'localhost';
+          const ollamaPort = process.env.OLLAMA_PORT || '11434';
+          const ollamaModel = process.env.OLLAMA_MODEL || 'deepseek-r1';
+          
+          console.log(`Attempting to connect to Ollama at ${ollamaHost}:${ollamaPort} using model ${ollamaModel}`);
+          
+          // 调用Ollama API
+          const ollamaResponse = await fetch(`http://${ollamaHost}:${ollamaPort}/api/generate`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              model: 'deepseek-r1', // 使用本地部署的模型名称
+              model: ollamaModel,
               prompt: `${systemPrompt}\n\n用户: ${message}\n\n助手:`,
               stream: false,
               options: {
@@ -502,7 +510,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 top_p: 0.9,
                 max_tokens: 800
               }
-            })
+            }),
+            // 添加超时设置，避免长时间等待
+            signal: AbortSignal.timeout(10000) // 10秒超时
           });
           
           if (!ollamaResponse.ok) {
@@ -519,6 +529,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         } catch (ollamaError) {
           console.error("Ollama API call failed:", ollamaError);
           console.log("Using fallback response due to Ollama error");
+          // 如果是网络连接错误，提供更详细的错误信息
+          if (ollamaError instanceof TypeError && ollamaError.message.includes('fetch failed')) {
+            console.error("Network error details:", ollamaError.cause);
+          }
           aiResponse = generateFallbackResponse(message);
         }
       } 
