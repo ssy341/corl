@@ -461,7 +461,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // AI咨询服务 - 在实际应用中应该连接到deepseek API
+  // AI咨询服务 - 连接到DeepSeek API
   app.post("/api/ai-consultation", async (req, res) => {
     try {
       const { message } = req.body;
@@ -473,31 +473,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
-      // 实际项目中，这里应该调用deepseek API获取回复
-      // 例如:
-      // const response = await fetch('https://api.deepseek.com/v1/chat', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Bearer ${process.env.DEEPSEEK_API_KEY}`
-      //   },
-      //   body: JSON.stringify({
-      //     model: 'deepseek-r1',
-      //     messages: [{role: 'user', content: message}]
-      //   })
-      // });
-      // const data = await response.json();
-      // const aiResponse = data.choices[0].message.content;
+      if (!process.env.DEEPSEEK_API_KEY) {
+        throw new Error("DeepSeek API key is not configured");
+      }
       
-      // 模拟AI回复
-      const aiResponse = `感谢您的咨询。您的问题关于"${message.substring(0, 30)}..."，从煤炭行业专业角度来看，我建议您考虑以下几点:
-
-1. 市场趋势分析: 当前煤炭市场整体呈现稳中有升态势，但受季节性因素影响存在波动。
-2. 供需平衡预测: 根据近期数据，国内动力煤供应充足，但优质焦煤仍有结构性短缺。
-3. 政策影响评估: 考虑到最新环保政策要求，建议关注合规性生产和清洁利用技术。
-4. 运营建议: 加强数字化转型，优化供应链管理，提高资源利用效率。
-
-如果您需要更具体的分析和建议，欢迎提供更多详细信息，我可以为您提供更针对性的专业意见。`;
+      // 调用DeepSeek API获取回复
+      const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.DEEPSEEK_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: 'deepseek-chat',
+          messages: [
+            {
+              role: 'system', 
+              content: `你是一位煤炭行业专家，擅长回答关于煤炭市场、产品、价格、政策、技术和行业趋势的问题。
+                        请提供专业、准确、有深度的回答，并在适当的时候引用数据和趋势。
+                        如果用户用英文提问，请用英文回答；如果用中文提问，请用中文回答。`
+            },
+            {role: 'user', content: message}
+          ],
+          temperature: 0.7,
+          max_tokens: 800
+        })
+      });
+      
+      const data = await response.json();
+      
+      // 检查是否有错误响应
+      if (data.error) {
+        console.error("DeepSeek API error:", data.error);
+        throw new Error(data.error.message || "DeepSeek API error");
+      }
+      
+      // 提取AI回复内容
+      const aiResponse = data.choices[0].message.content;
       
       return res.json({ 
         success: true, 
@@ -508,7 +520,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("Error generating AI response:", error);
       return res.status(500).json({ 
         success: false, 
-        message: "Failed to generate AI response" 
+        message: `Failed to generate AI response: ${error instanceof Error ? error.message : 'Unknown error'}`
       });
     }
   });
