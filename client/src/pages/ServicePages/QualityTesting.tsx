@@ -174,7 +174,6 @@ export default function QualityTesting() {
   const [activeTab, setActiveTab] = useState("overview");
 
   return (
-    <Layout>
       <div className="container mx-auto px-4 py-10">
         {/* Header Section */}
         <div className="text-center mb-12">
@@ -839,6 +838,5 @@ export default function QualityTesting() {
           </TabsContent>
         </Tabs>
       </div>
-    </Layout>
-  );
+    );
 }

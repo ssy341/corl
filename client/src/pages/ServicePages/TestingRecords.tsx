@@ -3,7 +3,6 @@ import { useLanguage } from "@/hooks/use-language";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { format } from "date-fns";
-import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -227,7 +226,6 @@ export default function TestingRecords() {
 
   if (loading) {
     return (
-      <Layout>
         <div className="container mx-auto px-4 py-10 flex items-center justify-center min-h-[60vh]">
           <div className="flex flex-col items-center">
             <Loader2 className="h-10 w-10 animate-spin text-primary" />
@@ -236,13 +234,11 @@ export default function TestingRecords() {
             </p>
           </div>
         </div>
-      </Layout>
     );
   }
 
   if (error) {
     return (
-      <Layout>
         <div className="container mx-auto px-4 py-10">
           <Card>
             <CardContent className="py-12">
@@ -255,12 +251,10 @@ export default function TestingRecords() {
             </CardContent>
           </Card>
         </div>
-      </Layout>
     );
   }
 
   return (
-    <Layout>
       <div className="container mx-auto px-4 py-10">
         <div className="flex flex-col space-y-6">
           {/* Header Section */}
@@ -508,37 +502,67 @@ export default function TestingRecords() {
                                             <h3 className="font-semibold mb-2">
                                               {language === 'en' ? 'Notes' : '备注'}
                                             </h3>
-                                            <p className="text-sm">{record.notes}</p>
+                                            <p className="text-sm text-gray-600">{record.notes}</p>
                                           </div>
                                         )}
                                       </div>
                                     </DialogContent>
                                   </Dialog>
                                   
-                                  <Button 
-                                    variant="ghost" 
-                                    size="icon"
-                                    onClick={() => viewWeightedResults(record)}
-                                    disabled={!record.weightedResults || Object.keys(record.weightedResults || {}).length === 0}
-                                  >
-                                    <BarChart4 className="h-4 w-4" />
-                                    <span className="sr-only">Weighted Average</span>
-                                  </Button>
+                                  {record.weightedResults && Object.keys(record.weightedResults).length > 0 && (
+                                    <Dialog>
+                                      <DialogTrigger asChild>
+                                        <Button 
+                                          variant="ghost" 
+                                          size="icon"
+                                          onClick={() => viewWeightedResults(record)}
+                                        >
+                                          <BarChart4 className="h-4 w-4" />
+                                          <span className="sr-only">View Weighted Results</span>
+                                        </Button>
+                                      </DialogTrigger>
+                                      <DialogContent>
+                                        <DialogHeader>
+                                          <DialogTitle>
+                                            {language === 'en' ? 'Weighted Averages' : '加权平均'} - {record.sampleId}
+                                          </DialogTitle>
+                                          <DialogDescription>
+                                            {language === 'en' 
+                                              ? 'Calculated weighted averages for this sample' 
+                                              : '此样本的计算加权平均值'}
+                                          </DialogDescription>
+                                        </DialogHeader>
+                                        <Table>
+                                          <TableHeader>
+                                            <TableRow>
+                                              <TableHead>{language === 'en' ? 'Parameter' : '参数'}</TableHead>
+                                              <TableHead>{language === 'en' ? 'Weighted Average' : '加权平均'}</TableHead>
+                                              <TableHead>{language === 'en' ? 'Unit' : '单位'}</TableHead>
+                                            </TableRow>
+                                          </TableHeader>
+                                          <TableBody>
+                                            {Object.entries(record.weightedResults).map(([itemCode, value]) => (
+                                              <TableRow key={itemCode}>
+                                                <TableCell>{getItemName(itemCode)}</TableCell>
+                                                <TableCell>{value.toFixed(2)}</TableCell>
+                                                <TableCell>{getItemUnit(itemCode)}</TableCell>
+                                              </TableRow>
+                                            ))}
+                                          </TableBody>
+                                        </Table>
+                                      </DialogContent>
+                                    </Dialog>
+                                  )}
                                 </div>
                               </TableCell>
                             </TableRow>
                           ))
                         ) : (
                           <TableRow>
-                            <TableCell colSpan={7} className="h-24 text-center">
-                              <div className="flex flex-col items-center justify-center">
-                                <ClipboardList className="h-8 w-8 text-gray-400" />
-                                <p className="mt-2 text-gray-500">
-                                  {language === 'en' 
-                                    ? 'No testing records found. Add your first record.' 
-                                    : '没有找到测试记录。添加您的第一条记录。'}
-                                </p>
-                              </div>
+                            <TableCell colSpan={7} className="text-center py-6 text-gray-500">
+                              {language === 'en' 
+                                ? 'No testing records found. Add a new record to get started.' 
+                                : '未找到检测记录。添加新记录即可开始。'}
                             </TableCell>
                           </TableRow>
                         )}
@@ -551,7 +575,25 @@ export default function TestingRecords() {
             
             {/* Add New Record Tab */}
             <TabsContent value="add-record">
-              <TestingRecordForm onSuccess={handleRecordAdded} />
+              <Card>
+                <CardHeader>
+                  <CardTitle>
+                    {language === 'en' ? 'Submit New Testing Record' : '提交新检测记录'}
+                  </CardTitle>
+                  <CardDescription>
+                    {language === 'en' 
+                      ? 'Add details for a new coal quality testing record' 
+                      : '添加新煤炭质量检测记录的详细信息'}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <TestingRecordForm 
+                    agencies={agencies} 
+                    testingItems={testingItems} 
+                    onSuccess={handleRecordAdded}
+                  />
+                </CardContent>
+              </Card>
             </TabsContent>
             
             {/* Analysis Tab */}
@@ -559,24 +601,20 @@ export default function TestingRecords() {
               <Card>
                 <CardHeader>
                   <CardTitle>
-                    {language === 'en' ? 'Coal Quality Analysis' : '煤质分析'}
+                    {language === 'en' ? 'Testing Analysis' : '检测分析'}
                   </CardTitle>
                   <CardDescription>
                     {language === 'en' 
-                      ? 'Analyze coal quality testing data over time' 
-                      : '分析煤质检测数据的时间趋势'}
+                      ? 'Analyze coal quality testing data and trends' 
+                      : '分析煤炭质量检测数据和趋势'}
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="py-12 text-center">
-                  <div className="flex flex-col items-center justify-center space-y-4">
-                    <BarChart4 className="h-16 w-16 text-gray-300" />
-                    <h3 className="text-lg font-medium">
-                      {language === 'en' ? 'Coming Soon' : '即将推出'}
-                    </h3>
-                    <p className="text-gray-500 max-w-md">
+                <CardContent className="py-10">
+                  <div className="text-center">
+                    <p className="text-gray-500 mb-4">
                       {language === 'en' 
-                        ? 'Advanced analytics and visualization tools are currently under development. Check back soon!' 
-                        : '高级分析和可视化工具正在开发中。请稍后再来查看！'}
+                        ? 'Analysis features coming soon. This section will provide data visualization and trend analysis for your testing records.' 
+                        : '分析功能即将推出。此部分将为您的检测记录提供数据可视化和趋势分析。'}
                     </p>
                   </div>
                 </CardContent>
@@ -584,52 +622,45 @@ export default function TestingRecords() {
             </TabsContent>
           </Tabs>
         </div>
-      </div>
-      
-      {/* Weighted Results Dialog */}
-      <AlertDialog open={showWeightedDialog} onOpenChange={setShowWeightedDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              {language === 'en' ? 'Weighted Average Results' : '加权平均结果'}
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              {language === 'en' 
-                ? 'Calculated weighted averages based on test results and assigned weights.' 
-                : '基于测试结果和分配的权重计算得出的加权平均值。'}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          
-          <div className="mt-4">
-            {selectedRecord && selectedRecord.weightedResults && (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>{language === 'en' ? 'Parameter' : '参数'}</TableHead>
-                    <TableHead>{language === 'en' ? 'Weighted Average' : '加权平均'}</TableHead>
-                    <TableHead>{language === 'en' ? 'Unit' : '单位'}</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {Object.entries(selectedRecord.weightedResults).map(([itemCode, value]) => (
-                    <TableRow key={itemCode}>
-                      <TableCell>{getItemName(itemCode)}</TableCell>
-                      <TableCell>{value.toFixed(2)}</TableCell>
-                      <TableCell>{getItemUnit(itemCode)}</TableCell>
+        
+        {/* Dialog for displaying weighted results */}
+        <AlertDialog open={showWeightedDialog} onOpenChange={setShowWeightedDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                {language === 'en' ? 'Weighted Averages' : '加权平均'} 
+                {selectedRecord && ` - ${selectedRecord.sampleId}`}
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                {language === 'en' 
+                  ? 'Calculated weighted averages for this sample' 
+                  : '此样本的计算加权平均值'}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <div className="mt-4">
+              {selectedRecord && selectedRecord.weightedResults && (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>{language === 'en' ? 'Parameter' : '参数'}</TableHead>
+                      <TableHead>{language === 'en' ? 'Weighted Average' : '加权平均'}</TableHead>
+                      <TableHead>{language === 'en' ? 'Unit' : '单位'}</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </div>
-          
-          <div className="flex justify-end mt-4">
-            <Button onClick={() => setShowWeightedDialog(false)}>
-              {language === 'en' ? 'Close' : '关闭'}
-            </Button>
-          </div>
-        </AlertDialogContent>
-      </AlertDialog>
-    </Layout>
+                  </TableHeader>
+                  <TableBody>
+                    {Object.entries(selectedRecord.weightedResults).map(([itemCode, value]) => (
+                      <TableRow key={itemCode}>
+                        <TableCell>{getItemName(itemCode)}</TableCell>
+                        <TableCell>{value.toFixed(2)}</TableCell>
+                        <TableCell>{getItemUnit(itemCode)}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
+            </div>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
   );
 }
