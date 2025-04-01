@@ -297,6 +297,16 @@ export class MemStorage implements IStorage {
         descriptionCn: "结合人工智能技术，提供专业的煤炭行业专家建议。",
         featuresEn: JSON.stringify(["Market insights", "Operational efficiency", "Regulatory compliance", "AI-powered analysis", "Deepseek-R1 model", "24/7 availability"]),
         featuresCn: JSON.stringify(["市场洞察", "运营效率", "法规遵从", "AI驱动分析", "Deepseek-R1模型", "全天候服务"]),
+      },
+      {
+        slug: "coal-risk-disposal",
+        icon: "src/assets/icons/coal-risk-disposal-icon.svg",
+        nameEn: "Coal Risk Disposal Services",
+        nameCn: "煤险处置服务",
+        descriptionEn: "Professional platform for coal collateral risk management and asset disposal through auctions and targeted pricing.",
+        descriptionCn: "专业的煤炭抵押风险管理和资产处置平台，通过竞拍和定向降价实现最优处置。",
+        featuresEn: JSON.stringify(["Collateral auction", "Risk assessment", "Price optimization", "Quality verification", "Purchase facilitation", "Secure transactions"]),
+        featuresCn: JSON.stringify(["抵押品竞拍", "风险评估", "价格优化", "质量验证", "购买便利化", "安全交易"]),
       }
     ];
 

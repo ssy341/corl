@@ -62,6 +62,11 @@ export function Header() {
               {language === 'cn' ? '煤事咨询服务' : 'Consultation'}
             </div>
           </Link>
+          <Link href="/services/coal-risk-disposal">
+            <div className="text-gray-700 hover:text-primary transition-colors cursor-pointer px-2">
+              {language === 'cn' ? '煤险处置服务' : 'Risk Disposal'}
+            </div>
+          </Link>
         </nav>
         
         {/* Mobile menu button - we'll implement the mobile menu later */}
@@ -168,6 +173,13 @@ export function Footer() {
                 <Link href="/consultation">
                   <div className="text-gray-600 hover:text-primary transition-colors cursor-pointer">
                     {language === 'cn' ? '煤事咨询服务' : 'Consultation'}
+                  </div>
+                </Link>
+              </li>
+              <li>
+                <Link href="/services/coal-risk-disposal">
+                  <div className="text-gray-600 hover:text-primary transition-colors cursor-pointer">
+                    {language === 'cn' ? '煤险处置服务' : 'Risk Disposal'}
                   </div>
                 </Link>
               </li>
