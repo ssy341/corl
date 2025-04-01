@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import CoalStorageMonitoring from './ServicePages/CoalStorageMonitoring';
 import WeightEstimation from './ServicePages/WeightEstimation';
 import PriceEstimation from './ServicePages/PriceEstimation';
+import ProductCollateral from './ServicePages/ProductCollateral';
 import NotFound from './not-found';
 
 // Service slug to component mapping - we only include components that have been implemented
@@ -13,6 +14,7 @@ const serviceComponents: Record<string, React.FC> = {
   'storage-monitoring': CoalStorageMonitoring,    // 煤仓监管服务
   'weight-estimation': WeightEstimation,          // 煤重估量服务
   'price-estimation': PriceEstimation,            // 煤价估算服务
+  'product-collateral': ProductCollateral,        // 煤品货押服务
 };
 
 // Default component for services that don't have a dedicated page yet
