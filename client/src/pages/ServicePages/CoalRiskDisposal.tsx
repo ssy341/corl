@@ -25,10 +25,31 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { 
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form';
+import { Label as FormLabel } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/hooks/use-language';
 import Layout from '@/components/Layout';
-import { Loader2, Heart, HeartOff, Timer, AlertTriangle, Gavel, Tag, TrendingDown } from 'lucide-react';
+import { Loader2, Heart, HeartOff, Timer, AlertTriangle, Gavel, Tag, TrendingDown, 
+         ShoppingBag, Upload, PlusCircle, Search, BarChart } from 'lucide-react';
 
 interface CoalProduct {
   id: number;
@@ -61,6 +82,10 @@ const CoalRiskDisposal: React.FC = () => {
   const [filter, setFilter] = useState<string>('all');
   const [riskFilter, setRiskFilter] = useState<string>('all');
   const [disposalFilter, setDisposalFilter] = useState<string>('all');
+  
+  // 对话框状态控制
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+  const [demandDialogOpen, setDemandDialogOpen] = useState(false);
 
   // 获取所有煤炭产品
   const { data: coalProducts, isLoading, error } = useQuery<{ data: CoalProduct[] }>({
@@ -186,35 +211,31 @@ const CoalRiskDisposal: React.FC = () => {
 
   if (isLoading) {
     return (
-      <Layout>
-        <div className="flex items-center justify-center min-h-[50vh]">
-          <Loader2 className="w-12 h-12 animate-spin text-primary" />
-          <span className="ml-2 text-xl font-semibold">
-            {language === 'cn' ? '加载中...' : 'Loading...'}
-          </span>
-        </div>
-      </Layout>
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <Loader2 className="w-12 h-12 animate-spin text-primary" />
+        <span className="ml-2 text-xl font-semibold">
+          {language === 'cn' ? '加载中...' : 'Loading...'}
+        </span>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <Layout>
-        <div className="flex flex-col items-center justify-center min-h-[50vh] px-4">
-          <AlertTriangle className="w-16 h-16 text-red-500 mb-4" />
-          <h2 className="text-2xl font-bold text-red-500 mb-2">
-            {language === 'cn' ? '数据加载失败' : 'Failed to load data'}
-          </h2>
-          <p className="text-center mb-4">
-            {language === 'cn' 
-              ? '无法加载煤险处置数据，请稍后再试或联系管理员。' 
-              : 'Unable to load coal risk disposal data. Please try again later or contact administrator.'}
-          </p>
-          <Button onClick={() => window.location.reload()}>
-            {language === 'cn' ? '重新加载' : 'Reload'}
-          </Button>
-        </div>
-      </Layout>
+      <div className="flex flex-col items-center justify-center min-h-[50vh] px-4">
+        <AlertTriangle className="w-16 h-16 text-red-500 mb-4" />
+        <h2 className="text-2xl font-bold text-red-500 mb-2">
+          {language === 'cn' ? '数据加载失败' : 'Failed to load data'}
+        </h2>
+        <p className="text-center mb-4">
+          {language === 'cn' 
+            ? '无法加载煤险处置数据，请稍后再试或联系管理员。' 
+            : 'Unable to load coal risk disposal data. Please try again later or contact administrator.'}
+        </p>
+        <Button onClick={() => window.location.reload()}>
+          {language === 'cn' ? '重新加载' : 'Reload'}
+        </Button>
+      </div>
     );
   }
 
@@ -308,6 +329,40 @@ const CoalRiskDisposal: React.FC = () => {
 
   const displayProducts = coalProducts?.data?.length ? filteredProducts : mockProducts;
 
+  // 处理产品上传提交
+  const handleProductUpload = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: language === 'cn' ? '提交成功' : 'Submission Successful',
+      description: language === 'cn' 
+        ? '您的煤炭产品信息已提交，我们将尽快审核。' 
+        : 'Your coal product information has been submitted. We will review it as soon as possible.',
+    });
+    setUploadDialogOpen(false);
+  };
+
+  // 处理采购需求提交
+  const handleDemandSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: language === 'cn' ? '提交成功' : 'Submission Successful',
+      description: language === 'cn' 
+        ? '您的采购需求已发布，我们将为您匹配合适的供应商。' 
+        : 'Your procurement demand has been published. We will match suitable suppliers for you.',
+    });
+    setDemandDialogOpen(false);
+  };
+
+  // AI匹配建议
+  const handleAiMatch = () => {
+    toast({
+      title: language === 'cn' ? 'AI匹配' : 'AI Matching',
+      description: language === 'cn' 
+        ? '根据您的历史交易偏好，我们为您推荐了3个可能感兴趣的煤炭产品。' 
+        : 'Based on your historical transaction preferences, we have recommended 3 coal products you may be interested in.',
+    });
+  };
+
   return (
     <Layout>
       <div className="container mx-auto py-8 px-4">
@@ -320,6 +375,20 @@ const CoalRiskDisposal: React.FC = () => {
               ? '通过竞拍或定向价格优惠购买抵押煤炭资产，获取优质煤炭资源的同时把握投资机会。' 
               : 'Purchase collateralized coal assets through auctions or targeted price discounts, seizing investment opportunities while acquiring quality coal resources.'}
           </p>
+          <div className="flex justify-center space-x-4 mt-6">
+            <Button onClick={() => setUploadDialogOpen(true)} className="flex items-center">
+              <Upload className="w-4 h-4 mr-2" />
+              {language === 'cn' ? '上传产品' : 'Upload Product'}
+            </Button>
+            <Button onClick={() => setDemandDialogOpen(true)} variant="outline" className="flex items-center">
+              <Search className="w-4 h-4 mr-2" />
+              {language === 'cn' ? '发布采购需求' : 'Post Procurement'}
+            </Button>
+            <Button onClick={handleAiMatch} variant="secondary" className="flex items-center">
+              <BarChart className="w-4 h-4 mr-2" />
+              {language === 'cn' ? 'AI匹配建议' : 'AI Match Suggestions'}
+            </Button>
+          </div>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
@@ -766,8 +835,251 @@ const CoalRiskDisposal: React.FC = () => {
             )}
           </TabsContent>
         </Tabs>
+        {/* 产品上传对话框 */}
+        <ProductUploadDialog
+          open={uploadDialogOpen}
+          onOpenChange={setUploadDialogOpen}
+          onSubmit={handleProductUpload}
+          language={language}
+        />
+        
+        {/* 采购需求对话框 */}
+        <ProcurementDemandDialog
+          open={demandDialogOpen}
+          onOpenChange={setDemandDialogOpen}
+          onSubmit={handleDemandSubmit}
+          language={language}
+        />
       </div>
     </Layout>
+  );
+};
+
+// 产品上传对话框
+const ProductUploadDialog: React.FC<{
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSubmit: (e: React.FormEvent) => void;
+  language: string;
+}> = ({ open, onOpenChange, onSubmit, language }) => {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[520px]">
+        <DialogHeader>
+          <DialogTitle>
+            {language === 'cn' ? '上传煤炭产品' : 'Upload Coal Product'}
+          </DialogTitle>
+          <DialogDescription>
+            {language === 'cn' 
+              ? '填写您的煤炭产品信息，我们将为您寻找合适的买家。' 
+              : 'Fill in your coal product details, and we will find suitable buyers for you.'}
+          </DialogDescription>
+        </DialogHeader>
+        
+        <form onSubmit={onSubmit} className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <FormLabel htmlFor="titleCn">
+                {language === 'cn' ? '产品名称(中文)' : 'Product Name (Chinese)'}
+              </FormLabel>
+              <Input id="titleCn" placeholder={language === 'cn' ? '例如: 优质动力煤' : 'e.g., Premium Thermal Coal'} />
+            </div>
+            <div>
+              <FormLabel htmlFor="titleEn">
+                {language === 'cn' ? '产品名称(英文)' : 'Product Name (English)'}
+              </FormLabel>
+              <Input id="titleEn" placeholder="e.g., Premium Thermal Coal" />
+            </div>
+          </div>
+          
+          <div>
+            <FormLabel htmlFor="coalType">
+              {language === 'cn' ? '煤炭类型' : 'Coal Type'}
+            </FormLabel>
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder={language === 'cn' ? '选择煤炭类型' : 'Select coal type'} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="thermal">{language === 'cn' ? '动力煤' : 'Thermal Coal'}</SelectItem>
+                <SelectItem value="coking">{language === 'cn' ? '焦煤' : 'Coking Coal'}</SelectItem>
+                <SelectItem value="anthracite">{language === 'cn' ? '无烟煤' : 'Anthracite'}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <FormLabel htmlFor="quantity">
+                {language === 'cn' ? '数量(吨)' : 'Quantity (tons)'}
+              </FormLabel>
+              <Input id="quantity" type="number" min="1" placeholder="1000" />
+            </div>
+            <div>
+              <FormLabel htmlFor="price">
+                {language === 'cn' ? '价格(元/吨)' : 'Price (CNY/ton)'}
+              </FormLabel>
+              <Input id="price" type="number" min="1" placeholder="1200" />
+            </div>
+          </div>
+          
+          <div>
+            <FormLabel htmlFor="location">
+              {language === 'cn' ? '存放地点' : 'Location'}
+            </FormLabel>
+            <Input id="location" placeholder={language === 'cn' ? '例如: 山西省朔州市' : 'e.g., Shuozhou, Shanxi'} />
+          </div>
+          
+          <div>
+            <FormLabel htmlFor="description">
+              {language === 'cn' ? '产品描述' : 'Product Description'}
+            </FormLabel>
+            <Textarea 
+              id="description" 
+              placeholder={language === 'cn' 
+                ? '请描述煤炭的质量指标、生产日期等信息' 
+                : 'Please describe quality indicators, production date, etc.'} 
+            />
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <FormLabel htmlFor="disposalType">
+                {language === 'cn' ? '处置方式' : 'Disposal Type'}
+              </FormLabel>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder={language === 'cn' ? '选择处置方式' : 'Select disposal type'} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="auction">{language === 'cn' ? '竞拍' : 'Auction'}</SelectItem>
+                  <SelectItem value="discount">{language === 'cn' ? '定向降价' : 'Discount'}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <FormLabel htmlFor="endDate">
+                {language === 'cn' ? '截止日期' : 'End Date'}
+              </FormLabel>
+              <Input id="endDate" type="date" />
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button type="submit">
+              {language === 'cn' ? '提交' : 'Submit'}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+// 采购需求对话框
+const ProcurementDemandDialog: React.FC<{
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSubmit: (e: React.FormEvent) => void;
+  language: string;
+}> = ({ open, onOpenChange, onSubmit, language }) => {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[520px]">
+        <DialogHeader>
+          <DialogTitle>
+            {language === 'cn' ? '发布采购需求' : 'Post Procurement Demand'}
+          </DialogTitle>
+          <DialogDescription>
+            {language === 'cn' 
+              ? '发布您的煤炭采购需求，我们将为您匹配合适的供应商。' 
+              : 'Post your coal procurement needs, and we will match suitable suppliers for you.'}
+          </DialogDescription>
+        </DialogHeader>
+        
+        <form onSubmit={onSubmit} className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <FormLabel htmlFor="title">
+                {language === 'cn' ? '需求标题' : 'Demand Title'}
+              </FormLabel>
+              <Input id="title" placeholder={language === 'cn' ? '例如: 急需优质动力煤' : 'e.g., Urgent need for premium thermal coal'} />
+            </div>
+            <div>
+              <FormLabel htmlFor="coalType">
+                {language === 'cn' ? '煤炭类型' : 'Coal Type'}
+              </FormLabel>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder={language === 'cn' ? '选择煤炭类型' : 'Select coal type'} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="thermal">{language === 'cn' ? '动力煤' : 'Thermal Coal'}</SelectItem>
+                  <SelectItem value="coking">{language === 'cn' ? '焦煤' : 'Coking Coal'}</SelectItem>
+                  <SelectItem value="anthracite">{language === 'cn' ? '无烟煤' : 'Anthracite'}</SelectItem>
+                  <SelectItem value="any">{language === 'cn' ? '任意类型' : 'Any Type'}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <FormLabel htmlFor="quantity">
+                {language === 'cn' ? '需求数量(吨)' : 'Required Quantity (tons)'}
+              </FormLabel>
+              <Input id="quantity" type="number" min="1" placeholder="1000" />
+            </div>
+            <div>
+              <FormLabel htmlFor="budget">
+                {language === 'cn' ? '预算(元/吨)' : 'Budget (CNY/ton)'}
+              </FormLabel>
+              <Input id="budget" type="number" min="1" placeholder="1200" />
+            </div>
+          </div>
+          
+          <div>
+            <FormLabel htmlFor="location">
+              {language === 'cn' ? '交货地点' : 'Delivery Location'}
+            </FormLabel>
+            <Input id="location" placeholder={language === 'cn' ? '例如: 河北省唐山市' : 'e.g., Tangshan, Hebei'} />
+          </div>
+          
+          <div>
+            <FormLabel htmlFor="qualityRequirements">
+              {language === 'cn' ? '质量要求' : 'Quality Requirements'}
+            </FormLabel>
+            <Textarea 
+              id="qualityRequirements" 
+              placeholder={language === 'cn' 
+                ? '请详细描述煤炭质量指标要求，如发热量、含硫量等' 
+                : 'Please describe coal quality requirements in detail, such as calorific value, sulfur content, etc.'} 
+            />
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <FormLabel htmlFor="deadline">
+                {language === 'cn' ? '截止日期' : 'Deadline'}
+              </FormLabel>
+              <Input id="deadline" type="date" />
+            </div>
+            <div>
+              <FormLabel htmlFor="contactMethod">
+                {language === 'cn' ? '联系方式' : 'Contact Method'}
+              </FormLabel>
+              <Input id="contactMethod" placeholder={language === 'cn' ? '电话或电子邮件' : 'Phone or Email'} />
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button type="submit">
+              {language === 'cn' ? '发布需求' : 'Post Demand'}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 };
 
